@@ -48,8 +48,8 @@
 
 /obj/mecha/combat/gygax/dark/New()
 	..()
-	new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot(src)
-	new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/clusterbang(src)
+	new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot/loaded(src)
+	new /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/clusterbang/loaded(src)
 	new /obj/item/mecha_parts/mecha_equipment/teleporter(src)
 	new /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay(src)
 	return

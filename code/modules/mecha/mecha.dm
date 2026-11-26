@@ -864,6 +864,14 @@
 			to_chat(user, "[src]-[device_name] interface initialization failed.")
 		return
 
+	if(istype(W, /obj/item/ammo_casing) || istype(W, /obj/item/ammo_storage))
+		for(var/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/B in equipment)
+			if(B.accepts_ammo(W))
+				B.load_ammo(W, user)
+				return
+		to_chat(user, "<span class='warning'>\The [src] has no weapon with room for \the [W].</span>")
+		return
+
 	if(istype(W, /obj/item/mecha_parts/mecha_equipment))
 		var/obj/item/mecha_parts/mecha_equipment/E = W
 		spawn()

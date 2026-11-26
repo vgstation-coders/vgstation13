@@ -232,9 +232,9 @@ var/list/impact_master = list()
 /obj/item/projectile/to_bump(atom/A as mob|obj|turf|area)
 	if (!A)	//This was runtiming if by chance A was null.
 		return 0
-	if((A == firer) && !reflected)
+	if((A == firer || (firer && ismecha(A) && firer.loc == A)) && !reflected)
 		loc = A.loc
-		return 0 //cannot shoot yourself, unless an ablative armor sent back the projectile
+		return 0 //cannot shoot yourself (or the exosuit you're piloting), unless an ablative armor sent back the projectile
 
 	if(bumped)
 		return 0
