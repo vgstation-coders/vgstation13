@@ -1720,6 +1720,8 @@ var/datum/record_organ //This is just a dummy proc, not storing any variables he
 	//Agent cards lower threatlevel.
 	if(istype(idcard, /obj/item/weapon/card/id/syndicate))
 		threatcount -= 2
+	return threatcount
+
 /mob/living/carbon/human/has_brain()
 	if(internal_organs_by_name["brain"])
 		var/datum/organ/internal/brain = internal_organs_by_name["brain"]
