@@ -1,0 +1,5 @@
+author: jknpj
+delete-after: true
+changes:
+- bugfix: The jury-rigged space helmet now updates its worn sprite when its light
+    is toggled.
