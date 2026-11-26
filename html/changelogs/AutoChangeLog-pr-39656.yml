@@ -1,0 +1,4 @@
+author: jknpj
+delete-after: true
+changes:
+- bugfix: Fixed a runtime for kitchen gun bullets that had no firing gun.
