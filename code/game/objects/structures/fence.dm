@@ -354,11 +354,14 @@
 	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	else
-		if(istype(mover, /obj/item/projectile))
-			var/obj/item/projectile/projectile = mover
-			return prob(projectile.grillepasschance) //Fairly hit chance
-		else
-			return !density || bounds_dist(border_dummy, mover) >= 0
+		return !density || bounds_dist(border_dummy, mover) >= 0
+
+/obj/structure/fence/border_dummy_Cross(atom/movable/mover)
+	if(istype(mover, /obj/item/projectile))
+		var/obj/item/projectile/projectile = mover
+		return prob(projectile.grillepasschance) //Fairly hit chance
+	else
+		return . = ..()
 
 //Mostly copied from grille.dm
 /obj/structure/fence/proc/shock(mob/user, prb = 100, siemens_coefficient = 1)
