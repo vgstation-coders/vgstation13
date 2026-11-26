@@ -621,11 +621,15 @@
 
 /mob/living/silicon/robot/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(opened) // Are they trying to insert something?
+		if(ispowercell(W) && wiresexposed)
+			to_chat(user, "Close the panel first.")
+			return
 		for(var/V in components)
 			var/datum/robot_component/C = components[V]
 			if(!C.installed && istype(W, C.external_type))
+				if(!user.drop_item(W, failmsg = TRUE))
+					return
 				C.install(user,W)
-				user.drop_item(W)
 				W.forceMove(null)
 				return
 
@@ -710,12 +714,10 @@
 				opened = TRUE
 				updateicon()
 
-	else if(istype(W, /obj/item/weapon/cell) && opened)	// trying to put a cell inside
-		if(wiresexposed)
-			to_chat(user, "Close the panel first.")
-			return
+	else if(ispowercell(W) && opened)	// trying to put a cell inside
 		var/datum/robot_component/C = components["power cell"]
-		user.drop_item(W, src)
+		if(!user.drop_item(W, src, failmsg = TRUE))
+			return
 		var/obj/item/weapon/cell/cell = get_cell()
 		if(cell)
 			C.uninstall(user)
@@ -728,7 +730,7 @@
 		else
 			to_chat(user, "You can't reach the wiring.")
 
-	else if(W.is_screwdriver(user) && opened && !get_cell())	// haxing
+	else if(W.is_screwdriver(user) && opened && (wiresexposed || !get_cell()))	// haxing
 		wiresexposed = !wiresexposed
 		to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
 		if(can_diagnose())
