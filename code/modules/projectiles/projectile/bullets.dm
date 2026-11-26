@@ -198,20 +198,28 @@
 	penetration = 2
 
 /obj/item/projectile/bullet/auto380/to_bump(atom/A)
+	var/already_bumped = bumped
+	var/turf/T = get_turf(A) //Stored now in case the bullet destroys A
 	. = ..()
-	if(A && shot_from && shot_from.type == /obj/item/weapon/gun/projectile/glock/fancy/kitchengun)
-		var/obj/item/weapon/gun/projectile/glock/fancy/kitchengun/K = shot_from
-		if(!(A in K.cleaning_targets)) // BUT WITH THREE SHOTS FROM KITCHEN GUN
-			K.cleaning_targets += A // BANG
-		K.cleaning_targets[A]++ // BANG
-		if(K.cleaning_targets[A] > 2) // BANG
-			var/turf/T = get_turf(A)
+	if(!A || already_bumped || (A == firer && !reflected))
+		return
+	if(special_collision != PROJECTILE_COLLISION_DEFAULT && special_collision != PROJECTILE_COLLISION_BLOCKED)
+		return //The bullet missed, bounced off or went through a portal
+	if(!shot_from || shot_from.type != /obj/item/weapon/gun/projectile/glock/fancy/kitchengun)
+		return
+	var/obj/item/weapon/gun/projectile/glock/fancy/kitchengun/K = shot_from
+	var/datum/weakref/target = makeweakref(A) //So the gun doesn't keep its targets from being deleted
+	K.cleaning_targets[target]++ // BANG BANG BANG
+	var/shots = K.cleaning_targets[target]
+	if(shots > 2 || A.gcDestroyed)
+		K.cleaning_targets -= target
+	if(shots > 2) // BUT WITH THREE SHOTS FROM KITCHEN GUN
+		if(T)
 			T.clean_act(CLEANLINESS_BLEACH)
 			for(var/obj/O in T)
 				O.clean_act(CLEANLINESS_BLEACH)
+		if(!A.gcDestroyed)
 			A.clean_act(CLEANLINESS_BLEACH) // AND IT SPARKLES LIKE NEW
-			K.cleaning_targets[A] = 0
-			K.cleaning_targets -= A
 
 /obj/item/projectile/bullet/auto380/practice
 	damage = 2
