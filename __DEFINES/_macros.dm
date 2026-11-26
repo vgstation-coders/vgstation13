@@ -275,11 +275,11 @@
 
 #define hasFactionIcons(H) (H.mind && H.mind.hasFactionsWithHUDIcons())
 
-#define isvampire(H) (H.mind ? H.mind.GetRole(VAMPIRE) : FALSE)
+#define isvampire(H) (H.mind ? H.mind.GetRole(VAMPIRE) : null)
 
-#define isthrall(H) (H.mind ? H.mind.GetRole(THRALL) : FALSE)
+#define isthrall(H) (H.mind ? H.mind.GetRole(THRALL) : null)
 
-#define iscultist(H) (H.mind ? H.mind.GetRole(CULTIST) : FALSE)
+#define iscultist(H) (H.mind ? H.mind.GetRole(CULTIST) : null)
 
 #define isstreamer(H) (H.mind && H.mind.GetRole(STREAMER))
 

@@ -572,7 +572,7 @@
 /datum/mind/proc/GetRole(var/role_id)
 	if (role_id in antag_roles)
 		return antag_roles[role_id]
-	return FALSE
+	return null
 
 /datum/mind/proc/GetRoleByType(var/type)
 	for(var/datum/role/R in antag_roles)
