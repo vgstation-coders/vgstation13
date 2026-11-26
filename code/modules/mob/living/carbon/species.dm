@@ -179,14 +179,43 @@ var/global/list/emag_cloneable_species = list()
 		myhuman = null
 	..()
 
-/// Returns an independent copy of this species datum with its runtime icon state.
-/// Detached organs use this so they don't keep a reference to a mob's species
-/// datum, which is deleted together with the mob.
+/// Returns an independent copy of this species datum with its runtime icon state
+/// and mutable stats. Detached organs use this so they don't keep a reference to
+/// a mob's species datum, which is deleted together with the mob.
 /datum/species/proc/Copy()
 	var/datum/species/new_species = new type
+
+	// Icon state, changed by updatespeciescolor().
 	new_species.icobase = icobase
 	new_species.deform = deform
 	new_species.override_icon = override_icon
+
+	// Runtime state, changed on live mobs by advanced_mutate(), viruses and cosmetics.
+	new_species.flags = flags
+	new_species.anatomy_flags = anatomy_flags
+	new_species.chem_flags = chem_flags
+	new_species.brute_mod = brute_mod
+	new_species.burn_mod = burn_mod
+	new_species.tox_mod = tox_mod
+	new_species.blood_color = blood_color
+	new_species.flesh_color = flesh_color
+	new_species.punch_damage = punch_damage
+	new_species.max_hurt_damage = max_hurt_damage
+	new_species.breath_type = breath_type
+	new_species.heat_level_1 = heat_level_1
+	new_species.heat_level_2 = heat_level_2
+	new_species.heat_level_3 = heat_level_3
+	new_species.cold_level_1 = cold_level_1
+	new_species.cold_level_2 = cold_level_2
+	new_species.cold_level_3 = cold_level_3
+	new_species.hazard_high_pressure = hazard_high_pressure
+	new_species.warning_high_pressure = warning_high_pressure
+	new_species.hazard_low_pressure = hazard_low_pressure
+	new_species.warning_low_pressure = warning_low_pressure
+	new_species.tacklePower = tacklePower
+	new_species.tackleRange = tackleRange
+
+	new_species.damage_overlays = damage_overlays.Copy()
 	new_species.default_blocks = default_blocks.Copy()
 	new_species.default_mutations = default_mutations.Copy()
 	return new_species

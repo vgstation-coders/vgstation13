@@ -33,33 +33,82 @@
 	assert_eq(can_handcuff, FALSE)
 
 // Heads (and other limbs) must keep a snapshot of their donor species. The
-// donor's species datum is deleted along with the donor mob, so a live
+// donor's species datum is hard-deleted after its mob is gone, so a live
 // reference would silently turn a preserved vox head into a human head.
 /datum/unit_test/human/head_reattach_keeps_species/start()
 	var/turf/centre = locate(100, 100, 1)
 	var/mob/living/carbon/human/donor = new(centre, "Vox")
 	var/mob/living/carbon/human/recipient = new(centre, "Human")
-	var/datum/species/donor_species = donor.species
 
 	var/datum/organ/external/head/donor_head = donor.get_organ(LIMB_HEAD)
+	var/expected_icon_path = get_icon_dmi_path(donor_head.get_icon("m"))
+	assert_eq(istext(expected_icon_path), TRUE)
+
 	var/obj/item/organ/external/head/head_item = donor_head.droplimb(TRUE, TRUE, TRUE, FALSE)
 	assert_eq(istype(head_item), TRUE)
 
-	var/expected_icobase = head_item.species?.icobase
-	assert_eq(expected_icobase, donor_species.icobase)
-	assert_eq(head_item.species == donor_species, FALSE)
-
-	var/datum/species/head_species = head_item.species
-
-	// This is what /mob/living/carbon/human/Destroy() does to its own species.
-	QDEL_NULL(donor.species)
-	assert_eq(head_item.species, head_species)
+	// Hard-delete the donor's species datum now instead of waiting for the GC.
+	var/datum/species/donor_species = donor.species
+	donor.species = null
+	donor_species.Destroy()
+	del(donor_species)
 
 	var/datum/organ/external/head/recipient_head = recipient.get_organ(LIMB_HEAD)
 	recipient_head.attach(head_item)
 
-	assert_eq(recipient_head.species, head_species)
-	assert_eq(recipient_head.species?.icobase, expected_icobase)
+	// The attached head must still render with the donor's species icon.
+	assert_eq(get_icon_dmi_path(recipient_head.get_icon("m")), expected_icon_path)
 
 	qdel(donor)
 	qdel(recipient)
+
+// A limb reattached to its own body must keep using the body's live species
+// datum, so updatespeciescolor() still recolors it.
+/datum/unit_test/human/limb_reattach_same_body_uses_live_species/start()
+	var/turf/centre = locate(100, 100, 1)
+	var/mob/living/carbon/human/vox = new(centre, "Vox")
+
+	var/datum/organ/external/l_arm/arm = vox.get_organ(LIMB_LEFT_ARM)
+	var/obj/item/organ/external/l_arm/arm_item = arm.droplimb(TRUE, TRUE, TRUE, FALSE)
+	assert_eq(istype(arm_item), TRUE)
+
+	arm.attach(arm_item)
+	assert_eq(arm.species, null)
+
+	vox.my_appearance.s_tone = VOXPLUCKED
+	vox.update_mutantrace()
+	assert_eq(get_icon_dmi_path(arm.get_icon()), "icons/mob/human_races/vox/r_voxplucked.dmi")
+
+	qdel(vox)
+
+// Copy() must preserve runtime species changes so cross-species grafts keep
+// the donor's damage modifiers, flags and colors.
+/datum/unit_test/species_copy_runtime_state/start()
+	var/datum/species/test_species = new /datum/species/human
+	test_species.flags |= RAD_GLOW
+	test_species.anatomy_flags |= NO_BLOOD
+	test_species.chem_flags = 123
+	test_species.brute_mod = 0.5
+	test_species.burn_mod = 2
+	test_species.tox_mod = 3
+	test_species.blood_color = "#112233"
+	test_species.flesh_color = "#445566"
+	test_species.punch_damage = 7
+	test_species.max_hurt_damage = 9
+	test_species.breath_type = GAS_NITROGEN
+	test_species.damage_overlays = list("brute")
+
+	var/datum/species/test_copy = test_species.Copy()
+	assert_eq(test_copy.flags & RAD_GLOW, RAD_GLOW)
+	assert_eq(test_copy.anatomy_flags & NO_BLOOD, NO_BLOOD)
+	assert_eq(test_copy.chem_flags, 123)
+	assert_eq(test_copy.brute_mod, 0.5)
+	assert_eq(test_copy.burn_mod, 2)
+	assert_eq(test_copy.tox_mod, 3)
+	assert_eq(test_copy.blood_color, "#112233")
+	assert_eq(test_copy.flesh_color, "#445566")
+	assert_eq(test_copy.punch_damage, 7)
+	assert_eq(test_copy.max_hurt_damage, 9)
+	assert_eq(test_copy.breath_type, GAS_NITROGEN)
+	assert_eq(test_copy.damage_overlays.len, 1)
+	assert_eq(test_copy.damage_overlays[1], "brute")

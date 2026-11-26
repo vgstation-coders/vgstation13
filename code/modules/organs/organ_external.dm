@@ -1120,7 +1120,13 @@ Note that amputating the affected organ does in fact remove the infection from t
 		src.fleshify()
 
 		//Transfer properties (species, damage, ...)
-		src.species = organ.species
+		//A limb going back onto the body it came from should keep using the
+		//owner's live species datum, so updatespeciescolor() keeps affecting it.
+		var/same_body = organ.owner_dna && owner.dna && organ.owner_dna.unique_enzymes && (organ.owner_dna.unique_enzymes == owner.dna.unique_enzymes)
+		if(same_body && organ.species && owner.species && (organ.species.type == owner.species.type))
+			src.species = null
+		else
+			src.species = organ.species
 		src.cancer_stage = organ.cancer_stage
 		src.wounds = organ.wounds
 		src.status = organ.status
