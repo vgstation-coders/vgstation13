@@ -40,7 +40,7 @@
 		holder = perp.hud_list[ID_HUD]
 		if(perp.head && istype(perp.head,/obj/item/clothing/head/tinfoil)) //Tinfoil hat? Move along.
 			continue
-		var/obj/item/weapon/card/id/card = perp.get_id_card()
+		var/obj/item/weapon/card/id/card = perp.get_visible_id()
 		if(card)
 			holder = perp.hud_list[WAGE_HUD]
 			var/datum/money_account/account = get_money_account(card.associated_account_number)
@@ -76,7 +76,7 @@
 			S = getStaticIcon(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(perp)), override_dir = SOUTH))
 			C.images += image(S, perp, "hudstatic")
 			continue
-		var/obj/item/weapon/card/id/card = perp.get_id_card()
+		var/obj/item/weapon/card/id/card = perp.get_visible_id()
 		if(card)
 			holder = perp.hud_list[WAGE_HUD]
 			if(!holder)

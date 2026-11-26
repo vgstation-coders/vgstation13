@@ -1682,7 +1682,7 @@ var/datum/record_organ //This is just a dummy proc, not storing any variables he
 				threatcount += 2
 		return threatcount
 	//Check for ID
-	var/obj/item/weapon/card/id/idcard = get_id_card()
+	var/obj/item/weapon/card/id/idcard = get_visible_id()
 	if(judgebot.idcheck && !idcard)
 		threatcount += 4
 	//Check for weapons

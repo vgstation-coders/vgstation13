@@ -51,7 +51,7 @@
 		if(perp.head && istype(perp.head,/obj/item/clothing/head/tinfoil)) //Tinfoil hat? Move along.
 			C.images += holder
 			continue
-		var/obj/item/weapon/card/id/card = perp.get_id_card()
+		var/obj/item/weapon/card/id/card = perp.get_visible_id()
 		if(card)
 			holder.icon_state = "hud[ckey(card.GetJobName())]"
 		C.images += holder

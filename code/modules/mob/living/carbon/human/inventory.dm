@@ -1,6 +1,17 @@
 /mob/living/carbon/human/get_all_slots()
 	. = get_head_slots() | get_body_slots()
 
+// The card you're holding up comes first, then the one worn in the ID slot, like GetAccess().
+// Only then the rest, so a PDA or card on the belt or in suit storage doesn't outrank the worn ID.
+// For the ID people can see on you (HUDs, beepsky), use get_visible_id() instead.
+/mob/living/carbon/human/get_id_card()
+	var/obj/item/I = get_active_hand()
+	. = I?.GetID()
+	if(!.)
+		. = wear_id?.GetID()
+	if(!.)
+		return ..()
+
 /mob/living/carbon/human/proc/get_body_slots()
 	return list(
 //ordered body items by which would appear on top

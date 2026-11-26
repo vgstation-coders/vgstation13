@@ -748,7 +748,7 @@ var/list/astral_projections = list()
 	real_name = name
 
 	//important to trick sechuds
-	var/obj/item/weapon/card/id/card = body.get_id_card()
+	var/obj/item/weapon/card/id/card = body.get_visible_id()
 	if(card)
 		cardjob = card.GetJobName()
 
