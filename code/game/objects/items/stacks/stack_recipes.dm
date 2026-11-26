@@ -5,6 +5,7 @@
 /datum/stack_recipe
 	var/title = "ERROR"
 	var/result_type
+	var/dupe_type // set to this for dupe checks, otherwise result_type
 	var/req_amount = 1
 	var/res_amount = 1
 	var/max_res_amount = 1
