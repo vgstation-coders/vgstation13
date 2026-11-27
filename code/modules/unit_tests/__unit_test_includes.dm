@@ -15,6 +15,7 @@
 #include "reagent_recipe_collisions.dm"
 #include "turretid.dm"
 #include "outfit_datums.dm"
+#include "preferences.dm"
 #include "ray.dm"
 #include "vector.dm"
 #include "reagent_ids.dm"
