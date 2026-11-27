@@ -1,10 +1,4 @@
 //Corgi
-#define IDLE 0
-#define BEGIN_FOOD_HUNTING 1
-#define FOOD_HUNTING 2
-#define BEGIN_POINTER_FOLLOWING 3
-#define POINTER_FOLLOWING 4
-
 /mob/living/simple_animal/corgi
 	name = "corgi"
 	real_name = "corgi"
@@ -45,10 +39,9 @@
 	var/obj/item/inventory_back
 	var/obj/item/clothing/mask/facehugger/facehugger
 	var/list/spin_emotes = list("dances around","chases its tail")
-	var/corgi_status = IDLE
-	var/obj/movement_target
 	var/mob/pointer_caller
 	var/mob/master //Obtained randomly when petting him. Can be overriden.
+	var/can_fetch = TRUE // Saint overrides this: he rescues instead of begging.
 
 	var/growl_sound = 'sound/voice/corgigrowl.ogg' // Sound played when hurt
 
@@ -76,65 +69,78 @@
 	if(.)
 		regular_hud_updates()
 		standard_damage_overlay_updates()
-	if(!stat && !resting && !locked_to && (ckey == null)) //Behavior mechanisms (om nom :3)
-		if(corgi_status == IDLE)
-			get_target()
-			stop_automated_movement = 0
 
-		else if(corgi_status == BEGIN_FOOD_HUNTING)
-			corgi_status = FOOD_HUNTING
-			spawn(0) // Separate process
-				stop_automated_movement = 1
-				var/failedsteps = 0
-				var/infinite_chase = loc && locate(/obj/machinery/power/treadmill) in loc
-				while(movement_target && !Adjacent(movement_target) && get_dist(src,movement_target) < 7 && corgi_status == FOOD_HUNTING && failedsteps <= 2)
-					if(!step_towards(src,movement_target,1) && !infinite_chase)
-						failedsteps += 1
-					if(time_between_directed_steps >= 1)
-						sleep(time_between_directed_steps)
-					else
-						sleep(1)
-				if(movement_target)
-					if(isturf(movement_target.loc) && src.Adjacent(movement_target))
-						movement_target.attack_animal(src)
-					else if(ishuman(movement_target.loc))
-						if(prob(20))
-							emote("me", 1, "stares at [movement_target.loc]'s [movement_target] with a sad puppy-face and whimpers.")
-				corgi_status = IDLE
-				movement_target = null
+/mob/living/simple_animal/corgi/New()
+	..()
+	// WIP: the decision layer is a behavior tree (food -> pointer -> idle).
+	use_idle_tree(can_fetch ? bt_corgi_tree() : bt_idle_tree())
 
-		else if(corgi_status == BEGIN_POINTER_FOLLOWING)
-			corgi_status = POINTER_FOLLOWING
-			if(prob(35) || (master != null && pointer_caller == master))
-				spawn(0) // Separate process
-					stop_automated_movement = 1
-					var/failedsteps = 0
-					while(failedsteps <= 3)
-						if(!movement_target || src.Adjacent(movement_target) || get_dist(src, movement_target) >= 7)
-							break
-						if(!step_towards(src,movement_target,1))
-							failedsteps++
-						sleep(time_between_directed_steps)
+/// The corgi only hunts snacks while it is not already full.
+/mob/living/simple_animal/corgi/ai_wants_food()
+	var/fullness = nutrition + (reagents ? reagents.get_reagent_amount(NUTRIMENT) * 25 : 0)
+	return fullness < 550
 
-					var/corg_her = "her"
-					if(gender == MALE)
-						corg_her = "his"
-					if(movement_target)
-						step_towards(src,movement_target,1)
-						playsound(loc, "[pick(emote_sound)]", 80, 1)
-						if(istype(movement_target,/obj/item/weapon/reagent_containers/food/snacks))
-							emote("me", 1, "barks at [movement_target], as if begging it to go into [corg_her] mouth.")
-							corgi_status = BEGIN_FOOD_HUNTING
-						else if(ishuman(movement_target))
-							emote("me", 1, "barks at [movement_target] and wags [corg_her] tail.")
-							corgi_status = IDLE
-						else
-							emote("me", 1, "barks with an attitude!")
-							corgi_status = IDLE
+/mob/living/simple_animal/corgi/ai_beg_for_food(atom/target, mob/living/holder)
+	emote("me", 1, "stares at [holder]'s [target] with a sad puppy-face and whimpers.")
 
-			else
-				emote("me", 1, "stares into space with a blank expression.")
-				corgi_status = IDLE
+/// Reacts to the thing someone pointed at: beg for food, greet a human, or bark.
+/datum/bt_node/ai_behavior/react_to_pointer
+	var/target_key = BB_TARGET
+
+/datum/bt_node/ai_behavior/react_to_pointer/setup(datum/ai_controller/controller)
+	var/atom/target = controller.blackboard[target_key]
+	if(!target || QDELETED(target) || !controller.pawn)
+		return FALSE
+	return get_dist(controller.pawn, target) <= 1
+
+/datum/bt_node/ai_behavior/react_to_pointer/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/atom/target = controller.blackboard[target_key]
+	var/mob/living/simple_animal/pawn = controller.pawn
+	if(!target || QDELETED(target) || !pawn || QDELETED(pawn) || get_dist(pawn, target) > 1)
+		return AI_BEHAVIOR_FAILED
+	var/pronoun = pawn.gender == MALE ? "his" : "her"
+	playsound(pawn.loc, "[pick(pawn.emote_sound)]", 80, 1)
+	if(istype(target, /obj/item/weapon/reagent_containers/food/snacks))
+		pawn.emote("me", 1, "barks at [target], as if begging it to go into [pronoun] mouth.")
+	else if(ishuman(target))
+		pawn.emote("me", 1, "barks at [target] and wags [pronoun] tail.")
+	else
+		pawn.emote("me", 1, "barks with an attitude!")
+	controller.clear_blackboard_key(target_key)
+	return AI_BEHAVIOR_SUCCEEDED
+
+/// Food first, then a point reaction, then ordinary pet idling.
+/proc/bt_corgi_tree()
+	return list(
+		BT_DESC_TYPE = /datum/bt_node/composite/selector,
+		BT_DESC_CHILDREN = list(
+			list(
+				BT_DESC_TYPE = /datum/bt_node/composite/sequence,
+				BT_DESC_CHILDREN = list(
+					list(
+						BT_DESC_TYPE = /datum/bt_node/ai_behavior/acquire_target,
+						target_source_type = /datum/target_source/food,
+						search_range = 5,
+					),
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/move_to_target, max_distance = 7),
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/fetch_food),
+				),
+			),
+			list(
+				BT_DESC_TYPE = /datum/bt_node/composite/sequence,
+				BT_DESC_CHILDREN = list(
+					list(
+						BT_DESC_TYPE = /datum/bt_node/ai_behavior/acquire_target,
+						target_source_type = /datum/target_source/pointer,
+						search_range = 5,
+					),
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/move_to_target, max_distance = 7),
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/react_to_pointer),
+				),
+			),
+			bt_idle_tree(50, 5 SECONDS, 4 SECONDS, FALSE),
+		),
+	)
 
 /mob/living/simple_animal/corgi/regular_hud_updates()
 	if(fire_alert)
@@ -392,32 +398,6 @@
 				if(user)
 					to_chat(user, "<span class='warning'>There is nothing to remove from its [remove_from].</span>")
 				return
-
-/mob/living/simple_animal/corgi/proc/get_target()
-	var/vision_range = 5
-	var/list/can_see = view(src, vision_range)
-	var/fullness = nutrition + (reagents.get_reagent_amount(NUTRIMENT) * 25)
-	if(fullness<550)
-		for(var/obj/item/weapon/reagent_containers/food/snacks/S in can_see)
-			if(isturf(S.loc) || ishuman(S.loc))
-				movement_target = S
-				corgi_status = BEGIN_FOOD_HUNTING
-				return
-	for(var/mob/living/carbon/M in can_see)
-		for(var/obj/item/H in M.held_items)
-			if(istype(H, /obj/item/weapon/reagent_containers/food/snacks))
-				movement_target = H
-				corgi_status = BEGIN_FOOD_HUNTING
-				return
-
-	for(var/obj/effect/decal/point/pointer in can_see)
-		var/atom/pointer_target = pointer.target
-		if(pointer_target == src)
-			return
-		corgi_status = BEGIN_POINTER_FOLLOWING
-		pointer_caller = pointer.pointer
-		movement_target = pointer_target
-		return
 
 /mob/living/simple_animal/corgi/Destroy()
 	..()
@@ -677,6 +657,7 @@
 	var/turns_since_scan = 0
 	var/mob/living/carbon/victim = null
 	can_breed = FALSE //tfw no gf
+	can_fetch = FALSE // rescues people instead of begging for snacks
 	var/obj/item/weapon/reagent_containers/glass/replenishing/rescue/barrel = null
 
 /mob/living/simple_animal/corgi/saint/death(var/gibbed = FALSE)
@@ -720,6 +701,7 @@
 		if(victim && (!IsVictim(victim) || !(victim.loc in can_see)))
 			victim = null
 			stop_automated_movement = FALSE
+			ai_wander_paused = FALSE
 		if(!victim)
 			for(var/mob/living/carbon/M in can_see)
 				if(IsVictim(M))
@@ -727,6 +709,7 @@
 					break
 		if(victim)
 			stop_automated_movement = TRUE
+			ai_wander_paused = TRUE
 			step_towards(src,victim)
 			if(Adjacent(victim) && IsVictim(victim)) //Seriously don't try to rescue the dead.
 				rescue(victim)
@@ -765,9 +748,3 @@
 	if (new_mannequin)
 		return TRUE
 	return FALSE
-
-#undef IDLE
-#undef BEGIN_FOOD_HUNTING
-#undef FOOD_HUNTING
-#undef BEGIN_POINTER_FOLLOWING
-#undef POINTER_FOLLOWING

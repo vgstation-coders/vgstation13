@@ -337,6 +337,8 @@
 // Attached controllers. Defined here so the AI port does not need to edit living.dm.
 /mob/living
 	var/datum/ai_controller/ai_controller = null
+	/// Pauses the tree's wander leaf without taking the controller offline.
+	var/ai_wander_paused = FALSE
 
 // Hooks called by the target acquisition leaf when the controller gains or drops
 // a target. Mobs override these for emotes/sounds; the leaves stay generic.
@@ -360,6 +362,16 @@
 /// Runs one unit of idle work (nurse spiders spin webs and lay eggs). Called
 /// from the idle_work leaf in a background context, so it may sleep.
 /mob/living/proc/ai_idle_work()
+	return
+
+/// TRUE when the pawn is hungry enough for the food target source to look for
+/// snacks. Defaults to never; pets override it.
+/mob/living/proc/ai_wants_food()
+	return FALSE
+
+/// Called by fetch_food when the snack is held by a human and the pawn would beg
+/// instead of eating it. Mobs override this for their own line/emote.
+/mob/living/proc/ai_beg_for_food(atom/target, mob/living/holder)
 	return
 
 /// TRUE when this controller currently has a blackboard target. Mobs use it to

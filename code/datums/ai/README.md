@@ -163,7 +163,18 @@ machines, bee swarms, corgis, parrots, mice) is still pending.
   it instead of the base `wander` block. The wander leaf routes through
   `wander_move()`, so custom flavors (cricket chirps, roach animation, snail
   trails and romance) still run. The snail pauses its controller while shelled
-  or romantic.
+  or romantic. `ai_wander_paused` lets a mob (the saint corgi) pause just the
+  wander leaf without taking the controller offline.
+- `friendly/corgi.dm`: the corgi's `corgi_status` state machine became
+  `bt_corgi_tree()`: food target (`target_source/food`, gated by
+  `ai_wants_food()`), pointer target (`target_source/pointer`, owner always
+  wins) and idle. `fetch_food` is generic; the corgi overrides
+  `ai_beg_for_food()` for its puppy-face line. The saint corgi keeps its rescue
+  `Life()` and uses a plain idle tree.
+- `friendly/mouse.dm`: mice run `bt_mouse_tree()`: snacks first, then an
+  occasional cable chew (`target_source/wires`, 10% poll gate), then idle. The
+  disease, cage and nutrition code stays in `Life()`.
+- `_ai_target_sources.dm`: added `food`, `pointer` and `wires` sources.
 - `mimic.dm`: mimics run the combat tree with `target_source/enemies/mimic`,
   which stays empty until `anger()`; losing the target calls `calm_down()` again
   (re-disguise) because the tree never calls `LoseTarget()`.

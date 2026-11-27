@@ -139,3 +139,81 @@
 	if(prey_type && !istype(existing, prey_type))
 		return FALSE
 	return TRUE
+
+/// Snacks a pet wants to eat: loose snacks on a turf and snacks held by a human.
+/// Only active while the pawn reports hunger through ai_wants_food().
+/datum/target_source/food
+	/// Include snacks held by humans (the corgi begs for those).
+	var/include_held = TRUE
+
+/datum/target_source/food/find_targets(datum/ai_controller/controller, mob/living/pawn, search_range)
+	var/list/candidates = list()
+	if(!pawn || !pawn.ai_wants_food())
+		return candidates
+	for(var/obj/item/weapon/reagent_containers/food/snacks/snack in view(search_range, pawn))
+		if(isturf(snack.loc))
+			candidates += snack
+	if(include_held)
+		for(var/mob/living/carbon/holder in view(search_range, pawn))
+			for(var/obj/item/held in holder.held_items)
+				if(istype(held, /obj/item/weapon/reagent_containers/food/snacks))
+					candidates += held
+	return candidates
+
+/datum/target_source/food/is_valid_target(datum/ai_controller/controller, mob/living/pawn, atom/existing)
+	return istype(existing, /obj/item/weapon/reagent_containers/food/snacks) && !QDELETED(existing)
+
+/// Follows someone's point emote. The pointer target is picked and the pointing
+/// mob is stored back on a corgi pawn so the reaction can tell friend from foe.
+/datum/target_source/pointer
+	/// Percent chance to actually react on a poll; the owner always gets through.
+	var/follow_chance = 35
+	/// target -> pointing mob for the candidates found this poll.
+	var/list/callers = list()
+
+/datum/target_source/pointer/find_targets(datum/ai_controller/controller, mob/living/pawn, search_range)
+	callers = list()
+	var/list/candidates = list()
+	var/mob/living/simple_animal/corgi/corgi = istype(pawn, /mob/living/simple_animal/corgi) ? pawn : null
+	for(var/obj/effect/decal/point/pointer in view(search_range, pawn))
+		var/atom/pointer_target = pointer.target
+		if(!pointer_target || pointer_target == pawn || QDELETED(pointer_target))
+			continue
+		if(callers[pointer_target])
+			continue
+		// The owner always gets the corgi's attention; strangers only sometimes.
+		if(corgi && corgi.master && pointer.pointer != corgi.master && !prob(follow_chance))
+			continue
+		if(!corgi && !prob(follow_chance))
+			continue
+		callers[pointer_target] = pointer.pointer
+		candidates += pointer_target
+	return candidates
+
+/datum/target_source/pointer/pick_target(datum/ai_controller/controller, mob/living/pawn, list/candidates)
+	var/atom/best = ..()
+	if(best)
+		var/mob/living/simple_animal/corgi/corgi = istype(pawn, /mob/living/simple_animal/corgi) ? pawn : null
+		if(corgi)
+			corgi.pointer_caller = callers[best]
+	return best
+
+/// Chewable cables for wire-chewing mice. Gated by a per-poll chance so the mouse
+/// does not spend every tick hunting cables.
+/datum/target_source/wires
+	/// Percent chance a poll yields any cable at all.
+	var/chew_chance = 10
+
+/datum/target_source/wires/find_targets(datum/ai_controller/controller, mob/living/pawn, search_range)
+	var/list/candidates = list()
+	var/mob/living/simple_animal/mouse/mouse = istype(pawn, /mob/living/simple_animal/mouse) ? pawn : null
+	if(mouse && !mouse.can_chew_wires)
+		return candidates
+	if(!prob(chew_chance))
+		return candidates
+	for(var/obj/structure/cable/wire in view(search_range, pawn))
+		candidates += wire
+	return candidates
+
+/datum/target_source/wires/is_valid_target(datum/ai_controller/controller, mob/living/pawn, atom/existing)
+	return istype(existing, /obj/structure/cable) && !QDELETED(existing)

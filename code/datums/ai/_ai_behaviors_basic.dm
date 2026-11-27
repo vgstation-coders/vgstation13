@@ -280,7 +280,11 @@
 
 /datum/bt_node/ai_behavior/move_to_target/setup(datum/ai_controller/controller)
 	var/atom/target = controller.blackboard[target_key]
-	if(!target || QDELETED(target) || !controller.pawn || !controller.ai_movement)
+	var/mob/living/pawn = controller.pawn
+	if(!target || QDELETED(target) || !pawn || QDELETED(pawn) || !controller.ai_movement)
+		return FALSE
+	// Sleeping, restrained or caged pawns do not walk.
+	if(pawn.stat != CONSCIOUS || pawn.locked_to)
 		return FALSE
 	return TRUE
 
@@ -582,6 +586,31 @@
 /datum/bt_node/ai_behavior/idle/perform(seconds_per_tick, datum/ai_controller/controller)
 	return AI_BEHAVIOR_SUCCEEDED
 
+/// Runs to the blackboard target and consumes/interacts with it through the
+/// legacy attack_animal hook (food, cables, ...). Begs when the target is held
+/// by a human. Override ai_beg_for_food() for a mob-specific line.
+/datum/bt_node/ai_behavior/fetch_food
+	var/target_key = BB_TARGET
+
+/datum/bt_node/ai_behavior/fetch_food/setup(datum/ai_controller/controller)
+	var/atom/target = controller.blackboard[target_key]
+	var/mob/living/pawn = controller.pawn
+	if(!target || QDELETED(target) || !pawn || QDELETED(pawn))
+		return FALSE
+	return pawn.stat == CONSCIOUS && !pawn.locked_to && get_dist(pawn, target) <= 1
+
+/datum/bt_node/ai_behavior/fetch_food/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/atom/target = controller.blackboard[target_key]
+	var/mob/living/pawn = controller.pawn
+	if(!target || QDELETED(target) || !pawn || QDELETED(pawn) || get_dist(pawn, target) > 1)
+		return AI_BEHAVIOR_FAILED
+	if(isturf(target.loc))
+		target.attack_animal(pawn)
+	else if(ishuman(target.loc) && prob(20))
+		pawn.ai_beg_for_food(target, target.loc)
+	controller.clear_blackboard_key(target_key)
+	return AI_BEHAVIOR_SUCCEEDED
+
 /// Writes a value to the blackboard. Fails without a key.
 /datum/bt_node/ai_behavior/set_blackboard_key
 	var/key = null
@@ -616,6 +645,12 @@
 /datum/bt_node/ai_behavior/wander/perform(seconds_per_tick, datum/ai_controller/controller)
 	var/mob/living/pawn = controller.pawn
 	if(!pawn || QDELETED(pawn))
+		return AI_BEHAVIOR_FAILED
+	if(pawn.stat != CONSCIOUS || pawn.locked_to)
+		return AI_BEHAVIOR_FAILED
+	// A mob can pause its idle wander without taking the controller offline
+	// (the saint corgi does this while rescuing a victim).
+	if(pawn.ai_wander_paused)
 		return AI_BEHAVIOR_FAILED
 	if(world.time < next_move_time)
 		return AI_BEHAVIOR_FAILED
