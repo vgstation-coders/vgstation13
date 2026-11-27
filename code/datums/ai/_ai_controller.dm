@@ -19,6 +19,8 @@
 	var/list/polling_observers = null
 	/// Current AI status; only controllers not in AI_STATUS_OFF are ticked.
 	var/ai_status = AI_STATUS_OFF
+	/// Movement adapter used by movement behaviors.
+	var/datum/ai_movement/ai_movement = null
 	/// Set by cancel_current_plan() mid-tick so composites abort the current tick loop.
 	var/cancelled_during_tick = FALSE
 	/// Execution index of the last leaf that returned BT_RUNNING.
@@ -27,6 +29,7 @@
 	var/ticking_execution_index = 0
 
 /datum/ai_controller/New(mob/living/new_pawn)
+	change_ai_movement_type(/datum/ai_movement/basic)
 	if(!isnull(new_pawn))
 		PossessPawn(new_pawn)
 	return ..()
@@ -36,6 +39,7 @@
 	if(pawn && pawn.ai_controller == src)
 		pawn.ai_controller = null
 	pawn = null
+	QDEL_NULL(ai_movement)
 	// behavior_nodes may still contain typepaths or descriptors if initialization
 	// never ran; only qdel resolved datum instances.
 	for(var/datum/entry in behavior_nodes)
@@ -57,6 +61,7 @@
 	pawn = new_pawn
 	pawn.ai_controller = src
 	blackboard[BB_MY_PAWN] = pawn
+	pawn.register_event(/event/death, src, nameof(src::on_pawn_death()))
 	set_ai_status(AI_STATUS_ON)
 	return TRUE
 
@@ -64,10 +69,21 @@
 /datum/ai_controller/proc/UnpossessPawn()
 	set_ai_status(AI_STATUS_OFF)
 	if(pawn)
+		pawn.unregister_event(/event/death, src, nameof(src::on_pawn_death()))
 		if(pawn.ai_controller == src)
 			pawn.ai_controller = null
 		pawn = null
 	blackboard.Remove(BB_MY_PAWN)
+
+/// Stops the AI when the pawn dies.
+/datum/ai_controller/proc/on_pawn_death(mob/living/user, body_destroyed)
+	set_ai_status(AI_STATUS_OFF)
+
+/// Replaces the movement adapter. Takes a movement datum typepath.
+/datum/ai_controller/proc/change_ai_movement_type(datum/ai_movement/new_movement)
+	if(ai_movement)
+		QDEL_NULL(ai_movement)
+	ai_movement = new new_movement
 
 /// Moves the controller between AI status lists.
 /datum/ai_controller/proc/set_ai_status(new_status)

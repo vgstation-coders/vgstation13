@@ -78,6 +78,7 @@
 #define AI_STATUS_ON_LOW "ai_on_low"
 #define AI_STATUS_OFF "ai_off"
 
-// Minimal blackboard key used by the controller itself.
+// Minimal blackboard keys used by the controller and the starter behaviors.
 #define BB_MY_PAWN "my_pawn"
+#define BB_TARGET "target"
 

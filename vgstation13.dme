@@ -3150,6 +3150,8 @@
 #include "code\datums\ai\_ai_bt_decorators.dm"
 #include "code\datums\ai\_ai_bt_subtree.dm"
 #include "code\datums\ai\_ai_behavior.dm"
+#include "code\datums\ai\_ai_movement.dm"
+#include "code\datums\ai\_ai_behaviors_basic.dm"
 #include "code\datums\ai\_ai_controller.dm"
 #include "code\datums\ai\behavior_tree_test.dm"
 // END_INCLUDE
