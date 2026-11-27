@@ -36,7 +36,9 @@
 	if(!..())
 		return FALSE
 	var/mob/living/simple_animal/hostile/hostile = controller.pawn
-	if(!istype(hostile) || !hostile.projectiletype || !hostile.ranged_mode())
+	// projectiletype is optional: mobs like the mummy priests override Shoot()
+	// with a spell instead of firing a projectile.
+	if(!istype(hostile) || !hostile.ranged_mode())
 		return FALSE
 	return hostile.ranged_cooldown <= 0
 
@@ -44,6 +46,11 @@
 	var/mob/living/simple_animal/hostile/hostile = controller.pawn
 	if(!target || QDELETED(target) || !hostile || QDELETED(hostile))
 		return AI_BEHAVIOR_FAILED
+	// Some legacy Shoot() overrides (mummy priests, jackal firebreathers) ignore
+	// their arguments and read src.target. Point it at the blackboard target for
+	// the shot; the legacy Life() GiveTarget(null) clears it again on its next
+	// idle tick, which also keeps rapid multi-shot spawns working.
+	hostile.target = target
 	hostile.OpenFire(target)
 	return AI_BEHAVIOR_SUCCEEDED
 

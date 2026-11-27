@@ -48,15 +48,16 @@
 			continue
 		if(isliving(candidate))
 			var/mob/living/living_candidate = candidate
-			if(living_candidate.stat == DEAD)
-				continue
 			// CanAttack() is vg's "would I attack this" contract: hostile mobs
-			// override it with faction rules, while the base simple_animal
-			// version only allows targets already in crit.
+			// override it with faction and stat_attack rules (embalmers and nurse
+			// spiders target dead bodies), while the base simple_animal version
+			// only allows targets already in crit.
 			if(istype(pawn, /mob/living/simple_animal))
 				var/mob/living/simple_animal/animal = pawn
 				if(!animal.CanAttack(candidate))
 					continue
+			else if(living_candidate.stat == DEAD)
+				continue
 			candidates += candidate
 			continue
 		// Objects (lights, bots, mechas) only while the pawn still searches for

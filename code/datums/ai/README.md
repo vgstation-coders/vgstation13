@@ -4,18 +4,15 @@ Source: [tgstation/tgstation](https://github.com/tgstation/tgstation) `master`,
 `code/datums/ai/_ai_bt_*.dm`, `code/datums/ai/_ai_behavior.dm`,
 `code/datums/ai/_ai_controller.dm` and `code/__DEFINES/ai/behavior_trees.dm`.
 
-**Status:** phase 20. The core, subsystem/possession path, sentience hooks,
+**Status:** phase 21. The core, subsystem/possession path, sentience hooks,
 z-level-gated subsystems, path-cached movement, starter behavior leaves (attack,
 flee, retreat, hold, smash, wait, wander, hunt, follow, idle work, speak,
 blackboard keys), async actions, target lifecycle hooks and target sources
 (enemies, wounded, retaliate, prey, including wanted objects), an ability system
 with a ranged and a charge ability, a health decorator, the `.bt.json` compiler,
 the admin BT viewer, an example hostile consumer and twenty-seven existing mapped
-mob types (space bear, space carp, strong/ranged/rapid hivebot, viscerator, cow,
-goat, chicken, cat, crab, bigroach, gingerbread, ginger family, skeleton jack,
-warrior bug, retaliate clown/mime/tomato, puddi, spider hunter, pirate/gunner,
-russian/gunner, spider nurse/queen) compile and pass the auxtools scenario. The
-wider basic mob behavior set is still pending.
+mob types plus the syndicate, mummy and jackal families compile and pass the
+auxtools scenario. The wider basic mob behavior set is still pending.
 
 ## Ported so far
 
@@ -120,6 +117,12 @@ wider basic mob behavior set is still pending.
   queen). They run a cocooning tree with async attacks (do_after cocoons no longer
   stall the tick), async idle work (web spinning, egg laying, evolution checks)
   and the queen's web projectile through the ranged ability.
+- `human/syndicate.dm`, `human/mummy.dm` + `human/jackal.dm`: the syndicate,
+  mummy and jackal families run `use_humanoid_tree()` (melee or gunner variants).
+  The mummy priests and jackal pyromaniac keep their custom `Shoot()` spells
+  because `ranged_attack` points the legacy `target` var at the shot target; the
+  jackal embalmer targets dead bodies through the normal `CanAttack`/stat_attack
+  rules.
 - `_ai_bt_viewer.dm` + `code/modules/admin/verbs/behavior_trees.dm`: admin
   "View Behavior Tree" verb rendering the tree, blackboard and live markers.
 - `living.dm`: `/mob/living/Destroy()` now deletes the attached
@@ -213,6 +216,15 @@ childless and it fails every tick.
   result through a token, but it cannot interrupt a `do_after` already in
   progress: the side effect may still land. Event logging (`EVLOG_*`) is still
   deferred; the viewer renders on demand and does not drain a per-tick log.
+- **Ranged shots set the legacy target.** Some legacy `Shoot()` overrides ignore
+  their arguments and read `src.target`; `ranged_attack` sets it before
+  `OpenFire()`. The legacy `Life()`'s idle `GiveTarget(null)` clears it again.
+- **Dead bodies are not pre-filtered.** For simple animals the enemy source leaves
+  the dead/alive decision to `CanAttack()` (which encodes `stat_attack` and
+  `stat_exclusive`), so embalmers and nurse spiders can target corpses.
+- **Controller death safety net.** `SelectBehaviors()` turns the AI off when the
+  pawn is dead, covering death overrides that skip `..()` and never fire
+  `/event/death`.
 
 ## Next phases
 
@@ -253,6 +265,7 @@ idle tree wanders, verify the spider hunter targets a wanted object and then
 attacks a living victim, verify the pirate/russian melee batch attacks and the
 pirate gunner fires its ranged ability, exercise the async leaf state machine,
 verify the nurse spider has the async attack leaf and spins a web in idle work,
-and verify the migrated space bear and space carp attack adjacent humans. Keep
-the test leaves in `behavior_tree_test.dm` until real leaves and unit tests
-replace them.
+verify the syndicate melee/gunner, mummy warrior/priest and jackal embalmer
+families behave, and verify the migrated space bear and space carp attack
+adjacent humans. Keep the test leaves in `behavior_tree_test.dm` until real
+leaves and unit tests replace them.

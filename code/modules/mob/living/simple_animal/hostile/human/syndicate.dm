@@ -142,3 +142,11 @@
     projectiletype = /obj/item/projectile/energy/plasma/pistol
     items_to_drop = list(/obj/item/weapon/gun/energy/plasma/pistol)
     corpse = /obj/effect/landmark/corpse/syndicateexec/space
+
+// WIP: the syndicate family runs the humanoid behavior tree (melee or ranged).
+/mob/living/simple_animal/hostile/humanoid/syndicate/New()
+	..()
+	use_humanoid_tree()
+
+/mob/living/simple_animal/hostile/humanoid/syndicate/FindTarget()
+	return null

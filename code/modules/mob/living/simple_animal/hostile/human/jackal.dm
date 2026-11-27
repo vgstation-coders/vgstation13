@@ -114,3 +114,13 @@
 	..()
 
 	target = old_target
+
+// WIP: the jackal family runs the humanoid behavior tree. The embalmer's
+// AttackingTarget (dead bodies -> mummy) works through the legacy bridge and the
+// pyromaniac's Shoot keeps working because ranged_attack sets src.target.
+/mob/living/simple_animal/hostile/humanoid/jackal/New()
+	..()
+	use_humanoid_tree()
+
+/mob/living/simple_animal/hostile/humanoid/jackal/FindTarget()
+	return null

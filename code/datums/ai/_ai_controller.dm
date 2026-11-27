@@ -182,6 +182,10 @@
 /// Ticks the roots until one is still running.
 /datum/ai_controller/proc/SelectBehaviors(seconds_per_tick)
 	SHOULD_NOT_SLEEP(TRUE)
+	// Safety net for death overrides that skip ..() and never fire /event/death.
+	if(pawn && pawn.stat == DEAD)
+		set_ai_status(AI_STATUS_OFF)
+		return
 	cancelled_during_tick = FALSE
 	if(polling_observers)
 		for(var/datum/bt_node/decorator/observer in polling_observers.Copy())
