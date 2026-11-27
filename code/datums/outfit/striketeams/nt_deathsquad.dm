@@ -39,8 +39,8 @@
 
 	id_type = /obj/item/weapon/card/id/death_commando
 	id_type_leader = /obj/item/weapon/card/id/death_commando_leader
-	assignment_leader = "Death Commando"
-	assignment_member = "Death Commander"
+	assignment_leader = "Death Commander"
+	assignment_member = "Death Commando"
 
 /datum/outfit/striketeam/nt_deathsquad/pre_equip(var/mob/living/carbon/human/H)
 	if (is_leader)
