@@ -4,12 +4,12 @@ Source: [tgstation/tgstation](https://github.com/tgstation/tgstation) `master`,
 `code/datums/ai/_ai_bt_*.dm`, `code/datums/ai/_ai_behavior.dm`,
 `code/datums/ai/_ai_controller.dm` and `code/__DEFINES/ai/behavior_trees.dm`.
 
-**Status:** phase 8.5 (controller integration). The core, subsystem/possession
-path, sentience hooks, path-cached movement, starter behavior leaves (attack,
-flee, speak), target lifecycle hooks and target sources, an ability system with a
-ranged and a charge ability, a health decorator, an example hostile consumer and
-three existing mapped mobs (space bear, space carp, strong hivebot) compile and
-pass the auxtools scenario. The wider basic mob behavior set is still pending.
+**Status:** phase 9. The core, subsystem/possession path, sentience hooks,
+path-cached movement, starter behavior leaves (attack, flee, retreat, hold,
+smash, speak), target lifecycle hooks and target sources, an ability system with
+a ranged and a charge ability, a health decorator, an example hostile consumer and five existing mapped mob types
+(space bear, space carp, strong/ranged/rapid hivebot) compile and pass the
+auxtools scenario. The wider basic mob behavior set is still pending.
 
 ## Ported so far
 
@@ -37,8 +37,9 @@ pass the auxtools scenario. The wider basic mob behavior set is still pending.
 - `_ai_abilities.dm`: `ai_ability` base with cooldowns, plus `ranged_attack`
   (wraps the legacy `OpenFire`/`ranged_cooldown`) and `charge` (closes two tiles).
 - `_ai_behaviors_basic.dm`: `acquire_target` (target sources, dead/invalid target
-  cleanup), `move_to_target`, `attack_target`, `flee_target`, `speak_line`,
-  `use_ability`, and the `bt_hostile_combat_tree()` /
+  cleanup), `move_to_target`, `attack_target`, `flee_target` (also the
+  `retreat_from_target` keep-distance stance), `speak_line`, `use_ability`,
+  `hold_position` and `smash_surroundings`, plus the `bt_hostile_combat_tree()` /
   `bt_basic_hostile_tree()` / `bt_fleeing_hostile_tree()` /
   `bt_ranged_hostile_tree()` descriptors.
 - `bt_guard.dm`: example first consumer, a hostile simple animal whose decision
@@ -50,10 +51,11 @@ pass the auxtools scenario. The wider basic mob behavior set is still pending.
 - `carp.dm`: second existing mapped mob migration. Space carp (and their
   subtypes) now run the shared starter tree; their legacy target acquisition is
   disabled and the "gnashes at" emote moved to the `ai_target_acquired()` hook.
-- `hivebot.dm`: third migration and the first ranged consumer. `hivebot/strong`
-  runs `bt_ranged_hostile_tree()`: fire at range through `use_ability`, melee when
-  adjacent. The beacon-spawned `hivebot`, `range` and `rapid` variants are still on
-  the legacy AI on purpose (they need retreat-distance handling).
+- `hivebot.dm`: third migration and the ranged consumers. `hivebot/strong`,
+  `hivebot/range` and `hivebot/rapid` run `bt_ranged_hostile_tree()`: melee when
+  adjacent, back off to `retreat_distance`, fire at range, hold while the gun
+  cools down, chase otherwise. The beacon-spawned base `hivebot` and the `tele`
+  beacon itself stay on the legacy AI on purpose.
 - `code/controllers/subsystem/ai_controllers.dm`: two subsystems —
   `SSai_controllers` for `AI_STATUS_ON` and `SSai_controllers_low` for
   `AI_STATUS_ON_LOW` at half rate. Controllers created before the subsystems
@@ -85,11 +87,17 @@ childless and it fails every tick.
   fallback has no obstacle avoidance: a blocked step fails the movement leaf and
   the tree retries on the next tick, so a pawn can stall on a single blocker.
 - **Starter hostile behavior only.** The shared trees have acquire/move/attack,
-  plus opt-in flee (`bt_fleeing_hostile_tree`), ranged attacks
-  (`bt_ranged_hostile_tree`) and `speak_line`. Environment smashing and the legacy
-  bear-specific burger behavior are still missing. Chatting leaves should pass
-  explicit lines when the mob keeps legacy `handle_automated_speech()` to avoid
-  double-speaking.
+  plus opt-in flee (`bt_fleeing_hostile_tree`), ranged combat with
+  retreat/hold (`bt_ranged_hostile_tree`) and `speak_line`. Chatting leaves
+  should pass explicit lines when the mob keeps legacy `handle_automated_speech()`
+  to avoid double-speaking.
+- **Ranged stance is selector-based.** The ranged tree evaluates melee, retreat,
+  ability and hold in order; it cannot attack and back off on the same tick the
+  way legacy `MoveToTarget()` does. A cornered ranged mob melees instead of
+  failing to retreat.
+- **Environment smashing is a fallback branch.** It calls the legacy
+  `DestroySurroundings()` on a 2 second cooldown, only after the chase branch
+  failed to move. It does not replace the legacy `EscapeConfinement()` loop.
 - **Target sources are polled, not event driven.** `acquire_target` asks its
   `target_source` for candidates on every run, so sources are cheap filters
   instead of signal subscriptions.
@@ -115,8 +123,8 @@ childless and it fails every tick.
 
 ## Next phases
 
-1. **Behaviors:** port the remaining basic mob leaves (environment smashing,
-   speech variants, more target sources) and keep migrating existing mobs.
+1. **Behaviors:** port the remaining basic mob leaves (speech variants, more
+   target sources, mob-specific specials) and keep migrating existing mobs.
 2. **Controller integration:** z-level lists if AI becomes a hotspot; higher
    level path caching and multi-step movement.
 3. **Tree tooling:** `.bt.json` compiler and loader; BT viewer.
@@ -125,7 +133,7 @@ childless and it fails every tick.
 
 ## Testing
 
-The phase-8.5 scenario lives outside the repository (local auxtools harness):
+The phase-9 scenario lives outside the repository (local auxtools harness):
 build a sequence/selector/decorator/subtree, tick it across RUNNING/SUCCESS/
 FAILURE, exercise the descriptor builder, cancel a running leaf, possess a mob,
 verify sentience login/logout and high/low subsystem routing, trigger its death
@@ -134,6 +142,8 @@ example `bt_guard` against an adjacent victim, make it flee while badly hurt and
 resume combat after healing (in a cleared arena so the path is deterministic),
 say a line, drop a dead target during acquisition, verify the closest and
 wounded target sources pick the expected victim, fire the strong hivebot's
-ranged ability, make it melee at adjacency, charge with a pawn, and verify the
-migrated space bear and space carp attack adjacent humans. Keep the test leaves
-in `behavior_tree_test.dm` until real leaves and unit tests replace them.
+ranged ability, make it melee at adjacency, charge with a pawn, verify a ranged
+hivebot retreats to its keep distance, smash surroundings as a hostile pawn,
+and verify the migrated space bear and space carp attack adjacent humans. Keep
+the test leaves in `behavior_tree_test.dm` until real leaves and unit tests
+replace them.

@@ -35,12 +35,29 @@
 
 	blooded = FALSE
 
+// WIP: installs a behavior tree controller on a hivebot combat variant. Kept as
+// a proc so the beacon (`tele`) and the unmigrated base hivebot keep the legacy
+// AI; only the subtypes below opt in.
+/mob/living/simple_animal/hostile/hivebot/proc/use_behavior_tree(list/tree)
+	stop_automated_movement = TRUE
+	wander = 0
+	var/datum/ai_controller/controller = new(src)
+	controller.behavior_nodes = list(tree)
+	controller.initialize_behavior_tree()
+
 /mob/living/simple_animal/hostile/hivebot/range
 	name = "Ranged Hivebot"
 	desc = "A biggish robot. This one has a gun!"
 	ranged = 1
 	retreat_distance = 5
 	minimum_distance = 5
+
+/mob/living/simple_animal/hostile/hivebot/range/New()
+	..()
+	use_behavior_tree(bt_ranged_hostile_tree(retreat_distance = retreat_distance))
+
+/mob/living/simple_animal/hostile/hivebot/range/FindTarget()
+	return null
 
 /mob/living/simple_animal/hostile/hivebot/rapid
 	name = "Rapidfire Hivebot"
@@ -49,6 +66,13 @@
 	rapid = 1
 	retreat_distance = 5
 	minimum_distance = 5
+
+/mob/living/simple_animal/hostile/hivebot/rapid/New()
+	..()
+	use_behavior_tree(bt_ranged_hostile_tree(retreat_distance = retreat_distance))
+
+/mob/living/simple_animal/hostile/hivebot/rapid/FindTarget()
+	return null
 
 /mob/living/simple_animal/hostile/hivebot/strong
 	name = "Strong Hivebot"
@@ -61,11 +85,7 @@
 // legacy hostile AI no longer acquires targets.
 /mob/living/simple_animal/hostile/hivebot/strong/New()
 	..()
-	stop_automated_movement = TRUE
-	wander = 0
-	var/datum/ai_controller/controller = new(src)
-	controller.behavior_nodes = list(bt_ranged_hostile_tree())
-	controller.initialize_behavior_tree()
+	use_behavior_tree(bt_ranged_hostile_tree())
 
 /mob/living/simple_animal/hostile/hivebot/strong/FindTarget()
 	return null

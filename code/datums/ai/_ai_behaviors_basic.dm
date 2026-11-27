@@ -25,6 +25,15 @@
 					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/attack_target),
 				),
 			),
+			// Last resort when the chase branch could not move: break what is in
+			// the way instead of standing still forever.
+			list(
+				BT_DESC_TYPE = /datum/bt_node/composite/sequence,
+				BT_DESC_CHILDREN = list(
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/acquire_target),
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/smash_surroundings),
+				),
+			),
 		),
 	)
 
@@ -55,15 +64,32 @@
 		),
 	)
 
-/// Hostile tree that opens with a ranged ability while the target is at range,
-/// then falls back to the shared combat tree (which closes in and melees).
-/proc/bt_ranged_hostile_tree(ability_type = /datum/ai_ability/ranged_attack, min_distance = 2, max_distance = 7)
+/// Ranged tree: melee when adjacent, keep the retreat distance, fire when ready,
+/// hold position while the gun cools down, and only then chase. The melee branch
+/// comes first so a cornered ranged mob fights instead of failing to back off.
+/proc/bt_ranged_hostile_tree(ability_type = /datum/ai_ability/ranged_attack, min_distance = 2, max_distance = 7, retreat_distance = 0)
 	return list(
 		BT_DESC_TYPE = /datum/bt_node/composite/selector,
 		BT_DESC_CHILDREN = list(
 			list(
+				BT_DESC_TYPE = /datum/bt_node/composite/sequence,
+				BT_DESC_CHILDREN = list(
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/acquire_target),
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/attack_target),
+				),
+			),
+			list(
+				BT_DESC_TYPE = /datum/bt_node/ai_behavior/flee_target/retreat,
+				flee_distance = retreat_distance,
+			),
+			list(
 				BT_DESC_TYPE = /datum/bt_node/ai_behavior/use_ability,
 				ability_type = ability_type,
+				min_distance = min_distance,
+				max_distance = max_distance,
+			),
+			list(
+				BT_DESC_TYPE = /datum/bt_node/ai_behavior/hold_position,
 				min_distance = min_distance,
 				max_distance = max_distance,
 			),
@@ -203,15 +229,23 @@
 /// Runs away from the blackboard target until it is farther than flee_distance.
 /// With hold_while_target_alive the leaf stays RUNNING once safe, so a
 /// respond-to-damage branch keeps the pawn away instead of re-engaging.
+/// With gate_on_distance the leaf is a retreat stance: it only activates while
+/// closer than flee_distance and finishes once that distance is reached.
 /datum/bt_node/ai_behavior/flee_target
 	var/target_key = BB_TARGET
 	var/flee_distance = 5
 	var/max_distance = 30
 	var/hold_while_target_alive = FALSE
+	/// When TRUE, act as a keep-distance stance instead of a full flee.
+	var/gate_on_distance = FALSE
 
 /datum/bt_node/ai_behavior/flee_target/setup(datum/ai_controller/controller)
 	var/atom/threat = controller.blackboard[target_key]
 	if(!threat || QDELETED(threat) || !controller.pawn || !controller.ai_movement)
+		return FALSE
+	if(flee_distance <= 0)
+		return FALSE
+	if(gate_on_distance && get_dist(controller.pawn, threat) >= flee_distance)
 		return FALSE
 	return TRUE
 
@@ -221,7 +255,7 @@
 	if(!threat || QDELETED(threat) || !pawn || QDELETED(pawn))
 		return AI_BEHAVIOR_FAILED
 
-	if(get_dist(pawn, threat) > flee_distance)
+	if(get_dist(pawn, threat) >= flee_distance)
 		if(controller.ai_movement)
 			controller.ai_movement.stop_moving_towards(controller)
 		if(hold_while_target_alive)
@@ -249,6 +283,12 @@
 	if(controller?.ai_movement)
 		controller.ai_movement.stop_moving_towards(controller)
 	return ..()
+
+/// Keep-distance stance for ranged mobs: backs off while the target is closer
+/// than flee_distance and yields once the distance is restored. Subtype of
+/// flee_target so it shares the pathing/stop logic.
+/datum/bt_node/ai_behavior/flee_target/retreat
+	gate_on_distance = TRUE
 
 /// Says one of the provided lines (or the pawn's speak list) on a cooldown.
 /// Note: simple animals that keep legacy speech (handle_automated_speech) should
@@ -327,3 +367,42 @@
 	if(result & AI_BEHAVIOR_SUCCEEDED)
 		ability.start_cooldown(controller)
 	return result
+
+/// Does nothing for a tick when the target is inside the ability's range but the
+/// ability is not ready. Returning SUCCESS lets the selector re-check next tick
+/// instead of walking the pawn into melee.
+/datum/bt_node/ai_behavior/hold_position
+	var/target_key = BB_TARGET
+	var/min_distance = 1
+	var/max_distance = 7
+
+/datum/bt_node/ai_behavior/hold_position/setup(datum/ai_controller/controller)
+	var/atom/target = controller.blackboard[target_key]
+	var/mob/living/pawn = controller.pawn
+	if(!target || QDELETED(target) || !pawn || QDELETED(pawn))
+		return FALSE
+	var/distance = get_dist(pawn, target)
+	return distance > min_distance && distance <= max_distance
+
+/datum/bt_node/ai_behavior/hold_position/perform(seconds_per_tick, datum/ai_controller/controller)
+	return AI_BEHAVIOR_SUCCEEDED
+
+/// Breaks obstacles in the pawn's way through the legacy DestroySurroundings().
+/// Only useful for hostile mobs; other pawns fail the branch.
+/datum/bt_node/ai_behavior/smash_surroundings
+	/// Cooldown between smashing attempts so a blocked pawn does not spam attacks.
+	var/cooldown = 2 SECONDS
+	/// world.time before which the leaf reports failure instead of smashing.
+	var/next_smash_time = 0
+
+/datum/bt_node/ai_behavior/smash_surroundings/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/simple_animal/hostile/hostile = controller.pawn
+	if(!istype(hostile) || QDELETED(hostile))
+		return AI_BEHAVIOR_FAILED
+	// Fail (instead of returning DELAY) so the selector keeps re-evaluating the
+	// higher-priority branches while the smash is on cooldown.
+	if(world.time < next_smash_time)
+		return AI_BEHAVIOR_FAILED
+	next_smash_time = world.time + cooldown
+	hostile.DestroySurroundings()
+	return AI_BEHAVIOR_SUCCEEDED
