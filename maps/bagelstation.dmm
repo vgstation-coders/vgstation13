@@ -84324,6 +84324,7 @@
 /area/centcom/holding)
 "djW" = (
 /obj/machinery/vending/cigarette,
+/obj/structure/fence/east,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "djX" = (
@@ -114018,6 +114019,13 @@
 /obj/machinery/crate_weigher,
 /turf/simulated/floor,
 /area/supply/storage)
+"prx" = (
+/obj/structure/bed/chair/wood/wings{
+	dir = 8
+	},
+/obj/structure/fence/east,
+/turf/unsimulated/floor/mars/air,
+/area/centcom/holding)
 "pDP" = (
 /obj/machinery/atmospherics/pipe/simple/cyan,
 /obj/structure/catwalk,
@@ -420807,7 +420815,7 @@ diA
 diH
 diH
 diA
-diA
+prx
 djW
 dkf
 dkf
@@ -421309,8 +421317,8 @@ diC
 diH
 djv
 djD
-djD
-djD
+diC
+diC
 dkg
 eOx
 eOx

@@ -154,22 +154,37 @@
 /turf/simulated/floor/engine,
 /area/prison/solitary)
 "s" = (
-/obj/structure/fence/post,
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
 	},
 /obj/structure/cable,
+/obj/structure/fence/post/east,
+/obj/structure/fence/post/west,
 /turf/simulated/floor/engine,
 /area/prison/solitary)
 "u" = (
-/obj/structure/fence,
 /obj/structure/cable,
+/obj/structure/fence/post/east,
+/obj/structure/fence/post/west,
 /turf/simulated/floor/engine,
+/area/prison/solitary)
+"v" = (
+/obj/structure/fence/west,
+/turf/simulated/floor/engine,
+/area/prison/solitary)
+"w" = (
+/obj/structure/fence,
+/obj/structure/fence/west,
+/turf/simulated/floor{
+	icon_state = "cult"
+	},
 /area/prison/solitary)
 "x" = (
 /obj/structure/fence/post,
+/obj/structure/fence/post/west,
+/obj/structure/fence/post/east,
 /turf/simulated/floor{
 	icon_state = "cult"
 	},
@@ -192,6 +207,10 @@
 /turf/simulated/floor{
 	icon_state = "cult"
 	},
+/area/prison/solitary)
+"E" = (
+/obj/structure/fence/east,
+/turf/simulated/floor/plating,
 /area/prison/solitary)
 "F" = (
 /obj/structure/fence/door/secure/inverted,
@@ -217,6 +236,29 @@
 /area/prison/solitary)
 "N" = (
 /obj/structure/fence/door/secure/inverted,
+/turf/simulated/floor/plating,
+/area/prison/solitary)
+"U" = (
+/obj/structure/fence/post/east,
+/turf/simulated/floor/plating,
+/area/prison/solitary)
+"V" = (
+/obj/structure/fence,
+/obj/structure/fence/east,
+/turf/simulated/floor{
+	icon_state = "cult"
+	},
+/area/prison/solitary)
+"W" = (
+/obj/structure/fence/east,
+/turf/simulated/floor/engine,
+/area/prison/solitary)
+"X" = (
+/obj/structure/fence/post/west,
+/turf/simulated/floor/plating,
+/area/prison/solitary)
+"Z" = (
+/obj/structure/fence/west,
 /turf/simulated/floor/plating,
 /area/prison/solitary)
 
@@ -270,18 +312,18 @@ c
 g
 g
 a
-q
-J
-J
-J
-J
-J
-J
-M
-L
-K
-J
-q
+X
+Z
+Z
+Z
+Z
+Z
+Z
+Z
+Z
+Z
+Z
+X
 a
 g
 a
@@ -339,12 +381,12 @@ k
 r
 r
 z
-z
-z
-z
-z
-z
-z
+v
+v
+v
+v
+v
+w
 r
 r
 r
@@ -405,11 +447,11 @@ m
 r
 r
 z
-A
-A
-A
-A
-A
+r
+r
+r
+r
+r
 z
 r
 r
@@ -449,11 +491,11 @@ m
 r
 r
 z
-A
-A
-A
-A
-A
+r
+r
+r
+r
+r
 z
 r
 r
@@ -493,11 +535,11 @@ k
 r
 r
 z
-A
-A
-A
-A
-A
+r
+r
+r
+r
+r
 z
 r
 r
@@ -515,12 +557,12 @@ k
 r
 r
 z
-z
-z
-z
-z
-z
-z
+W
+W
+W
+W
+W
+V
 r
 r
 r
@@ -578,18 +620,18 @@ g
 g
 g
 a
-q
-J
-J
-J
-J
-J
-J
-J
-J
-J
-J
-q
+U
+E
+E
+E
+E
+E
+E
+E
+E
+E
+E
+U
 a
 g
 a

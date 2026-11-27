@@ -713,6 +713,10 @@
 	},
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/entrance)
+"lQ" = (
+/obj/structure/fence/east,
+/turf/unsimulated/floor/asteroid,
+/area/vault/mothership_lab/asteroid)
 "lX" = (
 /mob/living/simple_animal/hostile/humanoid/grey/soldier/pacifier,
 /obj/item/device/flashlight/flare/ever_bright,
@@ -1238,7 +1242,7 @@
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/asteroid)
 "sK" = (
-/obj/structure/fence/door/secure/inverted,
+/obj/structure/fence/door/secure/inverted/east,
 /turf/unsimulated/floor/asteroid/plating,
 /area/vault/mothership_lab/asteroid)
 "sN" = (
@@ -6612,9 +6616,9 @@ MD
 MD
 Dp
 Au
-Wf
+lQ
 sK
-Wf
+lQ
 Au
 MD
 MD

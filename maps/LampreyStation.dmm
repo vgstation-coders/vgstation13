@@ -855,9 +855,12 @@
 /turf/simulated/floor/wood,
 /area/lamprey/detoxins)
 "acr" = (
-/obj/structure/fence,
-/turf/simulated/floor/plating/damaged/broken,
-/area/lamprey/detoxins)
+/obj/structure/bed/chair/wood/wings{
+	dir = 8
+	},
+/obj/structure/fence/east,
+/turf/unsimulated/floor/mars/air,
+/area/centcom/holding)
 "act" = (
 /obj/effect/landmark/corpse/chef,
 /turf/simulated/floor/wood,
@@ -128982,6 +128985,7 @@
 /area/centcom/holding)
 "fBo" = (
 /obj/machinery/vending/cigarette,
+/obj/structure/fence/east,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "fBp" = (
@@ -289146,9 +289150,9 @@ aiW
 aaa
 aaa
 acc
-acr
+acf
 alb
-acr
+acf
 acw
 acA
 acI
@@ -291155,7 +291159,7 @@ aaa
 acc
 acc
 acf
-acr
+acf
 alb
 acw
 acw
@@ -398207,9 +398211,9 @@ aaa
 aaa
 aaa
 acc
-acr
+acf
 alb
-acr
+acf
 acw
 acw
 acC
@@ -400216,7 +400220,7 @@ aaa
 acc
 acc
 acf
-acr
+acf
 alb
 acw
 acw
@@ -499243,7 +499247,7 @@ fxI
 fxP
 fxP
 fxI
-fxI
+acr
 fBo
 fBP
 fBP
@@ -499745,8 +499749,8 @@ fxK
 fxP
 fzO
 fAO
-fAO
-fAO
+fxK
+fxK
 fBQ
 fCq
 fCq

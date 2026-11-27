@@ -5,6 +5,7 @@
 /datum/stack_recipe
 	var/title = "ERROR"
 	var/result_type
+	var/dupe_type // set to this for dupe checks, otherwise result_type
 	var/req_amount = 1
 	var/res_amount = 1
 	var/max_res_amount = 1
@@ -19,7 +20,7 @@
 	var/list/other_reqs = list()
 	var/list/extra_data = list()
 
-/datum/stack_recipe/New(title, result_type, req_amount = 1, res_amount = 1, max_res_amount = 1, time = 0, one_per_turf = 0, on_floor = 0, start_unanchored = 0, other_reqs = list(), z_up_required = 0, z_down_required = 0, cargonia_boost = 0)
+/datum/stack_recipe/New(title, result_type, req_amount = 1, res_amount = 1, max_res_amount = 1, time = 0, one_per_turf = 0, on_floor = 0, start_unanchored = 0, other_reqs = list(), z_up_required = 0, z_down_required = 0, cargonia_boost = 0, dupe_type)
 	src.title = title
 	src.result_type = result_type
 	src.req_amount = req_amount
@@ -33,11 +34,23 @@
 	src.z_up_required = z_up_required
 	src.z_down_required = z_down_required
 	src.cargonia_boost = cargonia_boost
+	src.dupe_type = dupe_type || result_type
 
 /datum/stack_recipe/proc/can_build_here(var/mob/user, var/turf/T)
-	if(one_per_turf && locate(result_type) in T)
+	if(one_per_turf && locate(dupe_type) in T)
 		to_chat(user, "<span class='warning'>There is another [title] here!</span>")
 		return 0
+	if(on_floor && (istype(T, /turf/space)))
+		to_chat(user, "<span class='warning'>\The [title] must be constructed on solid floor!</span>")
+		return 0
+	return 1
+
+/datum/stack_recipe/border/can_build_here(var/mob/user, var/turf/T)
+	if(one_per_turf)
+		for(var/atom/movable/AM in T)
+			if(istype(AM,dupe_type) && AM.dir == user.dir)
+				to_chat(user, "<span class='warning'>There is another [title] here!</span>")
+				return 0
 	if(on_floor && (istype(T, /turf/space)))
 		to_chat(user, "<span class='warning'>\The [title] must be constructed on solid floor!</span>")
 		return 0
@@ -478,11 +491,11 @@ var/list/datum/stack_recipe/plasteel_recipes = list (
 	new/datum/stack_recipe("Tank dispenser",				/obj/structure/dispenser/empty,						2,	time = 10,	one_per_turf = 1				),
 	new/datum/stack_recipe("Fireaxe cabinet",				/obj/item/mounted/frame/fireaxe_cabinet_frame,		2,	time = 50									),
 	null,
-	new/datum/stack_recipe("fence", /obj/structure/fence, 2, time = 50, one_per_turf = 1),
-	new/datum/stack_recipe("fence post", /obj/structure/fence/post, 2, time = 50, one_per_turf = 1),
+	new/datum/stack_recipe/border("fence", /obj/structure/fence, 2, time = 50, one_per_turf = 1),
+	new/datum/stack_recipe/border("fence post", /obj/structure/fence/post, 2, time = 50, one_per_turf = 1, dupe_type = /obj/structure/fence),
 	null,
-	new/datum/stack_recipe("fence door", /obj/structure/fence/door, 2, time = 50, one_per_turf = 1),
-	new/datum/stack_recipe("secure fence door", /obj/structure/fence/door/secure, 2, time = 50, one_per_turf = 1),
+	new/datum/stack_recipe/border("fence door", /obj/structure/fence/door, 2, time = 50, one_per_turf = 1, dupe_type = /obj/structure/fence),
+	new/datum/stack_recipe/border("secure fence door", /obj/structure/fence/door/secure, 2, time = 50, one_per_turf = 1, dupe_type = /obj/structure/fence),
 	null,
 	new/datum/stack_recipe("lockless lockbox", /obj/item/weapon/storage/lockbox/nolock, 1, time = 2 SECONDS, one_per_turf = 0, on_floor = 0),
 	null,

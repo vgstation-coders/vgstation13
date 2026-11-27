@@ -36712,7 +36712,7 @@
 	holomap_draw_override = 1
 	})
 "uvf" = (
-/obj/structure/fence/door,
+/obj/structure/fence/door/east,
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
@@ -38130,7 +38130,7 @@
 	},
 /area/mine/eva)
 "viT" = (
-/obj/structure/fence,
+/obj/structure/fence/east,
 /turf/unsimulated/floor/grass,
 /area/centcom/control)
 "viY" = (

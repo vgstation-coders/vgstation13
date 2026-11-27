@@ -7135,9 +7135,7 @@
 	},
 /area/centcom/holding)
 "LB" = (
-/obj/structure/fence/corner{
-	dir = 1
-	},
+/obj/structure/fence/north,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "LD" = (

@@ -22151,6 +22151,7 @@
 /area/centcom/holding)
 "dAw" = (
 /obj/machinery/vending/cigarette,
+/obj/structure/fence/east,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "dAx" = (
@@ -60099,6 +60100,13 @@
 	},
 /turf/simulated/floor/plating,
 /area/hallway/primary/central)
+"jKq" = (
+/obj/structure/bed/chair/wood/wings{
+	dir = 8
+	},
+/obj/structure/fence/east,
+/turf/unsimulated/floor/mars/air,
+/area/centcom/holding)
 "jKv" = (
 /obj/machinery/firealarm{
 	dir = 4;
@@ -427516,7 +427524,7 @@ dyf
 dyo
 dyo
 dyf
-dyf
+jKq
 dAw
 dAT
 dAT
@@ -428018,8 +428026,8 @@ dyk
 dyo
 dzt
 dzI
-dzI
-dzI
+dyk
+dyk
 dAS
 dBd
 dBd

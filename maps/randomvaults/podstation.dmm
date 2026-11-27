@@ -117,6 +117,12 @@
 	icon_state = "asteroidwarning"
 	},
 /area/vault/podstation/exterior)
+"bt" = (
+/obj/structure/fence/west,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/podstation/exterior)
 "bB" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
 	dir = 10;
@@ -2017,6 +2023,13 @@
 	icon_state = "cafeteria"
 	},
 /area/vault/podstation/interior)
+"SQ" = (
+/obj/structure/fence,
+/obj/structure/fence/west,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/podstation/exterior)
 "SS" = (
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
@@ -2400,8 +2413,8 @@ pU
 ES
 ES
 VW
-VW
-VW
+bt
+SQ
 ES
 VS
 aI
@@ -2491,9 +2504,9 @@ ES
 En
 cE
 Yx
-VW
-VW
-VW
+Yx
+bt
+SQ
 ES
 pU
 pU

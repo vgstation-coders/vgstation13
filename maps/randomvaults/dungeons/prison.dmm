@@ -570,13 +570,15 @@
 /turf/simulated/wall/r_wall,
 /area/vault/prison)
 "bH" = (
-/obj/structure/fence/door/secure,
+/obj/effect/decal/cleanable/blood/drip,
+/obj/structure/fence/east,
 /turf/simulated/floor{
 	icon_state = "pattern_red"
 	},
 /area/vault/prison)
 "bI" = (
-/obj/structure/fence/post,
+/obj/structure/fence/east,
+/obj/structure/fence/north,
 /turf/simulated/floor{
 	icon_state = "pattern_red"
 	},
@@ -624,12 +626,13 @@
 /area)
 "bR" = (
 /obj/effect/landmark/corpse/civilian,
+/obj/structure/fence/north,
 /turf/simulated/floor{
 	icon_state = "pattern_red"
 	},
 /area/vault/prison)
 "bS" = (
-/obj/structure/fence,
+/obj/structure/fence/north,
 /turf/simulated/floor{
 	icon_state = "pattern_red"
 	},
@@ -640,20 +643,22 @@
 	pixel_x = 8;
 	pixel_y = 2
 	},
+/obj/structure/fence/east,
+/obj/structure/fence/north,
 /turf/simulated/floor{
 	icon_state = "pattern_red"
 	},
 /area/vault/prison)
 "bU" = (
-/obj/effect/decal/cleanable/blood,
 /obj/effect/decal/cleanable/blood/drip,
+/obj/structure/fence/door/secure/inverted/east,
+/obj/structure/fence/north,
 /turf/simulated/floor{
 	icon_state = "pattern_red"
 	},
 /area/vault/prison)
 "bV" = (
-/obj/structure/fence/door/secure/inverted,
-/obj/effect/decal/cleanable/blood/drip,
+/obj/structure/fence/door/secure/inverted/north,
 /turf/simulated/floor{
 	icon_state = "pattern_red"
 	},
@@ -722,6 +727,7 @@
 	pixel_x = 12;
 	pixel_y = 2
 	},
+/obj/structure/fence/east,
 /turf/simulated/floor{
 	icon_state = "pattern_red"
 	},
@@ -742,17 +748,18 @@
 	},
 /area/vault/prison)
 "cg" = (
-/obj/effect/decal/cleanable/blood/drip,
+/obj/effect/decal/cleanable/blood,
+/obj/effect/decal/cleanable/blood{
+	pixel_y = -32
+	},
 /turf/simulated/floor{
 	icon_state = "pattern_red"
 	},
 /area/vault/prison)
 "ch" = (
-/obj/structure/fence,
 /obj/effect/decal/cleanable/blood,
-/obj/effect/decal/cleanable/blood{
-	pixel_y = -32
-	},
+/obj/effect/decal/cleanable/blood/drip,
+/obj/structure/fence/north,
 /turf/simulated/floor{
 	icon_state = "pattern_red"
 	},
@@ -768,20 +775,20 @@
 	},
 /area/vault/prison)
 "cj" = (
-/obj/effect/landmark/corpse/mutilated{
-	burn_dmg = 50
+/obj/effect/decal/cleanable/blood{
+	pixel_y = -32
 	},
-/obj/effect/decal/cleanable/blood,
-/obj/effect/decal/cleanable/blood/drip,
 /turf/simulated/floor{
 	icon_state = "pattern_red"
 	},
 /area/vault/prison)
 "ck" = (
-/obj/structure/fence/post,
-/obj/effect/decal/cleanable/blood{
-	pixel_y = -32
+/obj/effect/landmark/corpse/mutilated{
+	burn_dmg = 50
 	},
+/obj/effect/decal/cleanable/blood,
+/obj/effect/decal/cleanable/blood/drip,
+/obj/structure/fence/east,
 /turf/simulated/floor{
 	icon_state = "pattern_red"
 	},
@@ -1163,7 +1170,7 @@ be
 bc
 bt
 aJ
-bS
+aJ
 bR
 cd
 aj
@@ -1197,8 +1204,8 @@ be
 bc
 bu
 aJ
-bH
 aJ
+bV
 aJ
 aj
 ac
@@ -1231,8 +1238,8 @@ be
 bc
 bv
 aJ
-bS
 aJ
+bI
 ce
 aj
 ac
@@ -1265,9 +1272,9 @@ bf
 bc
 bw
 aJ
-bI
+aJ
 bS
-bS
+aJ
 aj
 ac
 ab
@@ -1299,9 +1306,9 @@ bf
 bc
 bx
 bA
-bS
 aJ
-aJ
+bV
+cf
 aj
 ac
 ab
@@ -1333,9 +1340,9 @@ bf
 bc
 bx
 aJ
-bH
 aJ
-cf
+bT
+bH
 aj
 ac
 ab
@@ -1367,8 +1374,8 @@ bf
 bc
 bx
 aJ
+aJ
 bS
-bT
 cg
 aj
 ac
@@ -1401,9 +1408,9 @@ bf
 bc
 aM
 aJ
-bI
-bS
+aJ
 ch
+ci
 aj
 ac
 ab
@@ -1435,9 +1442,9 @@ bc
 bc
 aJ
 aJ
-bS
+aJ
 bU
-ci
+ck
 aj
 ac
 ab
@@ -1469,7 +1476,7 @@ aJ
 bl
 aJ
 aJ
-bS
+aJ
 aJ
 cj
 aj
@@ -1503,9 +1510,9 @@ aJ
 bc
 aJ
 aJ
-bS
-bV
-ck
+aJ
+aJ
+aJ
 aj
 ac
 ab

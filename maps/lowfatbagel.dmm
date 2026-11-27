@@ -31631,6 +31631,7 @@
 /area/engineering/engine)
 "cls" = (
 /obj/machinery/vending/cigarette,
+/obj/structure/fence/east,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "clw" = (
@@ -47370,6 +47371,13 @@
 	icon_state = "cmo"
 	},
 /area/research_outpost/med)
+"gzt" = (
+/obj/structure/bed/chair/wood/wings{
+	dir = 8
+	},
+/obj/structure/fence/east,
+/turf/unsimulated/floor/mars/air,
+/area/centcom/holding)
 "gzD" = (
 /obj/structure/sign/securearea{
 	pixel_y = -32
@@ -414979,7 +414987,7 @@ jnc
 rOk
 rOk
 jnc
-jnc
+gzt
 cls
 lwj
 lwj
@@ -415481,8 +415489,8 @@ upn
 rOk
 lIA
 uCA
-uCA
-uCA
+upn
+upn
 krD
 hiz
 hiz

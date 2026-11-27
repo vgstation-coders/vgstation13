@@ -2,11 +2,29 @@
 "a" = (
 /turf/template_noop,
 /area/template_noop)
+"h" = (
+/obj/structure/fence/north,
+/obj/structure/fence/west,
+/turf/template_noop,
+/area/exposed_ruin)
 "k" = (
 /turf/template_noop,
 /area/exposed_ruin)
 "l" = (
 /obj/structure/fence/door/opened,
+/turf/template_noop,
+/area/exposed_ruin)
+"m" = (
+/obj/structure/fence/north,
+/obj/structure/fence/east,
+/turf/template_noop,
+/area/exposed_ruin)
+"o" = (
+/obj/structure/fence/cut/large/west,
+/turf/template_noop,
+/area/exposed_ruin)
+"p" = (
+/obj/structure/fence/west,
 /turf/template_noop,
 /area/exposed_ruin)
 "t" = (
@@ -27,6 +45,7 @@
 /area/exposed_ruin)
 "C" = (
 /obj/structure/fence,
+/obj/structure/fence/east,
 /turf/template_noop,
 /area/exposed_ruin)
 "E" = (
@@ -34,6 +53,15 @@
 	desc = "An old pressure tank repressurized to store corn.";
 	name = "deer feeder"
 	},
+/turf/template_noop,
+/area/exposed_ruin)
+"I" = (
+/obj/structure/fence,
+/obj/structure/fence/west,
+/turf/template_noop,
+/area/exposed_ruin)
+"J" = (
+/obj/structure/fence/east,
 /turf/template_noop,
 /area/exposed_ruin)
 "K" = (
@@ -56,8 +84,16 @@
 	},
 /turf/template_noop,
 /area/exposed_ruin)
+"S" = (
+/obj/structure/fence/cut/large/east,
+/turf/template_noop,
+/area/exposed_ruin)
 "V" = (
 /obj/item/weapon/corncob,
+/turf/template_noop,
+/area/exposed_ruin)
+"W" = (
+/obj/structure/fence/north,
 /turf/template_noop,
 /area/exposed_ruin)
 
@@ -73,17 +109,17 @@ a
 "}
 (2,1,1) = {"
 a
-C
-C
-C
-C
-A
-C
+h
+p
+p
+p
+o
+I
 a
 "}
 (3,1,1) = {"
 a
-C
+W
 V
 k
 k
@@ -93,7 +129,7 @@ a
 "}
 (4,1,1) = {"
 a
-C
+W
 k
 w
 K
@@ -103,7 +139,7 @@ a
 "}
 (5,1,1) = {"
 a
-C
+W
 k
 E
 Q
@@ -113,7 +149,7 @@ a
 "}
 (6,1,1) = {"
 a
-A
+W
 V
 k
 V
@@ -123,11 +159,11 @@ u
 "}
 (7,1,1) = {"
 a
-C
-C
-A
-C
-C
+m
+J
+S
+J
+J
 C
 a
 "}

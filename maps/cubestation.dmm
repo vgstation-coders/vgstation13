@@ -2111,17 +2111,13 @@
 	},
 /area/teleporter)
 "aoZ" = (
-/obj/structure/fence{
-	dir = 1;
-	name = "space fence";
-	desc = "It's a fence. It's in space. Space fence!"
-	},
 /obj/structure/disposalpipe/segment{
 	desc = "A deep red pipe designed to deploy the station's highly trained security officers to the external ring of the station.";
 	name = "security deployment pipe";
 	color = "#FF0000";
 	dir = 4
 	},
+/obj/structure/fence,
 /turf/simulated/floor/plating/airless,
 /area)
 "apb" = (
@@ -2238,11 +2234,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/obj/structure/fence{
-	dir = 4;
-	desc = "It's a fence. It's in space. Space fence!";
-	name = "space fence"
-	},
+/obj/structure/fence/west,
 /turf/simulated/floor/plating/airless,
 /area)
 "apF" = (
@@ -5597,7 +5589,7 @@
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "aLM" = (
-/obj/structure/fence/door/opened,
+/obj/structure/fence/north,
 /turf/unsimulated/floor/mars/air,
 /area/centcom/holding)
 "aLT" = (
@@ -7334,10 +7326,11 @@
 	name = "\improper Prison Ore Processing"
 	})
 "aXA" = (
-/obj/structure/fence/corner{
-	dir = 8;
-	desc = "It's a fence. It's in space. Space fence!";
-	name = "space fence"
+/obj/structure/fence/west,
+/obj/structure/fence{
+	dir = 1;
+	name = "space fence";
+	desc = "It's a fence. It's in space. Space fence!"
 	},
 /turf/simulated/floor/plating/airless{
 	icon_state = "asteroidplating"
@@ -9074,11 +9067,8 @@
 /turf/simulated/floor/shuttle/plating,
 /area/shuttle/striketeam/centcom)
 "bkg" = (
-/obj/structure/fence/corner{
-	dir = 5;
-	desc = "It's a fence. It's in space. Space fence!";
-	name = "space fence"
-	},
+/obj/structure/fence/west,
+/obj/structure/fence/north,
 /turf/simulated/floor/plating/airless{
 	icon_state = "asteroidplating"
 	},
@@ -10801,11 +10791,7 @@
 	name = "Prison Visitation External";
 	network = list("Prison")
 	},
-/obj/structure/fence{
-	dir = 4;
-	desc = "It's a fence. It's in space. Space fence!";
-	name = "space fence"
-	},
+/obj/structure/fence/west,
 /turf/simulated/floor/plating/airless,
 /area)
 "bvx" = (
@@ -15281,11 +15267,7 @@
 /turf/simulated/wall,
 /area/maintenance/fore)
 "bXn" = (
-/obj/structure/fence{
-	dir = 4;
-	desc = "It's a fence. It's in space. Space fence!";
-	name = "space fence"
-	},
+/obj/structure/fence/east,
 /turf/simulated/floor/plating/airless{
 	icon_state = "asteroidplating"
 	},
@@ -30463,6 +30445,13 @@
 	},
 /turf/simulated/floor,
 /area/hallway/primary/central)
+"dNG" = (
+/obj/structure/fence,
+/obj/structure/fence/east,
+/turf/simulated/floor/plating/airless{
+	icon_state = "asteroidplating"
+	},
+/area/mine/explored)
 "dNH" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 9
@@ -34365,11 +34354,7 @@
 	},
 /area/medical/medbay)
 "elu" = (
-/obj/structure/fence/corner{
-	dir = 8;
-	desc = "It's a fence. It's in space. Space fence!";
-	name = "space fence"
-	},
+/obj/structure/fence/east,
 /turf/simulated/floor/plating/airless{
 	icon_state = "asteroidplating"
 	},
@@ -42803,15 +42788,11 @@
 /turf/simulated/floor/plating/airless,
 /area)
 "fra" = (
-/obj/structure/fence/corner{
-	dir = 4;
-	desc = "It's a fence. It's in space. Space fence!";
-	name = "space fence"
-	},
+/obj/structure/fence/north,
 /turf/simulated/floor/plating/airless{
 	icon_state = "asteroidplating"
 	},
-/area/mine/explored)
+/area)
 "frb" = (
 /obj/structure/closet/paramedic,
 /obj/item/clothing/accessory/storage/webbing/paramed,
@@ -48704,9 +48685,12 @@
 /turf/simulated/floor/plating/vox,
 /area/vox_trading_post/solars)
 "gdK" = (
-/obj/structure/fence,
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
+/obj/structure/fence/east,
+/obj/structure/fence/north,
+/turf/simulated/floor/plating/airless{
+	icon_state = "asteroidplating"
+	},
+/area/mine/explored)
 "gdO" = (
 /obj/structure/disposalpipe/segment{
 	desc = "An underfloor disposal pipe. Directly connected to cargo for station exports.";
@@ -51124,6 +51108,9 @@
 	},
 /turf/simulated/wall/r_wall,
 /area/turret_protected/ai)
+"gvt" = (
+/turf/space,
+/area/mine/explored)
 "gvv" = (
 /obj/effect/decal/warning_stripes{
 	dir = 1;
@@ -52280,6 +52267,7 @@
 	icon_state = "4-8"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/structure/fence/west,
 /turf/simulated/floor,
 /area/hallway/primary/fore)
 "gDK" = (
@@ -57394,11 +57382,6 @@
 	name = "\improper Aft Starboard Primary Hallway"
 	})
 "hny" = (
-/obj/structure/fence/corner{
-	dir = 8;
-	desc = "It's a fence. It's in space. Space fence!";
-	name = "space fence"
-	},
 /obj/structure/disposalpipe/segment{
 	dir = 8;
 	icon_state = "pipe-c";
@@ -57406,6 +57389,8 @@
 	desc = "A deep red pipe designed to deploy the station's highly trained security officers to the external ring of the station.";
 	color = "#FF0000"
 	},
+/obj/structure/fence,
+/obj/structure/fence/east,
 /turf/simulated/floor/plating/airless,
 /area)
 "hnE" = (
@@ -65088,6 +65073,7 @@
 	})
 "iqF" = (
 /obj/machinery/vending/cigarette,
+/obj/structure/fence/east,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "iqI" = (
@@ -69046,6 +69032,7 @@
 	name = "Entertainment monitor";
 	pixel_y = -30
 	},
+/obj/structure/fence/north,
 /turf/unsimulated/floor/mars/air,
 /area/centcom/holding)
 "iSb" = (
@@ -70358,6 +70345,11 @@
 	},
 /turf/simulated/floor,
 /area/hallway/secondary/entry)
+"jaa" = (
+/turf/simulated/floor/plating/airless{
+	icon_state = "asteroidplating"
+	},
+/area)
 "jae" = (
 /obj/item/device/radio/intercom{
 	name = "Station Intercom (General)";
@@ -70872,11 +70864,6 @@
 	dir = 4;
 	name = "Prison Mining Loading Area";
 	network = list("JAIL","SS13")
-	},
-/obj/structure/fence/corner{
-	dir = 9;
-	name = "space fence";
-	desc = "It's a fence. It's in space. Space fence!"
 	},
 /turf/simulated/floor/plating/airless{
 	icon_state = "asteroidplating"
@@ -72091,6 +72078,7 @@
 /obj/structure/bed/chair/shuttle/white{
 	name = "Lifeguard Station"
 	},
+/obj/structure/fence/north,
 /turf/unsimulated/floor/mars/air,
 /area/centcom/holding)
 "jml" = (
@@ -76631,14 +76619,10 @@
 	},
 /area/hallway/secondary/exit)
 "jRi" = (
-/obj/structure/fence{
-	dir = 4;
-	desc = "It's a fence. It's in space. Space fence!";
-	name = "space fence"
-	},
 /obj/structure/sign/securearea{
 	pixel_x = 32
 	},
+/obj/structure/fence/west,
 /turf/simulated/floor/plating/airless{
 	icon_state = "asteroidplating"
 	},
@@ -80886,17 +80870,13 @@
 	name = "Escape Pod Station"
 	})
 "krX" = (
-/obj/structure/fence/door/secure{
-	req_access_txt = "63";
-	desc = "A fence door with a door latch. It can only be opened and closed from one direction. Also it's in space!";
-	name = "secure spacen fence door"
-	},
 /obj/structure/disposalpipe/segment{
 	desc = "A deep red pipe designed to deploy the station's highly trained security officers to the external ring of the station.";
 	name = "security deployment pipe";
 	color = "#FF0000";
 	dir = 4
 	},
+/obj/structure/fence/door/secure,
 /turf/simulated/floor/plating/airless,
 /area)
 "krY" = (
@@ -86710,11 +86690,12 @@
 	icon_state = "engine"
 	})
 "lcc" = (
-/obj/structure/fence/corner{
-	dir = 4;
-	desc = "It's a fence. It's in space. Space fence!";
-	name = "space fence"
+/obj/structure/fence{
+	dir = 1;
+	name = "space fence";
+	desc = "It's a fence. It's in space. Space fence!"
 	},
+/obj/structure/fence/west,
 /turf/simulated/floor/plating/airless{
 	icon_state = "asteroidplating"
 	},
@@ -92693,13 +92674,9 @@
 /turf/simulated/floor,
 /area/security/interrogation)
 "lNH" = (
-/obj/structure/fence{
-	dir = 1;
-	name = "space fence";
-	desc = "It's a fence. It's in space. Space fence!"
-	},
-/turf/simulated/floor/plating/airless,
-/area)
+/obj/structure/fence/door/opened/north,
+/turf/unsimulated/floor/mars/air,
+/area/centcom/holding)
 "lNJ" = (
 /obj/structure/reagent_dispensers/watertank,
 /obj/effect/decal/warning_stripes{
@@ -102277,16 +102254,13 @@
 	},
 /area/engineering/atmos)
 "nbh" = (
-/obj/structure/fence/corner{
-	dir = 9;
-	name = "space fence";
-	desc = "It's a fence. It's in space. Space fence!"
-	},
 /obj/structure/disposalpipe/segment{
 	desc = "A deep red pipe designed to deploy the station's highly trained security officers to the external ring of the station.";
 	name = "security deployment pipe";
 	color = "#FF0000"
 	},
+/obj/structure/fence/east,
+/obj/structure/fence/north,
 /turf/simulated/floor/plating/airless,
 /area)
 "nbk" = (
@@ -110048,11 +110022,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/asmaint2)
 "odX" = (
-/obj/structure/fence{
-	dir = 4;
-	desc = "It's a fence. It's in space. Space fence!";
-	name = "space fence"
-	},
+/obj/structure/fence/west,
 /turf/simulated/floor/plating/airless{
 	icon_state = "asteroidplating"
 	},
@@ -119993,11 +119963,6 @@
 	name = "\improper Syndicate Moon Base"
 	})
 "poX" = (
-/obj/structure/fence{
-	dir = 1;
-	name = "space fence";
-	desc = "It's a fence. It's in space. Space fence!"
-	},
 /obj/structure/disposalpipe/segment{
 	dir = 4;
 	icon_state = "pipe-c";
@@ -120005,6 +119970,7 @@
 	desc = "A deep red pipe designed to deploy the station's highly trained security officers to the external ring of the station.";
 	color = "#FF0000"
 	},
+/obj/structure/fence,
 /turf/simulated/floor/plating/airless,
 /area)
 "pph" = (
@@ -124476,16 +124442,12 @@
 	},
 /area/shuttle/mining/station)
 "pSg" = (
-/obj/structure/fence{
-	dir = 4;
-	desc = "It's a fence. It's in space. Space fence!";
-	name = "space fence"
-	},
 /obj/structure/disposalpipe/segment{
 	desc = "A deep red pipe designed to deploy the station's highly trained security officers to the external ring of the station.";
 	name = "security deployment pipe";
 	color = "#FF0000"
 	},
+/obj/structure/fence/east,
 /turf/simulated/floor/plating/airless,
 /area)
 "pSi" = (
@@ -141221,11 +141183,8 @@
 	name = "Engineering Outpost"
 	})
 "sat" = (
-/obj/structure/fence/corner{
-	dir = 9;
-	name = "space fence";
-	desc = "It's a fence. It's in space. Space fence!"
-	},
+/obj/structure/fence/north,
+/obj/structure/fence/east,
 /turf/simulated/floor/plating/airless{
 	icon_state = "asteroidplating"
 	},
@@ -146451,11 +146410,7 @@
 	},
 /area/bridge)
 "sKN" = (
-/obj/structure/fence/corner{
-	dir = 9;
-	name = "space fence";
-	desc = "It's a fence. It's in space. Space fence!"
-	},
+/obj/structure/fence/north,
 /turf/simulated/floor/plating/airless{
 	icon_state = "asteroidplating"
 	},
@@ -148979,15 +148934,11 @@
 	},
 /area/centcom/test)
 "tab" = (
-/obj/structure/fence/corner{
-	dir = 5;
-	desc = "It's a fence. It's in space. Space fence!";
-	name = "space fence"
-	},
+/obj/structure/fence/west,
 /turf/simulated/floor/plating/airless{
 	icon_state = "asteroidplating"
 	},
-/area/mine/explored)
+/area)
 "tac" = (
 /obj/structure/flora/pottedplant/random,
 /obj/machinery/light{
@@ -153067,11 +153018,7 @@
 /turf/simulated/floor/plating,
 /area/medical/paramedics)
 "tCf" = (
-/obj/structure/fence{
-	dir = 4;
-	desc = "It's a fence. It's in space. Space fence!";
-	name = "space fence"
-	},
+/obj/structure/fence/west,
 /turf/simulated/floor/plating/airless,
 /area)
 "tCl" = (
@@ -153754,6 +153701,7 @@
 /area/hallway/primary/fore)
 "tFN" = (
 /obj/structure/closet,
+/obj/structure/fence/north,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "tFP" = (
@@ -156701,11 +156649,8 @@
 	},
 /area/centcom/living)
 "tWU" = (
-/obj/structure/fence/corner{
-	dir = 5;
-	name = "space fence";
-	desc = "It's a fence. It's in space. Space fence!"
-	},
+/obj/structure/fence/west,
+/obj/structure/fence/north,
 /turf/simulated/floor/plating/airless,
 /area)
 "tWZ" = (
@@ -157423,14 +157368,10 @@
 	name = "\improper Aft Starboard Primary Hallway"
 	})
 "ucK" = (
-/obj/structure/fence{
-	dir = 4;
-	desc = "It's a fence. It's in space. Space fence!";
-	name = "space fence"
-	},
 /obj/structure/sign/securearea{
 	pixel_x = -32
 	},
+/obj/structure/fence/east,
 /turf/simulated/floor/plating/airless{
 	icon_state = "asteroidplating"
 	},
@@ -158533,7 +158474,7 @@
 	name = "Brig Dormitories"
 	})
 "uku" = (
-/obj/structure/fence/cut/small,
+/obj/structure/fence/north,
 /turf/simulated/floor/plating/airless,
 /area)
 "ukx" = (
@@ -162776,6 +162717,13 @@
 	dir = 4
 	},
 /area/medical/sleeper)
+"uOa" = (
+/obj/structure/bed/chair/wood/wings{
+	dir = 8
+	},
+/obj/structure/fence/east,
+/turf/unsimulated/floor/mars/air,
+/area/centcom/holding)
 "uOb" = (
 /obj/structure/window{
 	dir = 4
@@ -184970,13 +184918,16 @@
 	},
 /area/hallway/primary/central)
 "xwF" = (
-/obj/structure/fence/corner{
-	dir = 5;
+/obj/structure/fence/east,
+/obj/structure/fence{
+	dir = 1;
 	name = "space fence";
 	desc = "It's a fence. It's in space. Space fence!"
 	},
-/turf/unsimulated/floor/grass,
-/area/centcom/holding)
+/turf/simulated/floor/plating/airless{
+	icon_state = "asteroidplating"
+	},
+/area)
 "xwG" = (
 /obj/structure/grille,
 /obj/structure/cable/yellow{
@@ -187309,9 +187260,7 @@
 /turf/simulated/wall/r_wall,
 /area/maintenance/incinerator)
 "xMG" = (
-/obj/structure/fence{
-	dir = 4
-	},
+/obj/structure/fence/north,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "xMJ" = (
@@ -303000,7 +302949,7 @@ kBG
 kBG
 kBG
 kBG
-lNH
+uku
 aBp
 aBp
 aBp
@@ -303502,7 +303451,7 @@ gJo
 gJo
 gJo
 gJo
-lNH
+uku
 aBp
 aBp
 uzV
@@ -304004,7 +303953,7 @@ gJo
 gJo
 gJo
 gJo
-lNH
+uku
 aBp
 aBp
 uzV
@@ -305008,7 +304957,7 @@ kBG
 kBG
 kBG
 kBG
-lNH
+uku
 aBp
 aBp
 gTR
@@ -305510,7 +305459,7 @@ kBG
 kBG
 kBG
 kBG
-lNH
+uku
 aBp
 aBp
 uzV
@@ -306012,7 +305961,7 @@ kBG
 kBG
 kBG
 kBG
-lNH
+uku
 aBp
 aBp
 uzV
@@ -306514,7 +306463,7 @@ kZl
 kBG
 kBG
 kBG
-lNH
+uku
 aBp
 aBp
 aBp
@@ -307016,7 +306965,7 @@ kZl
 kBG
 kBG
 kBG
-lNH
+uku
 aBp
 aBp
 aBp
@@ -307518,7 +307467,7 @@ ake
 kBG
 kBG
 kBG
-lNH
+uku
 aBp
 aBp
 aBp
@@ -308020,7 +307969,7 @@ brZ
 kBG
 kBG
 kBG
-lNH
+uku
 aBp
 aBp
 aBp
@@ -308522,7 +308471,7 @@ brZ
 kBG
 kBG
 kBG
-lNH
+uku
 aBp
 aBp
 aBp
@@ -309024,7 +308973,7 @@ kFT
 kBG
 kBG
 kBG
-lNH
+uku
 aBp
 aBp
 aBp
@@ -309526,7 +309475,7 @@ brZ
 kBG
 kBG
 kBG
-lNH
+uku
 aBp
 aBp
 aBp
@@ -310028,7 +309977,7 @@ oaS
 kBG
 kBG
 kBG
-lNH
+uku
 aBp
 aBp
 aBp
@@ -310530,7 +310479,7 @@ kZl
 kBG
 kBG
 kBG
-lNH
+uku
 aBp
 aBp
 aBp
@@ -311032,7 +310981,7 @@ kZl
 kBG
 kBG
 kBG
-lNH
+uku
 aBp
 aBp
 aBp
@@ -311534,7 +311483,7 @@ kZl
 kBG
 kBG
 kBG
-lNH
+uku
 aBp
 aBp
 aBp
@@ -312036,7 +311985,7 @@ kZl
 gJo
 gJo
 gJo
-lNH
+uku
 aBp
 aBp
 aBp
@@ -312538,7 +312487,7 @@ kZl
 gJo
 gJo
 gJo
-lNH
+uku
 aBp
 aBp
 aBp
@@ -497562,7 +497511,7 @@ irR
 lYo
 lYo
 irR
-irR
+uOa
 iqF
 vYO
 vYO
@@ -498063,9 +498012,9 @@ oNL
 bml
 lYo
 klb
-xwF
+bml
 xMG
-xMG
+bml
 eqS
 tlH
 tlH
@@ -498565,7 +498514,7 @@ bml
 bml
 lYo
 gfO
-gdK
+bml
 tFN
 bml
 ftB
@@ -499067,7 +499016,7 @@ jVh
 oNL
 lYo
 jVh
-gdK
+bml
 tFN
 bml
 ftB
@@ -499569,8 +499518,8 @@ gfO
 oNL
 lYo
 lYo
-aLM
 lYo
+lNH
 lYo
 ftB
 ftB
@@ -500071,8 +500020,8 @@ oNL
 gfO
 lYo
 exi
-gdK
-lYo
+bml
+aLM
 lYo
 ftB
 ftB
@@ -500573,7 +500522,7 @@ rCB
 bml
 lYo
 rCB
-gdK
+bml
 jmi
 lYo
 qPh
@@ -501075,8 +501024,8 @@ rCB
 bml
 lYo
 oNL
-gdK
-lYo
+bml
+aLM
 wcb
 ftB
 ftB
@@ -501577,7 +501526,7 @@ jVh
 rzY
 lYo
 rCB
-gdK
+bml
 iRY
 qRM
 ftB
@@ -502079,8 +502028,8 @@ hcr
 rCB
 lYo
 oNL
-gdK
-lYo
+bml
+aLM
 wcb
 ftB
 toR
@@ -502581,8 +502530,8 @@ rCB
 gfO
 lYo
 jVh
-gdK
-lYo
+bml
+aLM
 wcb
 ftB
 ftB
@@ -503083,7 +503032,7 @@ hcr
 jVh
 lYo
 oNL
-gdK
+bml
 iRY
 qRM
 ftB
@@ -503585,8 +503534,8 @@ lYo
 lYo
 lYo
 oNL
-gdK
-lYo
+bml
+aLM
 wcb
 uBp
 ftB
@@ -1232632,7 +1232581,7 @@ kBG
 kBG
 kBG
 nmC
-bkg
+jaa
 bXn
 bXn
 bXn
@@ -1238121,39 +1238070,39 @@ kBG
 nmC
 bkg
 jRi
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
 aXA
 uAX
 uAX
@@ -1238176,25 +1238125,25 @@ kdb
 cOw
 xdh
 pAB
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
-bXn
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
+tab
 jRi
 lcc
 nmC
@@ -1238621,7 +1238570,7 @@ kBG
 kBG
 kBG
 nmC
-pDZ
+fra
 xkm
 xkm
 xkm
@@ -1239123,82 +1239072,82 @@ kBG
 kBG
 kBG
 nmC
-pDZ
+fra
 xkm
-tab
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
+paL
 elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+dNG
+paL
 paL
 mwj
 wKp
 jdG
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-odX
-fra
+gdK
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+elu
+paL
 xkm
 pDZ
 nmC
@@ -1239625,7 +1239574,7 @@ kBG
 kBG
 kBG
 nmC
-pDZ
+fra
 xkm
 wUX
 uAX
@@ -1239700,7 +1239649,7 @@ uAX
 uAX
 uAX
 uAX
-wUX
+sKN
 xkm
 pDZ
 nmC
@@ -1240127,7 +1240076,7 @@ kBG
 kBG
 kBG
 nmC
-pDZ
+fra
 xkm
 wUX
 uAX
@@ -1240202,7 +1240151,7 @@ uAX
 uAX
 uAX
 uAX
-wUX
+sKN
 xkm
 pDZ
 nmC
@@ -1240629,7 +1240578,7 @@ kBG
 kBG
 kBG
 nmC
-pDZ
+fra
 xkm
 wUX
 uAX
@@ -1240704,7 +1240653,7 @@ uAX
 uAX
 uAX
 uAX
-wUX
+sKN
 xkm
 pDZ
 nmC
@@ -1241131,7 +1241080,7 @@ kBG
 kBG
 kBG
 nmC
-pDZ
+fra
 xkm
 wUX
 uAX
@@ -1241206,7 +1241155,7 @@ uAX
 uAX
 uAX
 uAX
-wUX
+sKN
 xkm
 pDZ
 nmC
@@ -1241633,7 +1241582,7 @@ kBG
 kBG
 kBG
 nmC
-pDZ
+fra
 xkm
 wUX
 uAX
@@ -1241708,7 +1241657,7 @@ uAX
 uAX
 uAX
 uAX
-wUX
+sKN
 xkm
 pDZ
 nmC
@@ -1242135,7 +1242084,7 @@ kBG
 kBG
 kBG
 nmC
-pDZ
+fra
 xkm
 wUX
 uAX
@@ -1242210,7 +1242159,7 @@ uAX
 uAX
 uAX
 uAX
-wUX
+sKN
 xkm
 pDZ
 nmC
@@ -1242637,7 +1242586,7 @@ kBG
 kBG
 kBG
 nmC
-pDZ
+fra
 xkm
 wUX
 uAX
@@ -1242697,7 +1242646,7 @@ uAX
 uAX
 uAX
 uAX
-uAX
+gvt
 uAX
 qth
 qth
@@ -1242712,7 +1242661,7 @@ uAX
 uAX
 uAX
 uAX
-wUX
+sKN
 xkm
 pDZ
 nmC
@@ -1243139,7 +1243088,7 @@ kBG
 kBG
 kBG
 nmC
-pDZ
+fra
 xkm
 wUX
 uAX
@@ -1243214,7 +1243163,7 @@ qth
 uAX
 uAX
 uAX
-wUX
+sKN
 xkm
 pDZ
 nmC
@@ -1243641,7 +1243590,7 @@ kBG
 kBG
 kBG
 nmC
-pDZ
+fra
 xkm
 wUX
 uAX
@@ -1243716,7 +1243665,7 @@ qth
 uAX
 uAX
 uAX
-wUX
+sKN
 xkm
 pDZ
 nmC
@@ -1244143,7 +1244092,7 @@ kBG
 kBG
 kBG
 nmC
-pDZ
+fra
 xkm
 wUX
 uAX
@@ -1244218,7 +1244167,7 @@ qth
 uAX
 uAX
 uAX
-wUX
+sKN
 xkm
 pDZ
 nmC
@@ -1244645,7 +1244594,7 @@ kBG
 kBG
 kBG
 nmC
-pDZ
+fra
 xkm
 wUX
 uAX
@@ -1244720,7 +1244669,7 @@ uAX
 uAX
 uAX
 uAX
-wUX
+sKN
 xkm
 pDZ
 nmC
@@ -1245147,7 +1245096,7 @@ kBG
 kBG
 kBG
 nmC
-pDZ
+fra
 xkm
 wUX
 uAX
@@ -1245222,7 +1245171,7 @@ uAX
 uAX
 uAX
 uAX
-wUX
+sKN
 xkm
 pDZ
 nmC
@@ -1245649,7 +1245598,7 @@ kBG
 kBG
 kBG
 nmC
-pDZ
+fra
 xkm
 wUX
 uAX
@@ -1245724,7 +1245673,7 @@ uAX
 uAX
 uAX
 uAX
-wUX
+sKN
 xkm
 pDZ
 nmC
@@ -1246151,7 +1246100,7 @@ kBG
 kBG
 nmC
 nmC
-pDZ
+fra
 xkm
 wUX
 uAX
@@ -1246226,7 +1246175,7 @@ uAX
 uAX
 uAX
 uAX
-wUX
+sKN
 xkm
 pDZ
 nmC
@@ -1246653,7 +1246602,7 @@ kBG
 kBG
 nmC
 nmC
-pDZ
+fra
 xkm
 wUX
 uAX
@@ -1246728,7 +1246677,7 @@ uAX
 uAX
 uAX
 uAX
-wUX
+sKN
 xkm
 pDZ
 nmC
@@ -1247155,7 +1247104,7 @@ kBG
 kBG
 nmC
 nmC
-pDZ
+fra
 xkm
 wUX
 uAX
@@ -1247230,7 +1247179,7 @@ uAX
 uAX
 uAX
 uAX
-wUX
+sKN
 xkm
 pDZ
 nmC
@@ -1247657,7 +1247606,7 @@ kBG
 kBG
 nmC
 nmC
-pDZ
+fra
 xkm
 wUX
 uAX
@@ -1247732,7 +1247681,7 @@ uAX
 uAX
 uAX
 uAX
-wUX
+sKN
 xkm
 pDZ
 nmC
@@ -1248159,7 +1248108,7 @@ kBG
 nmC
 nmC
 nmC
-pDZ
+fra
 xkm
 wUX
 uAX
@@ -1248234,7 +1248183,7 @@ uAX
 uAX
 uAX
 uAX
-wUX
+sKN
 xkm
 pDZ
 nmC
@@ -1248661,7 +1248610,7 @@ kBG
 nmC
 nmC
 nmC
-pDZ
+fra
 xkm
 wUX
 uAX
@@ -1248736,7 +1248685,7 @@ uAX
 uAX
 uAX
 uAX
-wUX
+sKN
 xkm
 pDZ
 nmC
@@ -1249163,7 +1249112,7 @@ kBG
 nmC
 nmC
 nmC
-pDZ
+fra
 xkm
 wUX
 uAX
@@ -1249238,7 +1249187,7 @@ qth
 uAX
 uAX
 uAX
-wUX
+sKN
 xkm
 pDZ
 nmC
@@ -1249665,7 +1249614,7 @@ kBG
 nmC
 nmC
 nmC
-pDZ
+fra
 xkm
 wUX
 uAX
@@ -1249740,7 +1249689,7 @@ qth
 qth
 qth
 uAX
-wUX
+sKN
 xkm
 pDZ
 nmC
@@ -1250167,7 +1250116,7 @@ kBG
 nmC
 nmC
 nmC
-pDZ
+fra
 xkm
 wUX
 uAX
@@ -1250242,7 +1250191,7 @@ aOu
 aOu
 qth
 uAX
-wUX
+sKN
 xkm
 pDZ
 nmC
@@ -1250669,7 +1250618,7 @@ kBG
 kBG
 nmC
 nmC
-pDZ
+fra
 xkm
 wUX
 uAX
@@ -1250744,7 +1250693,7 @@ aOu
 aOu
 qth
 uAX
-wUX
+sKN
 xkm
 pDZ
 nmC
@@ -1251171,7 +1251120,7 @@ kBG
 kBG
 nmC
 nmC
-pDZ
+fra
 xkm
 wUX
 uAX
@@ -1251246,7 +1251195,7 @@ aOu
 aOu
 qth
 uAX
-wUX
+sKN
 xkm
 pDZ
 nmC
@@ -1251673,7 +1251622,7 @@ kBG
 kBG
 nmC
 nmC
-pDZ
+fra
 xkm
 wUX
 uAX
@@ -1251748,7 +1251697,7 @@ aOu
 aOu
 qth
 uAX
-wUX
+sKN
 xkm
 pDZ
 nmC
@@ -1252175,7 +1252124,7 @@ kBG
 kBG
 nmC
 nmC
-pDZ
+fra
 xkm
 wUX
 uAX
@@ -1252250,7 +1252199,7 @@ aOu
 aOu
 qth
 uAX
-wUX
+sKN
 xkm
 pDZ
 nmC
@@ -1252677,7 +1252626,7 @@ kBG
 kBG
 nmC
 nmC
-pDZ
+fra
 xkm
 wUX
 uAX
@@ -1252752,7 +1252701,7 @@ aOu
 aOu
 qth
 uAX
-wUX
+sKN
 xkm
 pDZ
 nmC
@@ -1253179,7 +1253128,7 @@ kBG
 kBG
 nmC
 nmC
-pDZ
+fra
 xkm
 wUX
 uAX
@@ -1253254,7 +1253203,7 @@ qth
 aOu
 qth
 uAX
-wUX
+sKN
 xkm
 pDZ
 nmC
@@ -1253681,7 +1253630,7 @@ kBG
 kBG
 nmC
 nmC
-pDZ
+fra
 xkm
 wUX
 uAX
@@ -1253756,7 +1253705,7 @@ qth
 qth
 qth
 uAX
-wUX
+sKN
 xkm
 pDZ
 nmC
@@ -1254183,7 +1254132,7 @@ kBG
 kBG
 kBG
 nmC
-pDZ
+fra
 xkm
 wUX
 uAX
@@ -1254258,7 +1254207,7 @@ uAX
 uAX
 uAX
 uAX
-wUX
+sKN
 xkm
 pDZ
 nmC
@@ -1254685,9 +1254634,9 @@ kBG
 kBG
 kBG
 nmC
-pDZ
+fra
 xkm
-sKN
+paL
 odX
 odX
 odX
@@ -1254760,7 +1254709,7 @@ odX
 odX
 odX
 odX
-elu
+paL
 xkm
 pDZ
 nmC
@@ -1255187,7 +1255136,7 @@ kBG
 kBG
 kBG
 nmC
-pDZ
+fra
 xkm
 xkm
 xkm
@@ -1255766,7 +1255715,7 @@ bXn
 bXn
 bXn
 ucK
-aXA
+xwF
 nmC
 kBG
 kBG

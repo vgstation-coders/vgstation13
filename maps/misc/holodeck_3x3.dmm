@@ -259,11 +259,10 @@
 	},
 /area/holodeck/source_wildride)
 "pY" = (
-/obj/structure/fence,
-/obj/structure/fence,
-/turf/simulated/floor/holofloor{
-	icon_state = "asteroid"
-	},
+/obj/structure/fence/north,
+/obj/structure/fence/west,
+/obj/structure/flora/ausbushes/ywflowers,
+/turf/simulated/floor/holofloor/grass,
 /area/holodeck/source_zoo)
 "qP" = (
 /obj/item/clothing/under/shorts/green,
@@ -361,7 +360,9 @@
 	},
 /area/holodeck/source_panic)
 "xw" = (
-/turf/simulated/floor/holofloor/grass,
+/turf/simulated/floor/holofloor{
+	icon_state = "asteroid"
+	},
 /area/holodeck/source_zoo)
 "xP" = (
 /obj/structure/bed/chair/holowood/wings,
@@ -764,10 +765,8 @@
 	},
 /area/holodeck/source_gym)
 "RG" = (
-/obj/structure/fence/door,
-/turf/simulated/floor/holofloor{
-	icon_state = "asteroid"
-	},
+/obj/structure/fence/door/north,
+/turf/simulated/floor/holofloor/grass,
 /area/holodeck/source_zoo)
 "Sd" = (
 /turf/simulated/floor/holofloor{
@@ -839,10 +838,8 @@
 	},
 /area/holodeck/source_panic)
 "Vb" = (
-/obj/structure/fence,
-/turf/simulated/floor/holofloor{
-	icon_state = "asteroid"
-	},
+/obj/structure/fence/west,
+/turf/simulated/floor/holofloor/grass,
 /area/holodeck/source_zoo)
 "Vf" = (
 /obj/structure/stacklifter/holo,
@@ -896,10 +893,6 @@
 	icon_state = "grimy"
 	},
 /area/holodeck/source_meetinghall)
-"Xt" = (
-/obj/structure/flora/ausbushes/ywflowers,
-/turf/simulated/floor/holofloor/grass,
-/area/holodeck/source_zoo)
 "XB" = (
 /turf/simulated/floor/holofloor{
 	dir = 8;
@@ -1389,7 +1382,7 @@ bG
 "}
 (42,1,1) = {"
 ii
-Xt
+xw
 xw
 xw
 Mr

@@ -17,7 +17,6 @@
 	density = 0
 	layer = ABOVE_WINDOW_LAYER
 
-
 /obj/structure/sign/ex_act(severity)
 	switch(severity)
 		if(1.0)

@@ -85087,6 +85087,7 @@
 /area/centcom/holding)
 "djr" = (
 /obj/machinery/vending/cigarette,
+/obj/structure/fence/east,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "djs" = (
@@ -101109,6 +101110,13 @@
 	icon_state = "white"
 	},
 /area/medical/medbay)
+"kgg" = (
+/obj/structure/bed/chair/wood/wings{
+	dir = 8
+	},
+/obj/structure/fence/east,
+/turf/unsimulated/floor/mars/air,
+/area/centcom/holding)
 "kgh" = (
 /obj/structure/bed/chair/office/dark{
 	dir = 8
@@ -411445,7 +411453,7 @@ dhj
 dhs
 dhs
 dhj
-dhj
+kgg
 djr
 djL
 djL
@@ -411947,8 +411955,8 @@ dho
 dhs
 dir
 diZ
-diZ
-diZ
+dho
+dho
 djK
 djW
 djW

@@ -1,8 +1,8 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
 "b" = (
-/obj/machinery/suspension_gen{
-	dir = 4
-	},
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/fence/west,
+/obj/structure/fence/north,
 /turf/unsimulated/floor/asteroid/air,
 /area/exposed_ruin)
 "d" = (
@@ -26,6 +26,11 @@
 	},
 /turf/template_noop,
 /area/exposed_ruin)
+"i" = (
+/obj/machinery/floodlight,
+/obj/structure/fence/north,
+/turf/unsimulated/floor/asteroid/air,
+/area/exposed_ruin)
 "j" = (
 /turf/unsimulated/floor/asteroid/air,
 /area/exposed_ruin)
@@ -39,12 +44,23 @@
 /obj/item/weapon/pickaxe/plasmacutter,
 /turf/template_noop,
 /area/exposed_ruin)
+"m" = (
+/obj/structure/anomaly_container,
+/obj/machinery/artifact,
+/obj/structure/fence/west,
+/turf/unsimulated/floor/asteroid/air,
+/area/exposed_ruin)
 "o" = (
 /obj/structure/closet/crate,
 /obj/item/weapon/pickaxe,
 /obj/item/weapon/pickaxe/hand,
 /obj/item/clothing/gloves/latex,
 /obj/item/clothing/glasses/scanner/science,
+/turf/template_noop,
+/area/exposed_ruin)
+"p" = (
+/obj/structure/fence,
+/obj/structure/fence/east,
 /turf/template_noop,
 /area/exposed_ruin)
 "q" = (
@@ -59,6 +75,11 @@
 	dir = 8
 	},
 /turf/template_noop,
+/area/exposed_ruin)
+"s" = (
+/obj/structure/fence/east,
+/obj/structure/fence/north,
+/turf/unsimulated/floor/asteroid/air,
 /area/exposed_ruin)
 "u" = (
 /obj/machinery/floodlight,
@@ -81,7 +102,8 @@
 	},
 /area/exposed_ruin)
 "y" = (
-/obj/machinery/floodlight,
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/fence/north,
 /turf/unsimulated/floor/asteroid/air,
 /area/exposed_ruin)
 "A" = (
@@ -95,6 +117,11 @@
 /obj/structure/table,
 /obj/item/device/flashlight/lantern,
 /turf/template_noop,
+/area/exposed_ruin)
+"D" = (
+/obj/item/weapon/pickaxe/shovel,
+/obj/structure/fence/east,
+/turf/unsimulated/floor/asteroid/air,
 /area/exposed_ruin)
 "E" = (
 /obj/structure/bed/chair/folding,
@@ -119,6 +146,10 @@
 /obj/structure/largecrate,
 /turf/template_noop,
 /area/exposed_ruin)
+"J" = (
+/obj/structure/fence/west,
+/turf/unsimulated/floor/asteroid/air,
+/area/exposed_ruin)
 "K" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/stack/sheet/bone,
@@ -141,14 +172,28 @@
 /obj/effect/decal/cleanable/dirt,
 /turf/template_noop,
 /area/exposed_ruin)
+"N" = (
+/obj/structure/fence/east,
+/turf/unsimulated/floor/asteroid/air,
+/area/exposed_ruin)
+"O" = (
+/obj/structure/fence/north,
+/turf/unsimulated/floor/asteroid/air,
+/area/exposed_ruin)
 "P" = (
-/obj/item/weapon/pickaxe/shovel,
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/fence/east,
 /turf/unsimulated/floor/asteroid/air,
 /area/exposed_ruin)
 "T" = (
 /obj/structure/bed/chair/folding{
 	dir = 1
 	},
+/turf/template_noop,
+/area/exposed_ruin)
+"U" = (
+/obj/structure/fence,
+/obj/structure/fence/west,
 /turf/template_noop,
 /area/exposed_ruin)
 "V" = (
@@ -159,8 +204,10 @@
 	},
 /area/exposed_ruin)
 "W" = (
-/obj/structure/anomaly_container,
-/obj/machinery/artifact,
+/obj/machinery/suspension_gen{
+	dir = 4
+	},
+/obj/structure/fence/west,
 /turf/unsimulated/floor/asteroid/air,
 /area/exposed_ruin)
 "X" = (
@@ -182,40 +229,24 @@
 /area/exposed_ruin)
 
 (1,1,1) = {"
-L
-L
-L
-L
-L
-L
-L
 X
+b
+J
+m
+W
+W
+U
 X
-X
+G
+G
 X
 X
 X
 X
 "}
 (2,1,1) = {"
-L
-k
-j
-W
-b
-b
-L
 X
-G
-G
-X
-X
-X
-X
-"}
-(3,1,1) = {"
-L
-k
+y
 j
 k
 k
@@ -229,9 +260,9 @@ X
 X
 X
 "}
-(4,1,1) = {"
-L
-k
+(3,1,1) = {"
+X
+y
 k
 A
 V
@@ -245,9 +276,9 @@ M
 d
 X
 "}
-(5,1,1) = {"
-L
-y
+(4,1,1) = {"
+X
+i
 k
 K
 v
@@ -261,9 +292,9 @@ Y
 T
 X
 "}
-(6,1,1) = {"
-L
-k
+(5,1,1) = {"
+X
+y
 e
 V
 A
@@ -277,9 +308,9 @@ r
 F
 X
 "}
-(7,1,1) = {"
-L
-j
+(6,1,1) = {"
+X
+O
 k
 v
 w
@@ -293,14 +324,14 @@ X
 X
 X
 "}
-(8,1,1) = {"
-L
-j
-j
-k
-k
+(7,1,1) = {"
+X
+s
+N
 P
-L
+P
+D
+p
 I
 X
 X
@@ -309,14 +340,14 @@ X
 X
 X
 "}
-(9,1,1) = {"
-L
-L
-L
-L
-L
-L
-L
+(8,1,1) = {"
+X
+X
+X
+X
+X
+X
+X
 u
 X
 X

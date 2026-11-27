@@ -110686,6 +110686,7 @@
 /area/hallway/secondary/entry)
 "eEZ" = (
 /obj/machinery/vending/cigarette,
+/obj/structure/fence/east,
 /turf/unsimulated/floor/grass,
 /area/centcom/holding)
 "eFb" = (
@@ -114616,6 +114617,13 @@
 	icon_state = "floorgrime"
 	},
 /area/mine/production)
+"mFf" = (
+/obj/structure/bed/chair/wood/wings{
+	dir = 8
+	},
+/obj/structure/fence/east,
+/turf/unsimulated/floor/mars/air,
+/area/centcom/holding)
 "mRf" = (
 /obj/structure/disposalpipe/segment{
 	dir = 8
@@ -420803,7 +420811,7 @@ eEA
 eEJ
 eEJ
 eEA
-eEA
+mFf
 eEZ
 dBM
 dBM
@@ -421305,8 +421313,8 @@ eEB
 eEJ
 eEI
 eJx
-eJx
-eJx
+eEB
+eEB
 eFb
 dBN
 dBN

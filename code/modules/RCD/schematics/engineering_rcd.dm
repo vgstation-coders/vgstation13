@@ -350,7 +350,7 @@
 		return 0
 
 	for(var/atom/A2 in T.contents)
-		if(A2.type==/obj/structure/fence )
+		if(A2.type==/obj/structure/fence && A2.dir == user.dir)
 			to_chat(user, "There's already a [name] here!")
 			return 0
 	playsound(linked_rcd, 'sound/machines/click.ogg', 50, 1)
@@ -359,7 +359,8 @@
 			to_chat(user, "The [linked_rcd] doesn't have enough charge to build a [name]!")
 			return 0
 		playsound(linked_rcd, 'sound/items/Deconstruct.ogg', 50, 1)
-		new /obj/structure/fence(T)
+		var/obj/structure/fence/F = new(T)
+		F.dir = user.dir
 		return truecost
 	return 0
 
