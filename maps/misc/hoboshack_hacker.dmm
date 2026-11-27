@@ -169,6 +169,9 @@
 	dir = 4;
 	pixel_x = 11
 	},
+/obj/structure/mirror{
+	pixel_x = 28
+	},
 /turf/simulated/floor/mineral/reticulite/fancy{
 	name = "gamer floor plating";
 	color = "#AAAAFF"
@@ -247,10 +250,10 @@
 	name = "bedroom curtain";
 	pixel_y = -32
 	},
-/obj/machinery/computer/telecomms/monitor{
+/obj/machinery/computer/telecomms/server/hackershack{
 	network = "tcommsat";
-	emagged = 1;
-	name = "Hacked telecommunications network monitoring console"
+	name = "Hacked telecommunications server monitoring console";
+	emagged = 1
 	},
 /turf/simulated/floor/carpet/shag{
 	color = "#AAAAFF"
@@ -288,6 +291,9 @@
 /obj/item/toy/plushie/fumo/mime{
 	name = "\improper mimegirl fumo";
 	desc = "Has been meticulously taken care of to an uncanny extent."
+	},
+/obj/effect/landmark/hobostart{
+	desc = "Reminder to tweak these eventually so they spawn more greys than normal humans. It's ok for this mapper comment to be here, nobody ever will see it ingame."
 	},
 /turf/simulated/floor/carpet/shag{
 	color = "#AAAAFF"
@@ -519,6 +525,15 @@
 /area/shack)
 "ra" = (
 /obj/machinery/light/he,
+/obj/item/weapon/hair_dye{
+	pixel_y = -4;
+	pixel_x = -8
+	},
+/obj/structure/table,
+/obj/item/weapon/razor{
+	pixel_x = 7;
+	pixel_y = 12
+	},
 /turf/simulated/floor/mineral/reticulite/fancy{
 	name = "gamer floor plating";
 	color = "#AAAAFF"
@@ -584,6 +599,7 @@
 	},
 /obj/machinery/light/he,
 /obj/item/weapon/storage/toolbox/mechanical,
+/obj/item/weapon/storage/toolbox/electrical,
 /turf/simulated/floor/mineral/reticulite/fancy{
 	name = "gamer floor plating";
 	color = "#AAAAFF"
@@ -627,7 +643,9 @@
 /obj/structure/bed/chair/office/dark{
 	dir = 8
 	},
-/obj/effect/landmark/hobostart,
+/obj/effect/landmark/hobostart{
+	desc = "Reminder to tweak these eventually so they spawn more greys than normal humans. It's ok for this mapper comment to be here, nobody ever will see it ingame."
+	},
 /turf/simulated/floor/mineral/reticulite/fancy{
 	name = "gamer floor plating";
 	color = "#AAAAFF"
@@ -870,6 +888,9 @@
 /obj/item/stack/sheet/mineral/uranium{
 	amount = 50
 	},
+/obj/machinery/power/terminal{
+	dir = 1
+	},
 /turf/simulated/floor/mineral/reticulite/fancy{
 	name = "gamer floor plating";
 	color = "#AAAAFF"
@@ -997,7 +1018,9 @@
 	name = "gamer toilet";
 	dir = 4
 	},
-/obj/effect/landmark/hobostart,
+/obj/effect/landmark/hobostart{
+	desc = "Reminder to tweak these eventually so they spawn more greys than normal humans. It's ok for this mapper comment to be here, nobody ever will see it ingame."
+	},
 /turf/simulated/floor/mineral/reticulite/fancy{
 	name = "gamer floor plating";
 	color = "#AAAAFF"
@@ -1009,9 +1032,10 @@
 	pixel_y = -32
 	},
 /obj/machinery/computer/message_monitor{
-	emagged = 1;
-	name = "Hacked Message Monitor Console"
+	name = "Bypassed Message Monitor Console";
+	desc = "Used to Monitor the crew's messages, that are sent via PDA. Can also be used to view Request Console messages. This one has had all safeties disabled. Use the passcode to access the logs."
 	},
+/obj/item/weapon/paper/monitorkey,
 /turf/simulated/floor/carpet/shag{
 	color = "#AAAAFF"
 	},
@@ -1031,7 +1055,9 @@
 	icon_state = "shuttleseat_GAMER";
 	name = "high quality gamer chair"
 	},
-/obj/effect/landmark/hobostart,
+/obj/effect/landmark/hobostart{
+	desc = "Reminder to tweak these eventually so they spawn more greys than normal humans. It's ok for this mapper comment to be here, nobody ever will see it ingame."
+	},
 /turf/simulated/floor/carpet/shag{
 	color = "#AAAAFF"
 	},
@@ -1098,6 +1124,7 @@
 /obj/item/stack/sheet/wood/bigstack,
 /obj/item/stack/sheet/wood/bigstack,
 /obj/item/stack/sheet/wood/bigstack,
+/obj/item/weapon/storage/toolbox/nanopaint,
 /obj/item/stack/sheet/metal/bigstack,
 /turf/simulated/floor/mineral/reticulite/fancy{
 	name = "gamer floor plating";
@@ -1306,7 +1333,9 @@
 	dir = 8;
 	on = 1
 	},
-/obj/effect/landmark/hobostart,
+/obj/effect/landmark/hobostart{
+	desc = "Reminder to tweak these eventually so they spawn more greys than normal humans. It's ok for this mapper comment to be here, nobody ever will see it ingame."
+	},
 /turf/simulated/floor/mineral/reticulite/fancy{
 	name = "gamer floor plating";
 	color = "#AAAAFF"
