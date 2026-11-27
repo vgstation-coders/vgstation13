@@ -146,10 +146,10 @@ vox, dracson, grue_egg) are player-controlled or have no autonomous movement AI.
   melee combat tree. The legacy stance switch, `adjustBruteLoss` acquisition,
   `FindTarget()`, `MoveToTarget()` and `AttackTarget()` are inert while a
   controller is attached, so untouched mob families stop running two decision
-  layers. `is_legacy_idle()` / `is_legacy_engaged()` let idle flavor code (the
-  alien nest dragging, hog foraging, leaper vent climbing, rockernaut burrowing,
-  wolf pack following, grue feeding) keep running only while the tree has no
-  target.
+  layers. `is_legacy_idle()` / `is_legacy_engaged()` let idle flavor code (wolf
+  pack following, grue feeding, glare/light checks) keep running only while the
+  tree has no target; the alien/queen/leaper/rockernaut idle work uses the
+  `idle_work` leaf instead.
 - `arcane_golem.dm`: uses the new companion tree: it attacks adjacent enemies and
   otherwise follows its master through `ai_get_follow_target()` instead of the
   legacy `Goto(master)` loop.
