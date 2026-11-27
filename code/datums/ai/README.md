@@ -10,10 +10,11 @@ flee, retreat, hold, smash, wait, wander, hunt, follow, idle work, speak,
 blackboard keys), async actions, target lifecycle hooks and target sources
 (enemies, wounded, retaliate, prey, including wanted objects), an ability system
 with a ranged and a charge ability, a health decorator, the `.bt.json` compiler,
-the admin BT viewer, an example hostile consumer and twenty-seven existing mapped
-mob types plus the syndicate, mummy, jackal, vox, grey, nazi, mimic, frog and deer
-families compile and pass the auxtools scenario. The wider basic mob behavior set
-is still pending.
+the admin BT viewer, an example hostile consumer and the full hostile simple
+animal tree (every hostile mob gets a controller, either explicitly or lazily on
+its first `Life()` tick) plus a set of non-hostile idle mobs compile and pass the
+auxtools scenario. The wider basic mob behavior set (friendly custom state
+machines, bee swarms, corgis, parrots, mice) is still pending.
 
 ## Ported so far
 
@@ -156,6 +157,13 @@ is still pending.
   calls on acquisition.
 - `hive_aliens.dm`: the hive defender returns to movement mode through
   `ai_target_lost()` because the tree no longer calls `LostTarget()`.
+- `simple_animal.dm` (generic friendly migration): `use_idle_tree()` installs
+  the idle/wander tree on non-hostile mobs. Penguins, rabbits, pet slimes,
+  cockroaches, crickets, snails, pollywogs, amogus flashes and holograms now use
+  it instead of the base `wander` block. The wander leaf routes through
+  `wander_move()`, so custom flavors (cricket chirps, roach animation, snail
+  trails and romance) still run. The snail pauses its controller while shelled
+  or romantic.
 - `mimic.dm`: mimics run the combat tree with `target_source/enemies/mimic`,
   which stays empty until `anger()`; losing the target calls `calm_down()` again
   (re-disguise) because the tree never calls `LoseTarget()`.

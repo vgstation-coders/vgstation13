@@ -24,6 +24,8 @@
 /mob/living/simple_animal/hologram/New()
 	..()
 	mimic()
+	// WIP: the idle/wander decision layer is a behavior tree.
+	use_idle_tree()
 
 /mob/living/simple_animal/hologram/proc/mimic(var/atom/mimic = atom_to_mimic)
 	if(!mimic)

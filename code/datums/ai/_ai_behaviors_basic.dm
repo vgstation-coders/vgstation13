@@ -625,8 +625,15 @@
 		return AI_BEHAVIOR_FAILED
 
 	var/turf/destination = get_step(pawn, pick(alldirs))
-	if(!destination || !pawn.Move(destination))
+	if(!destination)
 		return AI_BEHAVIOR_FAILED
+	// Route through wander_move() so mob overrides (cricket chirps, roach
+	// animation, snail trails) keep their flavor.
+	if(istype(pawn, /mob/living/simple_animal))
+		var/mob/living/simple_animal/animal = pawn
+		animal.wander_move(destination)
+	else
+		pawn.Move(destination)
 	return AI_BEHAVIOR_SUCCEEDED
 
 /// Moves to the blackboard target and lets the pawn kill it through

@@ -564,6 +564,8 @@
 	if(can_breed)
 		gender = pick(MALE, FEMALE)
 	..()
+	// WIP: the idle/wander decision layer is a behavior tree.
+	use_idle_tree()
 
 /mob/living/simple_animal/rabbit/Life()
 	if(timestopped)

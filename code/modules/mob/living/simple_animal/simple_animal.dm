@@ -188,6 +188,15 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			set_glide_size(DELAY2GLIDESIZE(0.5 SECONDS))
 		Move(dest)
 
+/// WIP: installs an idle/wander behavior tree on a non-hostile mob. Custom
+/// wander_move() overrides keep running from the tree's wander leaf.
+/mob/living/simple_animal/proc/use_idle_tree(tree_type)
+	wander = 0
+	var/datum/ai_controller/controller = new(src)
+	controller.behavior_nodes = list(tree_type ? tree_type : bt_idle_tree())
+	controller.initialize_behavior_tree()
+	return controller
+
 /mob/living/simple_animal/proc/check_environment_susceptibility()
 	return TRUE
 

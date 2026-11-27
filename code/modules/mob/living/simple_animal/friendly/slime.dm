@@ -23,6 +23,11 @@
 	mob_push_flags = MONKEY|SLIME|SIMPLE_ANIMAL
 	held_items = list()
 
+/mob/living/simple_animal/slime/New()
+	..()
+	// WIP: the idle/wander decision layer is a behavior tree.
+	use_idle_tree()
+
 /mob/living/simple_animal/slime/attackby(var/obj/item/weapon/slimeparapotion/O as obj, var/mob/user as mob)
 	if(istype(O))
 		canmove = 0

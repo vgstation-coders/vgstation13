@@ -33,6 +33,8 @@
 /mob/living/simple_animal/penguin/New()
 	.=..()
 	gender = pick(MALE, FEMALE)
+	// WIP: the idle/wander decision layer is a behavior tree.
+	use_idle_tree()
 
 /mob/living/simple_animal/penguin/chick
 	name = "penguin chick"

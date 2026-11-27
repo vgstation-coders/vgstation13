@@ -5,6 +5,11 @@
 	icon_state = "pollywog"
 	var/changing = FALSE
 
+/mob/living/simple_animal/pollywog/New()
+	..()
+	// WIP: the idle/wander decision layer is a behavior tree.
+	use_idle_tree()
+
 /mob/living/simple_animal/pollywog/Life()
 	.=..()
 	if(!.)
