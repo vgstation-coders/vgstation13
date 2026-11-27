@@ -111,3 +111,34 @@
 
 	qdel(test_mob)
 
+// Carbons override get_default_language(), so they need the same fallback. A
+// human that picked a default through universal speak (phazon can grant and
+// later remove it) must go back to a language it can speak once it loses it.
+/datum/unit_test/languages/human_default_language_falls_back_when_unspeakable/start()
+	var/mob/living/carbon/human/test_human = new()
+
+	var/datum/language/outside = null
+	for (var/language_name in all_languages)
+		var/datum/language/candidate = all_languages[language_name]
+		if ((candidate.flags & RESTRICTED) || (candidate in test_human.languages))
+			continue
+		outside = candidate
+		break
+
+	if (!outside)
+		fail("every non-restricted language is already in the test human's languages list")
+		qdel(test_human)
+		return
+
+	var/datum/language/original = test_human.get_default_language()
+
+	test_human.universal_speak = TRUE
+	test_human.set_default_language(outside)
+	assert_eq(test_human.default_language, outside)
+
+	test_human.universal_speak = FALSE
+	var/datum/language/fallback = test_human.get_default_language()
+	assert_eq(test_human.can_speak_lang(fallback), TRUE)
+	assert_eq(fallback, original)
+
+	qdel(test_human)

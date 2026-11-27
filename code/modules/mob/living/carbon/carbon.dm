@@ -474,11 +474,13 @@
 	// Health is in deep shit and we're not already dead
 	return (health < config.health_threshold_crit) && (stat != DEAD)
 
+// Doesn't call the parent: humans fall back to their species language instead.
+// A default picked through universal speak can stop being speakable, so drop it
+// (back to init_language when that still works) rather than keep speaking it.
 /mob/living/carbon/get_default_language()
-	if(default_language)
-		return default_language
-
-	return null
+	if(default_language && !can_speak_lang(default_language))
+		default_language = (init_language && can_speak_lang(init_language)) ? init_language : null
+	return default_language
 
 /mob/living/carbon/html_mob_check(var/typepath)
 	for(var/atom/movable/AM in html_machines)
