@@ -11,9 +11,9 @@ blackboard keys), async actions, target lifecycle hooks and target sources
 (enemies, wounded, retaliate, prey, including wanted objects), an ability system
 with a ranged and a charge ability, a health decorator, the `.bt.json` compiler,
 the admin BT viewer, an example hostile consumer and twenty-seven existing mapped
-mob types plus the syndicate, mummy, jackal, vox, grey and nazi families compile
-and pass the auxtools scenario. The wider basic mob behavior set is still
-pending.
+mob types plus the syndicate, mummy, jackal, vox, grey, nazi, mimic, frog and deer
+families compile and pass the auxtools scenario. The wider basic mob behavior set
+is still pending.
 
 ## Ported so far
 
@@ -138,6 +138,15 @@ pending.
   the "out of ammo -> knife" switch stay in `afterShoot()`; the drawn-weapon
   overlays now also key off `ai_has_target()` because the tree does not touch
   `stance`.
+- `mimic.dm`: mimics run the combat tree with `target_source/enemies/mimic`,
+  which stays empty until `anger()`; losing the target calls `calm_down()` again
+  (re-disguise) because the tree never calls `LoseTarget()`.
+- `frog.dm`: hoppers run the ranged tree; their `Shoot()` (leap or spear throw)
+  keeps working because `ranged_attack` sets the legacy target, and the
+  spear/climb logic stays in `AttackingTarget()`/`Life()`.
+- `deer.dm`: deer acquire targets with the tree and set `BB_SPOOKED` through
+  `ai_target_acquired()`; a decorator runs the flee stance and self-aborts when
+  `calm_down()` clears the flag. Nearby deer get spooked too.
 - `_ai_bt_viewer.dm` + `code/modules/admin/verbs/behavior_trees.dm`: admin
   "View Behavior Tree" verb rendering the tree, blackboard and live markers.
 - `living.dm`: `/mob/living/Destroy()` now deletes the attached
@@ -289,6 +298,7 @@ verify the nurse spider has the async attack leaf and spins a web in idle work,
 verify the syndicate melee/gunner, mummy warrior/priest and jackal embalmer
 families behave, verify the vox assassin fires and the base raider loots
 spacecash, verify the grey regular fires and a grey prisoner melees, verify the
-nazi trooper fires at its keep distance, and verify the migrated space bear and
-space carp attack adjacent humans. Keep the test leaves in `behavior_tree_test.dm`
-until real leaves and unit tests replace them.
+nazi trooper fires at its keep distance, verify the mimic stays passive until
+angered, verify the frog leaps and the deer spooks/flees/calms, and verify the
+migrated space bear and space carp attack adjacent humans. Keep the test leaves
+in `behavior_tree_test.dm` until real leaves and unit tests replace them.

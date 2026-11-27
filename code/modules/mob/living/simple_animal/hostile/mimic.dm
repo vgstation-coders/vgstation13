@@ -142,6 +142,18 @@ var/global/list/crate_mimic_disguises = list(\
 	meat_taken--
 	initialize() //Collect all items from its turf!
 
+	// WIP: crate mimics (and their chest/item subtypes) only fight after anger();
+	// the tree uses an anger-gated target source and calms down when it loses the
+	// target. The wizard's mimic/copy is deliberately left on the legacy AI.
+	stop_automated_movement = TRUE
+	wander = 0
+	var/datum/ai_controller/controller = new(src)
+	controller.behavior_nodes = list(bt_hostile_combat_tree(/datum/target_source/enemies/mimic))
+	controller.initialize_behavior_tree()
+
+/mob/living/simple_animal/hostile/mimic/crate/FindTarget()
+	return null
+
 /mob/living/simple_animal/hostile/mimic/crate/Life()
 	if(!angry)
 		if(health < maxHealth)
@@ -238,6 +250,10 @@ var/global/list/crate_mimic_disguises = list(\
 	angry = 0
 	if(change_icon)
 		icon_state = initial(icon_state)
+
+// The tree drops targets without calling LoseTarget(); calm down here instead.
+/mob/living/simple_animal/hostile/mimic/crate/ai_target_lost(atom/target)
+	calm_down()
 
 /mob/living/simple_animal/hostile/mimic/crate/hitby() //This is called when the mimic is hit by a thrown object
 	. = ..()

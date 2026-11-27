@@ -85,4 +85,6 @@
 // Minimal blackboard keys used by the controller and the starter behaviors.
 #define BB_MY_PAWN "my_pawn"
 #define BB_TARGET "target"
+/// Set by the deer spook handling; the deer tree flees while this key exists.
+#define BB_SPOOKED "spooked"
 

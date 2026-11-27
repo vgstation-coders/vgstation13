@@ -109,6 +109,17 @@
 			candidates -= candidate
 	return candidates
 
+/// Like enemies, but only once the mimic has been angered (opened, pulled or
+/// hit). Keeps mimics disguised and passive until something disturbs them.
+/datum/target_source/enemies/mimic
+	name = "mimic enemies"
+
+/datum/target_source/enemies/mimic/find_targets(datum/ai_controller/controller, mob/living/pawn, search_range)
+	var/mob/living/simple_animal/hostile/mimic/mimic_pawn = pawn
+	if(!istype(mimic_pawn) || !mimic_pawn.angry)
+		return list()
+	return ..()
+
 /// Hunts a specific mob type (the cat's mice, future falconry, etc). Deliberately
 /// does not use CanAttack(): a friendly mob still needs prey it is not allowed to
 /// "attack". Only mobs standing on a turf are considered, so caged or held prey

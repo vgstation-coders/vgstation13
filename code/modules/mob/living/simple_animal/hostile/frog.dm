@@ -204,3 +204,17 @@
 		new /obj/item/weapon/spear(src)
 
 	update_spear()
+
+// WIP: hoppers run the ranged tree. Shoot() (leap or spear throw) reads
+// src.target, which ranged_attack sets, and AttackingTarget() keeps the
+// spear/climb logic working.
+/mob/living/simple_animal/hostile/frog/New()
+	..()
+	stop_automated_movement = TRUE
+	wander = 0
+	var/datum/ai_controller/controller = new(src)
+	controller.behavior_nodes = list(bt_ranged_hostile_tree())
+	controller.initialize_behavior_tree()
+
+/mob/living/simple_animal/hostile/frog/FindTarget()
+	return null
