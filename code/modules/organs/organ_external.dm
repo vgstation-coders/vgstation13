@@ -5,6 +5,7 @@
 	name = "external"
 
 	var/datum/species/species
+	var/native_enzymes = null //unique_enzymes of the body this limb was taken from
 	var/icon_name = null
 	var/body_part = null
 	var/icon_position = 0
@@ -1120,7 +1121,21 @@ Note that amputating the affected organ does in fact remove the infection from t
 		src.fleshify()
 
 		//Transfer properties (species, damage, ...)
-		src.species = organ.species
+		//A limb going back onto the body it was taken from should keep using the
+		//owner's live species datum, so updatespeciescolor() keeps affecting it.
+		//Use the body the limb was originally taken from, not owner_dna: that one
+		//is cloned from the last body it was attached to, so a regraft would look
+		//native and lose the donor's colours.
+		src.native_enzymes = organ.native_enzymes
+		//Matching enzymes alone isn't enough: the body may have changed species
+		//since the limb came off, or the limb's species may have been replaced
+		//(viruses, dice, baleful mutate, skeletonize). Keep the snapshot then.
+		var/same_body = organ.native_enzymes && owner.dna && (organ.native_enzymes == owner.dna.unique_enzymes) \
+			&& organ.species && owner.species && (organ.species.type == owner.species.type)
+		if(same_body)
+			src.species = null
+		else
+			src.species = organ.species
 		src.cancer_stage = organ.cancer_stage
 		src.wounds = organ.wounds
 		src.status = organ.status
@@ -1774,6 +1789,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	var/datum/organ/internal/organ_data //Harvestable organs
 	var/list/datum/organ/internal/internal_organs //Actual organs (for surgery)
 	var/datum/dna/owner_dna
+	var/native_enzymes = null //unique_enzymes of the body this limb was taken from
 	var/part = "organ"
 
 	//This variable stores "butchering products" - objects of type "/datum/butchering_product" (see  code/datums/helper_datums/butchering.dm)
@@ -1813,16 +1829,30 @@ Note that amputating the affected organ does in fact remove the infection from t
 			blood_DNA = list()
 		blood_DNA[H.dna.unique_enzymes] = H.dna.b_type
 
-	src.species = source.species || H.species
-	cancer_stage = source.cancer_stage
-	wounds = source.wounds.Copy()
-	burn_dam = source.burn_dam
-	brute_dam = source.brute_dam
-	if(!isnull(source.internal_organs)) //DM throws an error since Copy() can't run on a null object; some limbs don't have this var currently
-		internal_organs = source.internal_organs.Copy()
+	var/datum/species/organ_species = source?.species || H.species
+	if(organ_species)
+		//Snapshot the species datum: the donor mob deletes its own species
+		//datum on Destroy(), which would otherwise turn this limb into a
+		//plain body-species limb later on.
+		src.species = organ_species.Copy()
+	//A limb still using the body's live species is native to that body; one with
+	//its own snapshot carries the body it was originally taken from, even after
+	//being attached somewhere else.
+	if(source?.species)
+		native_enzymes = source.native_enzymes
+	else if(H.dna)
+		native_enzymes = H.dna.unique_enzymes
+	//Limbs that never were part of the body (like the extra arms Polymelia drops) have no source organ
+	if(source)
+		cancer_stage = source.cancer_stage
+		wounds = source.wounds.Copy()
+		burn_dam = source.burn_dam
+		brute_dam = source.brute_dam
+		if(!isnull(source.internal_organs)) //DM throws an error since Copy() can't run on a null object; some limbs don't have this var currently
+			internal_organs = source.internal_organs.Copy()
 
-	//Copy status flags except for ORGAN_CUT_AWAY and ORGAN_DESTROYED
-	status = source.status & ~(ORGAN_CUT_AWAY | ORGAN_DESTROYED)
+		//Copy status flags except for ORGAN_CUT_AWAY and ORGAN_DESTROYED
+		status = source.status & ~(ORGAN_CUT_AWAY | ORGAN_DESTROYED)
 
 	//Forming icon for the limb
 	//Setting base icon for this mob's race
