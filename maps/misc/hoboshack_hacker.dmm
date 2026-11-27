@@ -8,6 +8,23 @@
 	color = "#AAAAFF"
 	},
 /area/shack)
+"ac" = (
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 6
+	},
+/obj/machinery/power/port_gen/pacman/super,
+/obj/item/stack/sheet/mineral/uranium{
+	amount = 50
+	},
+/obj/machinery/power/terminal{
+	dir = 1
+	},
+/obj/structure/cable/yellow,
+/turf/simulated/floor/mineral/reticulite/fancy{
+	name = "gamer floor plating";
+	color = "#AAAAFF"
+	},
+/area/shack)
 "aC" = (
 /obj/machinery/atmospherics/unary/portables_connector{
 	dir = 8;
@@ -869,25 +886,6 @@
 	color = "#AAAAFF"
 	},
 /area/shack)
-"CV" = (
-/obj/machinery/power/terminal{
-	dir = 1
-	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
-	dir = 6
-	},
-/obj/machinery/power/port_gen/pacman/super,
-/obj/item/stack/sheet/mineral/uranium{
-	amount = 50
-	},
-/obj/machinery/power/terminal{
-	dir = 1
-	},
-/turf/simulated/floor/mineral/reticulite/fancy{
-	name = "gamer floor plating";
-	color = "#AAAAFF"
-	},
-/area/shack)
 "Ds" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 4
@@ -1522,7 +1520,7 @@ As
 (9,1,1) = {"
 mn
 Xe
-CV
+ac
 DI
 yd
 fH
