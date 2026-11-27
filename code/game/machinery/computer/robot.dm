@@ -191,7 +191,7 @@
 
 
 /obj/machinery/computer/robotics/proc/start_sequence()
-	speak("Emergency self-destruct sequence initiatied.")
+	speak("Emergency self-destruct sequence initiated.")
 	cyborg_detonation_time = world.time + DEFAULT_SEQUENCE_TIME
 	update_icon()
 
