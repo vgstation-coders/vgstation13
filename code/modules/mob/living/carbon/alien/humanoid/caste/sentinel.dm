@@ -11,7 +11,6 @@
 //As far as movement goes, Sentinels are average
 
 /mob/living/carbon/alien/humanoid/sentinel/New()
-	create_reagents(100)
 	if(name == "alien sentinel")
 		name = text("alien sentinel ([rand(1, 1000)])")
 	real_name = name

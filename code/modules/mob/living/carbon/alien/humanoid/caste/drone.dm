@@ -11,7 +11,6 @@
 	. *= 2 // Drones are slow
 
 /mob/living/carbon/alien/humanoid/drone/New()
-	create_reagents(100)
 	if(src.name == "alien drone")
 		src.name = text("alien drone ([rand(1, 1000)])")
 	src.real_name = src.name
