@@ -12,11 +12,11 @@ blackboard keys), async actions, target lifecycle hooks and target sources
 with a ranged and a charge ability, a health decorator, the `.bt.json` compiler,
 the admin BT viewer, an example hostile consumer and the full hostile simple
 animal tree (every hostile mob gets a controller, either explicitly or lazily on
-its first `Life()` tick, apart from the documented legacy exceptions) plus a set
-of non-hostile idle mobs compile and pass the auxtools scenario. The out-of-dir
-`complex_animal` family is a separate state-machine AI and is not ported yet; the
-remaining player-controlled/no-AI mobs (borer, shade, spiderbot, space_worm,
-constructs, vox, dracson, grue_egg) are out of scope.
+its first `Life()` tick, apart from the documented legacy exceptions) plus the
+out-of-dir `complex_animal` state machine and a set of non-hostile idle mobs
+compile and pass the auxtools scenario. The remaining player-controlled/no-AI
+mobs (borer, shade, spiderbot, space_worm, constructs, vox, dracson, grue_egg)
+are out of scope.
 
 ## Ported so far
 
@@ -206,6 +206,11 @@ constructs, vox, dracson, grue_egg) are out of scope.
   legacy idle_search priority list and `hog_forage` walks/eats it.
 - `grue.dm`: `bt_grue_tree()`: combat, then `ai_idle_work()` (moulting, feeding,
   egg laying), then the light-aware `grue_wander` leaf.
+- `complex_animal/base.dm`: the jungle mob state machine is scheduled by
+  `bt_complex_tree()`: a once-per-Life gate, the escape leaf, the
+  hunger/territory/fear interrupt leaves and one leaf per behavior state, all
+  calling the existing state ticks. The tree ticks at 1 s but the gate keeps the
+  original 2 s state cadence.
 - `_ai_target_sources.dm`: added `food`, `pointer` and `wires` sources.
 - `mimic.dm`: mimics run the combat tree with `target_source/enemies/mimic`,
   which stays empty until `anger()`; losing the target calls `calm_down()` again
@@ -337,10 +342,6 @@ childless and it fails every tick.
 
 ## Legacy AI exceptions
 
-- `code/modules/mob/living/complex_animal/` (jungle bears, crocodiles, dinosaurs,
-  frogs, gorillas, panthers, parrots, capybaras) is a separate state-machine AI
-  (idle/hunting/defending/attacking/fleeing/mating, food ranking, pack and
-  territory logic). It is not a `/hostile` subtype and is not ported yet.
 - `gourmonger`, `hex` and `giant_spider/spiderling` set
   `uses_legacy_ai = TRUE`: their bespoke hunger/charge, guard/escort and
   flee/GiveTarget AI stays legacy until it gets a dedicated tree.
