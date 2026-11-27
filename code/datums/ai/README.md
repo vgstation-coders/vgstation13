@@ -196,6 +196,15 @@ vox, dracson, grue_egg) are player-controlled or have no autonomous movement AI.
   async `idle_work` leaf between combat and the idle wander layer. The alien nest
   dragging, queen nest/egg laying, necro zombie evolution, leaper vent climbing
   and rockernaut burrowing moved from `Life()` into `ai_idle_work()`.
+- `gremlin.dm`: the unreachable-target give-up moved into `move_to_target` via
+  `ai_get_chase_timeout()`; `stand_still()` now extends that timeout instead of a
+  Life counter.
+- `wendigo.dm` + `wolf.dm`: campfire avoidance is the `flee_hazard` leaf in
+  `bt_hazard_hostile_tree()`, not a `walk_away` loop in `Life()`.
+- `hog.dm`: foraging is `bt_hog_tree()`: `target_source/hog_food` keeps the
+  legacy idle_search priority list and `hog_forage` walks/eats it.
+- `grue.dm`: `bt_grue_tree()`: combat, then `ai_idle_work()` (moulting, feeding,
+  egg laying), then the light-aware `grue_wander` leaf.
 - `_ai_target_sources.dm`: added `food`, `pointer` and `wires` sources.
 - `mimic.dm`: mimics run the combat tree with `target_source/enemies/mimic`,
   which stays empty until `anger()`; losing the target calls `calm_down()` again

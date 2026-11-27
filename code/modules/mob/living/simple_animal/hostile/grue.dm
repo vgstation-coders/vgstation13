@@ -244,60 +244,78 @@
 	regular_hud_updates()
 	standard_damage_overlay_updates()
 
-	if((stat==CONSCIOUS) && !busy && !ismoulting && !client && !mind && !ckey) //Checks for AI
-		grue_ai()
-
 //Grues already have a way to check their own health and the damage indicator doesn't mesh well with the vision.
 /mob/living/simple_animal/hostile/grue/standard_damage_overlay_updates()
 	return
 
-//AI stuff:
-/mob/living/simple_animal/hostile/grue/proc/grue_ai()
+/mob/living/simple_animal/hostile/grue/use_hostile_tree()
+	return ..(bt_grue_tree())
 
-	//Moulting
-	if(lifestage!=GRUE_ADULT && (nutrienergy>=moultcost) && lightparams.dark_dim_light==GRUE_DARK)
+/// Moulting, feeding and egg laying used to live in grue_ai(); they are idle
+/// work now, so combat keeps priority.
+/mob/living/simple_animal/hostile/grue/ai_idle_work()
+	if(stat != CONSCIOUS || busy || ismoulting || client || mind || ckey)
+		return
+	if(lifestage != GRUE_ADULT && (nutrienergy >= moultcost) && lightparams.dark_dim_light == GRUE_DARK)
 		start_moult()
-
-	//Eating
-	if(lifestage>=GRUE_JUVENILE && is_legacy_idle() && lightparams.dark_dim_light<GRUE_LIGHT)
+	if(lifestage >= GRUE_JUVENILE && is_legacy_idle() && lightparams.dark_dim_light < GRUE_LIGHT)
 		var/list/feed_targets = list()
-		for(var/mob/living/carbon/C in range(1,get_turf(src)))
+		for(var/mob/living/carbon/C in range(1, get_turf(src)))
 			feed_targets += C
 		if(feed_targets.len)
 			handle_feed(pick(feed_targets))
-
-	//Egglaying
-	if(config.grue_egglaying && (lifestage==GRUE_ADULT) && (eatencharge>0) && (lightparams.dark_dim_light==GRUE_DARK))
+	if(config.grue_egglaying && (lifestage == GRUE_ADULT) && (eatencharge > 0) && (lightparams.dark_dim_light == GRUE_DARK))
 		reproduce()
 
-	//Movement
-	//
-	//Wandering behavior
-	if((!client||deny_client_move) && !busy && !ismoulting && !anchored && (ckey == null) && !(flags & INVULNERABLE))
-		if(canmove)
-			turns_since_move++
-			if(turns_since_move >= turns_per_move)
-				if(!(stop_automated_movement_when_pulled && pulledby))
-					var/list/potential_dests=list() //any potential wander destinations
-					var/list/respite_dests=list() //any potential wander destinations leading out of the light into dark/dim
-					for(var/direction in cardinal)
-						var/potential_dest = get_step(src, direction)
-						if(lightparams.dark_dim_light==GRUE_LIGHT)//always prioritize wandering to a dark/dim tile if in light
-							if(get_ddl(potential_dest)<GRUE_LIGHT)
-								respite_dests+=potential_dest
-							else
-								potential_dests+=potential_dest
-						else //never wander from a dark/dim tile into light
-							if(get_ddl(potential_dest)<GRUE_LIGHT)
-								potential_dests+=potential_dest
-					var/ourdest
-					if(respite_dests.len)
-						ourdest=pick(respite_dests)
-					else if(potential_dests.len)
-						ourdest=pick(potential_dests)
-					if(ourdest)
-						wander_move(ourdest)
-						turns_since_move = 0
+/// Light-aware wandering: prefer dark tiles, never step from dark into light.
+/datum/bt_node/ai_behavior/grue_wander
+/datum/bt_node/ai_behavior/grue_wander/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/simple_animal/hostile/grue/grue = controller.pawn
+	if(!istype(grue) || QDELETED(grue))
+		return AI_BEHAVIOR_FAILED
+	if((grue.client && !grue.deny_client_move) || grue.busy || grue.ismoulting || grue.anchored || !isnull(grue.ckey) || (grue.flags & INVULNERABLE))
+		return AI_BEHAVIOR_FAILED
+	if(!grue.canmove)
+		return AI_BEHAVIOR_FAILED
+	if(grue.stop_automated_movement_when_pulled && grue.pulledby)
+		return AI_BEHAVIOR_FAILED
+
+	// The controller ticks every second; the legacy Life moved every 2 s.
+	grue.turns_since_move += 2
+	if(grue.turns_since_move < grue.turns_per_move)
+		return AI_BEHAVIOR_SUCCEEDED
+
+	var/list/potential_dests = list()
+	var/list/respite_dests = list()
+	for(var/direction in cardinal)
+		var/turf/potential_dest = get_step(grue, direction)
+		if(grue.lightparams.dark_dim_light == GRUE_LIGHT)//always prioritize wandering to a dark/dim tile if in light
+			if(grue.get_ddl(potential_dest) < GRUE_LIGHT)
+				respite_dests += potential_dest
+			else
+				potential_dests += potential_dest
+		else //never wander from a dark/dim tile into light
+			if(grue.get_ddl(potential_dest) < GRUE_LIGHT)
+				potential_dests += potential_dest
+	var/turf/our_dest
+	if(respite_dests.len)
+		our_dest = pick(respite_dests)
+	else if(potential_dests.len)
+		our_dest = pick(potential_dests)
+	if(our_dest)
+		grue.wander_move(our_dest)
+		grue.turns_since_move = 0
+	return AI_BEHAVIOR_SUCCEEDED
+
+/proc/bt_grue_tree()
+	return list(
+		BT_DESC_TYPE = /datum/bt_node/composite/selector,
+		BT_DESC_CHILDREN = list(
+			bt_basic_hostile_tree(),
+			list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/idle_work, cooldown = 2 SECONDS),
+			list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/grue_wander),
+		),
+	)
 
 /mob/living/simple_animal/hostile/grue/New()
 	..()

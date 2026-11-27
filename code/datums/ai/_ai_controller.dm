@@ -370,6 +370,11 @@
 /mob/living/proc/ai_wants_food()
 	return FALSE
 
+/// Seconds the move_to_target leaf should chase one target before giving up.
+/// Zero means never. Mobs with unreachable targets override this.
+/mob/living/proc/ai_get_chase_timeout()
+	return 0
+
 /// Called by fetch_food when the snack is held by a human and the pawn would beg
 /// instead of eating it. Mobs override this for their own line/emote.
 /mob/living/proc/ai_beg_for_food(atom/target, mob/living/holder)

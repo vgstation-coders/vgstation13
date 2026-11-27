@@ -61,7 +61,6 @@
 
 	nutrition = HOG_FED
 	var/food_search_radius = 7
-	var/food_target = null //A secondary target only used when we are not aggroing for a target we attack
 	var/mood = HOG_SKITTISH
 	var/panic = 0 //Ticks down, when positive cause aggro
 
@@ -111,16 +110,68 @@
 	..()
 	nutrition--
 
-	if(is_legacy_idle() && (!food_target || get_dist(food_target, src) > 7) && !ckey)
-		if(mood == HOG_CURIOUS)
-			var/odds_of_new_food_search = max(300 - nutrition, 0)
-			//every nutrition under HOG_FED increases odds of a new search by 1%
-			if(prob(odds_of_new_food_search))
-				mood = HOG_SKITTISH
-			return
-		food_target = idle_search()
-		if(!food_target)
-			set_mood(HOG_CURIOUS)
+/mob/living/simple_animal/hostile/spacehog/use_hostile_tree()
+	return ..(bt_hog_tree())
+
+/// Food source: keeps the hog's legacy idle_search priority list, while the
+/// tree owns the walk/eat. Low nutrition makes a curious hog commit to a search.
+/datum/target_source/hog_food
+/datum/target_source/hog_food/find_targets(datum/ai_controller/controller, mob/living/pawn, search_range)
+	var/mob/living/simple_animal/hostile/spacehog/hog = pawn
+	if(!istype(hog) || hog.ckey)
+		return list()
+	if(hog.mood == HOG_CURIOUS)
+		var/odds_of_new_food_search = max(300 - hog.nutrition, 0)
+		//every nutrition under HOG_FED increases odds of a new search by 1%
+		if(prob(odds_of_new_food_search))
+			hog.mood = HOG_SKITTISH
+		return list()
+	var/atom/food = hog.idle_search()
+	if(!food)
+		hog.set_mood(HOG_CURIOUS)
+		return list()
+	return list(food)
+
+/// Walks to the forage target and eats it through the hog's legacy eat().
+/datum/bt_node/ai_behavior/hog_forage
+	var/target_key = BB_TARGET
+
+/datum/bt_node/ai_behavior/hog_forage/setup(datum/ai_controller/controller)
+	var/mob/living/simple_animal/hostile/spacehog/hog = controller.pawn
+	var/atom/target = controller.blackboard[target_key]
+	if(!istype(hog) || !target || QDELETED(target))
+		return FALSE
+	return get_dist(hog, target) <= 1
+
+/datum/bt_node/ai_behavior/hog_forage/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/simple_animal/hostile/spacehog/hog = controller.pawn
+	var/atom/target = controller.blackboard[target_key]
+	if(!istype(hog) || !target || QDELETED(target) || get_dist(hog, target) > 1)
+		return AI_BEHAVIOR_FAILED
+	hog.eat(target)
+	controller.clear_blackboard_key(target_key)
+	return AI_BEHAVIOR_SUCCEEDED
+
+/proc/bt_hog_tree()
+	return list(
+		BT_DESC_TYPE = /datum/bt_node/composite/selector,
+		BT_DESC_CHILDREN = list(
+			bt_basic_hostile_tree(),
+			list(
+				BT_DESC_TYPE = /datum/bt_node/composite/sequence,
+				BT_DESC_CHILDREN = list(
+					list(
+						BT_DESC_TYPE = /datum/bt_node/ai_behavior/acquire_target,
+						target_source_type = /datum/target_source/hog_food,
+						search_range = 7,
+					),
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/move_to_target, max_distance = 7),
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/hog_forage),
+				),
+			),
+			bt_idle_tree(50, 5 SECONDS, 4 SECONDS, FALSE),
+		),
+	)
 
 /* Priorities:
 planted seeds with ligneous = FALSE
@@ -168,7 +219,6 @@ if ungreased adult: l containers
 		if(L.stat)
 			carrion = L
 		else
-			GiveTarget(L)
 			return L
 	if(carrion)
 		return carrion

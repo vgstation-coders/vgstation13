@@ -299,6 +299,12 @@
 /datum/bt_node/ai_behavior/move_to_target
 	var/target_key = BB_TARGET
 	var/max_distance = 30
+	/// Seconds to chase one target before giving up; 0 reads ai_get_chase_timeout().
+	var/max_chase_time = 0
+	/// Target the chase timer started for.
+	var/atom/chase_target = null
+	/// world.time the current chase started.
+	var/chase_started = 0
 
 /datum/bt_node/ai_behavior/move_to_target/setup(datum/ai_controller/controller)
 	var/atom/target = controller.blackboard[target_key]
@@ -308,6 +314,14 @@
 	// Sleeping, restrained or caged pawns do not walk.
 	if(pawn.stat != CONSCIOUS || pawn.locked_to)
 		return FALSE
+	if(target != chase_target)
+		chase_target = target
+		chase_started = world.time
+	var/timeout = max_chase_time || pawn.ai_get_chase_timeout()
+	if(timeout && world.time - chase_started >= timeout)
+		controller.clear_blackboard_key(target_key)
+		chase_target = null
+		return FALSE
 	return TRUE
 
 /datum/bt_node/ai_behavior/move_to_target/perform(seconds_per_tick, datum/ai_controller/controller)
@@ -315,6 +329,12 @@
 	var/atom/target = controller.blackboard[target_key]
 	var/mob/living/pawn = controller.pawn
 	if(!target || QDELETED(target) || !pawn || QDELETED(pawn))
+		return AI_BEHAVIOR_FAILED
+
+	var/timeout = max_chase_time || pawn.ai_get_chase_timeout()
+	if(timeout && target == chase_target && world.time - chase_started >= timeout)
+		controller.clear_blackboard_key(target_key)
+		chase_target = null
 		return AI_BEHAVIOR_FAILED
 
 	if(get_dist(pawn, target) <= 1)
@@ -338,6 +358,8 @@
 /datum/bt_node/ai_behavior/move_to_target/finish_action(datum/ai_controller/controller, succeeded)
 	if(controller?.ai_movement)
 		controller.ai_movement.stop_moving_towards(controller)
+	// A finished chase resets the timer so a later chase starts fresh.
+	chase_target = null
 	return ..()
 
 /// Attacks the blackboard target when adjacent. Returns failure when the target
@@ -467,6 +489,77 @@
 /// flee_target so it shares the pathing/stop logic.
 /datum/bt_node/ai_behavior/flee_target/retreat
 	gate_on_distance = TRUE
+
+/// Backs away from the nearest instance of hazard_type in view. Fails when no
+/// hazard is close enough, so a selector can fall through to combat/idle.
+/datum/bt_node/ai_behavior/flee_hazard
+	/// Typepath of the hazard to avoid (campfires for wendigos/wolves).
+	var/hazard_type = null
+	/// Keep at least this many tiles between the pawn and the hazard.
+	var/flee_distance = 5
+	/// Pathing budget while fleeing.
+	var/max_distance = 10
+	/// How far to look for a hazard.
+	var/search_range = 7
+
+/datum/bt_node/ai_behavior/flee_hazard/proc/find_nearest_hazard(datum/ai_controller/controller)
+	var/mob/living/pawn = controller.pawn
+	if(!pawn || QDELETED(pawn) || !hazard_type)
+		return null
+	var/atom/best = null
+	for(var/atom/hazard in view(search_range, pawn))
+		if(!istype(hazard, hazard_type))
+			continue
+		if(!best || get_dist(pawn, hazard) < get_dist(pawn, best))
+			best = hazard
+	return best
+
+/datum/bt_node/ai_behavior/flee_hazard/setup(datum/ai_controller/controller)
+	var/atom/hazard = find_nearest_hazard(controller)
+	if(!hazard)
+		return FALSE
+	return get_dist(controller.pawn, hazard) < flee_distance
+
+/datum/bt_node/ai_behavior/flee_hazard/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/pawn = controller.pawn
+	var/atom/hazard = find_nearest_hazard(controller)
+	if(!pawn || QDELETED(pawn) || !hazard)
+		return AI_BEHAVIOR_FAILED
+	if(get_dist(pawn, hazard) >= flee_distance)
+		if(controller.ai_movement)
+			controller.ai_movement.stop_moving_towards(controller)
+		return AI_BEHAVIOR_SUCCEEDED
+	if(!controller.ai_movement)
+		return AI_BEHAVIOR_FAILED
+	var/away_dir = get_dir(hazard, pawn)
+	if(!away_dir)
+		return AI_BEHAVIOR_FAILED
+	var/turf/flee_turf = get_edge_target_turf(pawn, away_dir)
+	if(!flee_turf)
+		return AI_BEHAVIOR_FAILED
+	if(controller.ai_movement.needs_repath(controller, flee_turf) && !controller.ai_movement.start_moving_towards(controller, flee_turf, max_distance))
+		return AI_BEHAVIOR_FAILED
+	if(!controller.ai_movement.process(controller))
+		return AI_BEHAVIOR_FAILED
+	return AI_BEHAVIOR_DELAY
+
+/datum/bt_node/ai_behavior/flee_hazard/finish_action(datum/ai_controller/controller, succeeded)
+	if(controller?.ai_movement)
+		controller.ai_movement.stop_moving_towards(controller)
+	return ..()
+
+/// Basic hostile tree with a hazard-avoidance branch in front of combat.
+/proc/bt_hazard_hostile_tree(hazard_type)
+	return list(
+		BT_DESC_TYPE = /datum/bt_node/composite/selector,
+		BT_DESC_CHILDREN = list(
+			list(
+				BT_DESC_TYPE = /datum/bt_node/ai_behavior/flee_hazard,
+				hazard_type = hazard_type,
+			),
+			bt_basic_hostile_tree(),
+		),
+	)
 
 /// Says one of the provided lines (or the pawn's speak list) on a cooldown.
 /// Note: simple animals that keep legacy speech (handle_automated_speech) should
