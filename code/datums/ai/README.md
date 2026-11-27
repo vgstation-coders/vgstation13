@@ -4,15 +4,22 @@ Source: [tgstation/tgstation](https://github.com/tgstation/tgstation) `master`,
 `code/datums/ai/_ai_bt_*.dm`, `code/datums/ai/_ai_behavior.dm`,
 `code/datums/ai/_ai_controller.dm` and `code/__DEFINES/ai/behavior_trees.dm`.
 
-**Status:** phase 9. The core, subsystem/possession path, sentience hooks,
-path-cached movement, starter behavior leaves (attack, flee, retreat, hold,
-smash, speak), target lifecycle hooks and target sources, an ability system with
-a ranged and a charge ability, a health decorator, an example hostile consumer and five existing mapped mob types
-(space bear, space carp, strong/ranged/rapid hivebot) compile and pass the
+**Status:** phase 9.5 (tree tooling). The core, subsystem/possession path,
+sentience hooks, path-cached movement, starter behavior leaves (attack, flee,
+retreat, hold, smash, speak), target lifecycle hooks and target sources, an
+ability system with a ranged and a charge ability, a health decorator, the
+`.bt.json` compiler, an example hostile consumer and five existing mapped mob
+types (space bear, space carp, strong/ranged/rapid hivebot) compile and pass the
 auxtools scenario. The wider basic mob behavior set is still pending.
 
 ## Ported so far
 
+- `trees/*.bt.json` + `compiled/*.compiled.json`: `.bt.json` sources and their
+  committed compiled output (`guard` and the shared `combat` subtree).
+- `tools/behavior_tree/bt_compiler.py`: validates sources against the scanned
+  `/datum/bt_node` declarations, expands subtrees, converts enum names to DM
+  defines and emits full-typepath descriptors. `--check` guards against stale
+  output in CI.
 - `__DEFINES/behavior_trees.dm`: statuses, node types, abort modes, subplan and
   parallel policies, descriptor keys, AI statuses, starter blackboard keys.
 - `_ai_bt_node.dm`: node base, execution indices, tick/reset/finalize hooks.
@@ -81,8 +88,8 @@ childless and it fails every tick.
   have their own tick rate, but each subsystem walks one flat list instead of
   per-z lists. vg fires every z level anyway; revisit if a busy z level makes AI
   a measurable hotspot.
-- **Simplified movement.** `ai_movement/basic` uses `get_path_to()` and has no
-  cell grid or path caching yet. If `SSpathfinder.mobs` is not initialized or
+- **Simplified movement.** `ai_movement/basic` uses `get_path_to()` with a
+  per-controller path cache. If `SSpathfinder.mobs` is not initialized or
   returns no route, it falls back to one greedy step instead of runtiming. That
   fallback has no obstacle avoidance: a blocked step fails the movement leaf and
   the tree retries on the next tick, so a pawn can stall on a single blocker.
@@ -103,9 +110,7 @@ childless and it fails every tick.
   instead of signal subscriptions.
 - **Abilities run synchronously.** `ai_ability/perform` must not sleep; anything
   with a windup belongs in a behavior leaf using `AI_BEHAVIOR_DELAY`. The ranged
-  ability also respects the mob's legacy `ranged_cooldown`, and there is no
-  retreat-distance handling yet, so a ranged tree holds position instead of
-  backing off.
+  ability also respects the mob's legacy `ranged_cooldown`.
 - **Migrations disable the legacy target acquisition** with a `FindTarget()`
   override. The legacy `Life()` still runs health/speech; only target
   acquisition, movement and attack are owned by the tree. Mobs can hook
@@ -114,9 +119,12 @@ childless and it fails every tick.
 - **Death and sentience hooks.** Possession registers `/event/death`,
   `/event/living_login` and `/event/logout`; a client turns the AI off and
   logout resumes it unless the pawn is dead.
-- **No compiled JSON files or compiler.** `BT_COMPILED_PATH` and
-  `load_tree_from_json` are present, but WIP trees are built from typepaths or
-  descriptor lists. The `.bt.json` compiler still needs to be ported/tooled.
+- **Compiled trees are generated, not authored in DM.** Sources live in
+  `code/datums/ai/trees/*.bt.json`; `tools/behavior_tree/bt_compiler.py` validates
+  them against the scanned `/datum/bt_node` declarations and writes
+  `code/datums/ai/compiled/*.compiled.json` (committed). `--check` fails when the
+  output is stale. Subtree references are expanded inline, so override slots are
+  not reachable through JSON yet.
 - **No async perform and no event logging.** The async leaf path and `EVLOG_*`
   calls are deferred with the controller/subsystem port.
 - The BT viewer's `append_*` helpers are not ported yet.
@@ -127,17 +135,18 @@ childless and it fails every tick.
    target sources, mob-specific specials) and keep migrating existing mobs.
 2. **Controller integration:** z-level lists if AI becomes a hotspot; higher
    level path caching and multi-step movement.
-3. **Tree tooling:** `.bt.json` compiler and loader; BT viewer.
+3. **Tree tooling:** the BT viewer (the compiler and loader are in place).
 4. **Migration:** move the remaining simple animal / NPC crew AI incrementally,
    with the behavior tree as the decision layer.
 
 ## Testing
 
-The phase-9 scenario lives outside the repository (local auxtools harness):
+The phase-9.5 scenario lives outside the repository (local auxtools harness):
 build a sequence/selector/decorator/subtree, tick it across RUNNING/SUCCESS/
 FAILURE, exercise the descriptor builder, cancel a running leaf, possess a mob,
 verify sentience login/logout and high/low subsystem routing, trigger its death
-event, test the path cache, move it towards a blackboard target, drive the
+event, test the path cache, load and run the compiled `guard.bt.compiled.json`
+tree, move it towards a blackboard target, drive the
 example `bt_guard` against an adjacent victim, make it flee while badly hurt and
 resume combat after healing (in a cleared arena so the path is deterministic),
 say a line, drop a dead target during acquisition, verify the closest and

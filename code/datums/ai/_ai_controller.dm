@@ -291,7 +291,31 @@
 	var/list/desc = json_decode(file2text(file(path)))
 	if(!desc)
 		return null
-	return build_node_from_descriptor(desc)
+	return build_node_from_descriptor(json_to_descriptor(desc))
+
+/// Recursively converts a decoded JSON descriptor into a runtime descriptor.
+/// The compiler writes DM typepaths as strings, so "type" (and any config value
+/// that looks like a typepath) is resolved with text2path().
+/datum/ai_controller/proc/json_to_descriptor(list/desc)
+	if(!islist(desc))
+		return desc
+	var/list/converted = list()
+	for(var/key in desc)
+		var/value = desc[key]
+		if(key == BT_DESC_TYPE && istext(value))
+			converted[key] = text2path(value)
+		else if(key == BT_DESC_CHILDREN && islist(value))
+			var/list/children = list()
+			for(var/child in value)
+				// `+=` would flatten the child descriptor list; append it whole.
+				children.len++
+				children[children.len] = json_to_descriptor(child)
+			converted[key] = children
+		else if(istext(value) && copytext(value, 1, 2) == "/")
+			converted[key] = text2path(value)
+		else
+			converted[key] = value
+	return converted
 
 /// Returns TRUE if we have a blackboard key and it is not qdeleting.
 /datum/ai_controller/proc/blackboard_key_exists(key)

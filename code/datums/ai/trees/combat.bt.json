@@ -1,0 +1,28 @@
+{
+  "type": "selector",
+  "children": [
+    {
+      "type": "sequence",
+      "children": [
+        {"type": "acquire_target"},
+        {"type": "attack_target"}
+      ]
+    },
+    {
+      "type": "sequence",
+      "children": [
+        {"type": "acquire_target"},
+        {"type": "move_to_target"},
+        {"type": "acquire_target"},
+        {"type": "attack_target"}
+      ]
+    },
+    {
+      "type": "sequence",
+      "children": [
+        {"type": "acquire_target"},
+        {"type": "smash_surroundings"}
+      ]
+    }
+  ]
+}

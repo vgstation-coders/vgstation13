@@ -1,0 +1,21 @@
+{
+  "type": "selector",
+  "children": [
+    {
+      "type": "pawn_health_below",
+      "threshold": 0.5,
+      "observer_abort": "self",
+      "children": [
+        {
+          "type": "flee_target",
+          "flee_distance": 6,
+          "hold_while_target_alive": true
+        }
+      ]
+    },
+    {
+      "type": "subtree",
+      "subtree": "combat"
+    }
+  ]
+}

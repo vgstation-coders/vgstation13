@@ -1,0 +1,44 @@
+{
+  "children": [
+    {
+      "children": [
+        {
+          "type": "/datum/bt_node/ai_behavior/acquire_target"
+        },
+        {
+          "type": "/datum/bt_node/ai_behavior/attack_target"
+        }
+      ],
+      "type": "/datum/bt_node/composite/sequence"
+    },
+    {
+      "children": [
+        {
+          "type": "/datum/bt_node/ai_behavior/acquire_target"
+        },
+        {
+          "type": "/datum/bt_node/ai_behavior/move_to_target"
+        },
+        {
+          "type": "/datum/bt_node/ai_behavior/acquire_target"
+        },
+        {
+          "type": "/datum/bt_node/ai_behavior/attack_target"
+        }
+      ],
+      "type": "/datum/bt_node/composite/sequence"
+    },
+    {
+      "children": [
+        {
+          "type": "/datum/bt_node/ai_behavior/acquire_target"
+        },
+        {
+          "type": "/datum/bt_node/ai_behavior/smash_surroundings"
+        }
+      ],
+      "type": "/datum/bt_node/composite/sequence"
+    }
+  ],
+  "type": "/datum/bt_node/composite/selector"
+}

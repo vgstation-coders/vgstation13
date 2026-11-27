@@ -60,8 +60,9 @@
 #define BT_DESC_OVERRIDE_ID "override_id"
 
 /// Resolves the compiled JSON path from a behavior tree's source JSON path.
-/// The JSON compiler and the compiled files are part of the next porting phase.
-#define BT_COMPILED_PATH(json_path) (replacetext("build/behavior_trees/" + json_path, ".json", ".compiled.json"))
+/// Compiled trees are committed under code/datums/ai/compiled/ and produced by
+/// tools/behavior_tree/bt_compiler.py.
+#define BT_COMPILED_PATH(json_path) (replacetext("code/datums/ai/compiled/" + json_path, ".json", ".compiled.json"))
 
 // Return flags for ai_behavior/perform().
 /// Update this behavior's cooldown.
