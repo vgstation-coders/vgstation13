@@ -43,6 +43,14 @@ behavior set is still pending.
   for `AI_STATUS_ON` / `AI_STATUS_ON_LOW`.
 - `behavior_tree_test.dm`: test leaves used by the auxtools scenario.
 
+## Descriptor format
+
+Trees are nested lists keyed by `BT_DESC_TYPE`, `BT_DESC_CHILDREN` and optional
+config vars (`configure()` assigns them to same-named vars). A decorator wraps
+exactly one child, so the child node must go inside the decorator's
+`BT_DESC_CHILDREN`; listing it next to the decorator leaves the decorator
+childless and it fails every tick.
+
 ## Deliberate deviations from tgstation
 
 - **No DCS signals.** vgstation uses `/event` handlers instead of TG's
