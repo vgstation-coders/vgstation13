@@ -389,7 +389,7 @@
 	return .
 
 /// Turf this hex should trail behind its master on, matching the legacy
-/// escort_routine() satellite order. The tree moves towards it.
+/// legacy satellite order. The tree moves towards it.
 /mob/living/simple_animal/hostile/hex/proc/get_escort_anchor()
 	if (mode != HEX_MODE_ESCORT || !master || master.gcDestroyed || master.isDead())
 		return null
@@ -593,24 +593,6 @@
 		if (locate(/obj/effect/cult_ritual/conversion) in M.loc)//or people that stand on top of an active conversion rune
 			return FALSE
 	return TRUE
-
-/mob/living/simple_animal/hostile/hex/MoveToTarget()
-	if (mode == HEX_MODE_ESCORT)
-		stop_automated_movement = 1
-		if(!target || !CanAttack(target))
-			LoseTarget()
-			return
-		if(isturf(loc))
-			if(target in ListTargets())
-				dir = get_dir(src, target)
-				if(get_dist(src,target) >= 2 && ranged_cooldown <= 0)
-					OpenFire(target)
-				if(target.Adjacent(src))
-					AttackingTarget()
-				return
-		LostTarget()
-	else
-		..()
 
 /mob/living/simple_animal/hostile/hex/cultify()
 	return

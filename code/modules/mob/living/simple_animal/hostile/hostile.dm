@@ -38,9 +38,6 @@
 	var/can_ventcrawl = FALSE // If the mob can ventcrawl
 	var/avoids_poisonous = FALSE
 	var/mob/living/simple_animal/hostile/asteroid/hivelord/hivelord = null
-	/// Opt out of the generic behavior-tree install when a subtype keeps a
-	/// bespoke AI that cannot share the controller.
-	var/uses_legacy_ai = FALSE
 	/// Target set by GiveTarget() before the lazy controller install; used by
 	/// spawned minions and callers that propagate aggro through GiveTarget().
 	var/atom/pending_ai_target = null
@@ -141,7 +138,7 @@
 	// WIP: every hostile mob is driven by a behavior tree. The controller is
 	// created lazily on the first Life tick so subtype New() has already run and
 	// set up ranged/retreat/search vars; mobs with a custom tree already have one.
-	if(!ai_controller && !stat && !uses_legacy_ai)
+	if(!ai_controller && !stat)
 		use_hostile_tree()
 	. = ..()
 	//Cooldowns
