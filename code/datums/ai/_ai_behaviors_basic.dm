@@ -55,13 +55,45 @@
 		),
 	)
 
+/// Hostile tree that opens with a ranged ability while the target is at range,
+/// then falls back to the shared combat tree (which closes in and melees).
+/proc/bt_ranged_hostile_tree(ability_type = /datum/ai_ability/ranged_attack, min_distance = 2, max_distance = 7)
+	return list(
+		BT_DESC_TYPE = /datum/bt_node/composite/selector,
+		BT_DESC_CHILDREN = list(
+			list(
+				BT_DESC_TYPE = /datum/bt_node/ai_behavior/use_ability,
+				ability_type = ability_type,
+				min_distance = min_distance,
+				max_distance = max_distance,
+			),
+			bt_hostile_combat_tree(),
+		),
+	)
+
 /// Finds a living target in view and stores it in the blackboard. The pawn's
 /// ai_target_acquired()/ai_target_lost() hooks are called on changes so mobs can
-/// react (emotes, sounds) without replacing this leaf.
+/// react (emotes, sounds) without replacing this leaf. The candidate list and
+/// priority come from target_source_type.
 /datum/bt_node/ai_behavior/acquire_target
 	var/target_key = BB_TARGET
 	/// How far to look for a target, in tiles.
 	var/search_range = 7
+	/// Target source that decides which candidates exist and which one wins.
+	var/target_source_type = /datum/target_source/enemies
+	/// Lazily built instance of target_source_type.
+	var/datum/target_source/target_source = null
+
+/datum/bt_node/ai_behavior/acquire_target/Destroy()
+	QDEL_NULL(target_source)
+	return ..()
+
+/datum/bt_node/ai_behavior/acquire_target/proc/get_target_source()
+	if(isnull(target_source) || target_source.type != target_source_type)
+		QDEL_NULL(target_source)
+		if(ispath(target_source_type, /datum/target_source))
+			target_source = new target_source_type
+	return target_source
 
 /// Returns TRUE while the stored target is still worth chasing.
 /datum/bt_node/ai_behavior/acquire_target/proc/is_still_valid(datum/ai_controller/controller, atom/existing)
@@ -83,6 +115,10 @@
 	if(!pawn || QDELETED(pawn))
 		return AI_BEHAVIOR_FAILED
 
+	var/datum/target_source/source = get_target_source()
+	if(!source)
+		return AI_BEHAVIOR_FAILED
+
 	var/atom/existing = controller.blackboard[target_key]
 	if(existing)
 		if(is_still_valid(controller, existing))
@@ -91,19 +127,14 @@
 		controller.blackboard.Remove(target_key)
 		pawn.ai_target_lost(existing)
 
-	for(var/mob/living/candidate in oview(search_range, pawn))
-		if(candidate == pawn || candidate.stat == DEAD)
-			continue
-		if(istype(pawn, /mob/living/simple_animal))
-			var/mob/living/simple_animal/animal = pawn
-			if(!animal.CanAttack(candidate))
-				continue
-		controller.blackboard[target_key] = candidate
-		pawn.ai_target_acquired(candidate)
-		return AI_BEHAVIOR_SUCCEEDED
+	var/atom/picked = source.pick_target(controller, pawn, source.find_targets(controller, pawn, search_range))
+	if(!picked)
+		controller.blackboard.Remove(target_key)
+		return AI_BEHAVIOR_FAILED
 
-	controller.blackboard.Remove(target_key)
-	return AI_BEHAVIOR_FAILED
+	controller.blackboard[target_key] = picked
+	pawn.ai_target_acquired(picked)
+	return AI_BEHAVIOR_SUCCEEDED
 
 /// Walks the pawn towards the blackboard target using the controller's movement adapter.
 /datum/bt_node/ai_behavior/move_to_target
@@ -246,3 +277,52 @@
 			pawn.say(pick(choices))
 
 	return AI_BEHAVIOR_DELAY
+
+/// Triggers an /datum/ai_ability when the blackboard target is within range and
+/// the ability is ready. On a cooldown or out of range it fails so a selector can
+/// fall through to the next branch (usually movement or melee).
+/datum/bt_node/ai_behavior/use_ability
+	var/target_key = BB_TARGET
+	var/ability_type = null
+	/// Lazily built instance of ability_type.
+	var/datum/ai_ability/ability = null
+	/// Ability only fires while the target is at least this many tiles away.
+	var/min_distance = 2
+	/// ...and at most this many tiles away.
+	var/max_distance = 7
+
+/datum/bt_node/ai_behavior/use_ability/Destroy()
+	QDEL_NULL(ability)
+	return ..()
+
+/datum/bt_node/ai_behavior/use_ability/proc/get_ability()
+	if(isnull(ability) || ability.type != ability_type)
+		QDEL_NULL(ability)
+		if(ispath(ability_type, /datum/ai_ability))
+			ability = new ability_type
+	return ability
+
+/datum/bt_node/ai_behavior/use_ability/setup(datum/ai_controller/controller)
+	var/atom/target = controller.blackboard[target_key]
+	var/mob/living/pawn = controller.pawn
+	if(!target || QDELETED(target) || !pawn || QDELETED(pawn))
+		return FALSE
+	if(!ispath(ability_type, /datum/ai_ability))
+		return FALSE
+
+	var/distance = get_dist(pawn, target)
+	if(distance < min_distance || distance > max_distance)
+		return FALSE
+
+	var/datum/ai_ability/ready_ability = get_ability()
+	return ready_ability ? ready_ability.can_use(controller) : FALSE
+
+/datum/bt_node/ai_behavior/use_ability/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/atom/target = controller.blackboard[target_key]
+	if(!target || QDELETED(target) || isnull(ability))
+		return AI_BEHAVIOR_FAILED
+
+	var/result = ability.perform(controller, target)
+	if(result & AI_BEHAVIOR_SUCCEEDED)
+		ability.start_cooldown(controller)
+	return result

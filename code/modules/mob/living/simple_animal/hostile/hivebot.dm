@@ -56,6 +56,20 @@
 	health = 80
 	ranged = 1
 
+// WIP: the strong hivebot is the first ranged mob migrated to the behavior tree
+// controller. Its legacy ranged attack is triggered through use_ability, and the
+// legacy hostile AI no longer acquires targets.
+/mob/living/simple_animal/hostile/hivebot/strong/New()
+	..()
+	stop_automated_movement = TRUE
+	wander = 0
+	var/datum/ai_controller/controller = new(src)
+	controller.behavior_nodes = list(bt_ranged_hostile_tree())
+	controller.initialize_behavior_tree()
+
+/mob/living/simple_animal/hostile/hivebot/strong/FindTarget()
+	return null
+
 /mob/living/simple_animal/hostile/hivebot/emp_act(severity)
 	if(flags & INVULNERABLE)
 		return
