@@ -22,6 +22,11 @@
 	var/obj/item/inventory_mask
 	held_items = list()
 
+/mob/living/simple_animal/crab/New()
+	..()
+	// WIP: the idle/wander decision layer is a behavior tree.
+	use_idle_tree()
+
 /mob/living/simple_animal/crab/get_butchering_products()
 	return list(/datum/butchering_product/claws/crab)
 
@@ -29,14 +34,11 @@
 	if(timestopped)
 		return 0 //under effects of time magick
 	..()
-	//CRAB movement
-	if(!ckey && !stat)
-		if(isturf(src.loc) && !resting && !locked_to)		//This is so it only moves if it's not inside a closet, gentics machine, etc.
-			turns_since_move++
-			if(turns_since_move >= turns_per_move)
-				Move(get_step(src,pick(4,8)))
-				turns_since_move = 0
 	regenerate_icons()
+
+// Crabs scuttle sideways instead of taking a random step.
+/mob/living/simple_animal/crab/wander_move(var/turf/dest)
+	..(get_step(src, pick(4,8)))
 
 //COFFEE! SQUEEEEEEEEE!
 /mob/living/simple_animal/crab/Coffee
