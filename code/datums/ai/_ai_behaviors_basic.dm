@@ -163,8 +163,8 @@
 		return AI_BEHAVIOR_FAILED
 
 	// The pathfinder fallback is a single greedy step, so recompute whenever the
-	// stored path runs out; this also recovers from a target that moved.
-	if(!controller.ai_movement.has_path(controller) && !controller.ai_movement.start_moving_towards(controller, target, max_distance))
+	// moved path runs out; this also recovers from a target that moved.
+	if(controller.ai_movement.needs_repath(controller, target) && !controller.ai_movement.start_moving_towards(controller, target, max_distance))
 		return AI_BEHAVIOR_FAILED
 
 	if(!controller.ai_movement.process(controller))
@@ -231,13 +231,14 @@
 	if(!controller.ai_movement)
 		return AI_BEHAVIOR_FAILED
 
-	if(!controller.ai_movement.has_path(controller))
-		var/away_dir = get_dir(threat, pawn)
-		if(!away_dir)
-			return AI_BEHAVIOR_FAILED
-		var/turf/flee_turf = get_edge_target_turf(pawn, away_dir)
-		if(!flee_turf || !controller.ai_movement.start_moving_towards(controller, flee_turf, max_distance))
-			return AI_BEHAVIOR_FAILED
+	var/away_dir = get_dir(threat, pawn)
+	if(!away_dir)
+		return AI_BEHAVIOR_FAILED
+	var/turf/flee_turf = get_edge_target_turf(pawn, away_dir)
+	if(!flee_turf)
+		return AI_BEHAVIOR_FAILED
+	if(controller.ai_movement.needs_repath(controller, flee_turf) && !controller.ai_movement.start_moving_towards(controller, flee_turf, max_distance))
+		return AI_BEHAVIOR_FAILED
 
 	if(!controller.ai_movement.process(controller))
 		return AI_BEHAVIOR_FAILED

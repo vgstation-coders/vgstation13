@@ -63,7 +63,11 @@
 	pawn.ai_controller = src
 	blackboard[BB_MY_PAWN] = pawn
 	pawn.register_event(/event/death, src, nameof(src::on_pawn_death()))
-	set_ai_status(AI_STATUS_ON)
+	pawn.register_event(/event/living_login, src, nameof(src::on_pawn_login()))
+	pawn.register_event(/event/logout, src, nameof(src::on_pawn_logout()))
+	// A pawn that already has a client is player-driven: keep the AI idle until
+	// the client leaves.
+	set_ai_status(new_pawn.client ? AI_STATUS_OFF : AI_STATUS_ON)
 	return TRUE
 
 /// Detaches this controller from its pawn and stops processing it.
@@ -71,6 +75,8 @@
 	set_ai_status(AI_STATUS_OFF)
 	if(pawn)
 		pawn.unregister_event(/event/death, src, nameof(src::on_pawn_death()))
+		pawn.unregister_event(/event/living_login, src, nameof(src::on_pawn_login()))
+		pawn.unregister_event(/event/logout, src, nameof(src::on_pawn_logout()))
 		if(pawn.ai_controller == src)
 			pawn.ai_controller = null
 		pawn = null
@@ -80,21 +86,51 @@
 /datum/ai_controller/proc/on_pawn_death(mob/living/user, body_destroyed)
 	set_ai_status(AI_STATUS_OFF)
 
+/// Stops the AI while a client is driving the pawn.
+/datum/ai_controller/proc/on_pawn_login(mob/user)
+	if(!pawn || QDELETED(pawn))
+		return
+	set_ai_status(AI_STATUS_OFF)
+
+/// Resumes the AI when the client leaves, unless the pawn is dead.
+/datum/ai_controller/proc/on_pawn_logout(mob/user)
+	if(!pawn || QDELETED(pawn) || pawn.stat == DEAD)
+		return
+	set_ai_status(AI_STATUS_ON)
+
 /// Replaces the movement adapter. Takes a movement datum typepath.
 /datum/ai_controller/proc/change_ai_movement_type(datum/ai_movement/new_movement)
 	if(ai_movement)
 		QDEL_NULL(ai_movement)
 	ai_movement = new new_movement
 
-/// Moves the controller between AI status lists.
+/// Returns the subsystem that ticks controllers in this status, if any.
+/datum/ai_controller/proc/get_subsystem_for_status(status)
+	if(status == AI_STATUS_ON)
+		return SSai_controllers
+	if(status == AI_STATUS_ON_LOW)
+		return SSai_controllers_low
+	return null
+
+/// Moves the controller between the AI status lists/subsystems.
 /datum/ai_controller/proc/set_ai_status(new_status)
 	if(ai_status == new_status)
 		return FALSE
-	if(SSai_controllers)
-		if(ai_status)
-			SSai_controllers.ai_controllers_by_status[ai_status] -= src
-		if(new_status)
-			SSai_controllers.ai_controllers_by_status[new_status] += src
+
+	var/datum/subsystem/ai_controllers/old_subsystem = get_subsystem_for_status(ai_status)
+	if(old_subsystem)
+		old_subsystem.ai_controllers -= src
+	else if(ai_status != AI_STATUS_OFF)
+		ai_controllers_pending -= src
+
+	var/datum/subsystem/ai_controllers/new_subsystem = get_subsystem_for_status(new_status)
+	if(new_subsystem)
+		new_subsystem.ai_controllers += src
+	else if(new_status != AI_STATUS_OFF)
+		// The map loads before the subsystems start, so mapped mobs create their
+		// controllers first. Wait here until the owner subsystem adopts us.
+		ai_controllers_pending += src
+
 	ai_status = new_status
 	if(ai_status == AI_STATUS_OFF)
 		cancel_current_plan()

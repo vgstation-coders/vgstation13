@@ -4,12 +4,12 @@ Source: [tgstation/tgstation](https://github.com/tgstation/tgstation) `master`,
 `code/datums/ai/_ai_bt_*.dm`, `code/datums/ai/_ai_behavior.dm`,
 `code/datums/ai/_ai_controller.dm` and `code/__DEFINES/ai/behavior_trees.dm`.
 
-**Status:** phase 8. The core, subsystem/possession path, pathfinding movement
-adapter, starter behavior leaves (attack, flee, speak), target lifecycle hooks and
-target sources, an ability system with a ranged and a charge ability, a health
-decorator, an example hostile consumer and three existing mapped mobs (space bear,
-space carp, strong hivebot) compile and pass the auxtools scenario. The wider
-basic mob behavior set is still pending.
+**Status:** phase 8.5 (controller integration). The core, subsystem/possession
+path, sentience hooks, path-cached movement, starter behavior leaves (attack,
+flee, speak), target lifecycle hooks and target sources, an ability system with a
+ranged and a charge ability, a health decorator, an example hostile consumer and
+three existing mapped mobs (space bear, space carp, strong hivebot) compile and
+pass the auxtools scenario. The wider basic mob behavior set is still pending.
 
 ## Ported so far
 
@@ -23,10 +23,12 @@ basic mob behavior set is still pending.
 - `_ai_behavior.dm`: behavior leaf base (setup/perform/finish/cooldown).
 - `_ai_controller.dm`: blackboard, descriptor/typepath tree construction,
   `SelectBehaviors()`, cancellation, tick-state reset, AI status, possession,
-  movement adapter, pawn death handling and the `ai_target_acquired()` /
+  sentience (`/event/living_login`, `/event/logout`), subsystem routing, movement
+  adapter, pawn death handling and the `ai_target_acquired()` /
   `ai_target_lost()` mob hooks.
-- `_ai_movement.dm`: basic `get_path_to()` walker with `has_path()` and a greedy
-  step fallback while the pathfinder subsystem is not ready or has no route.
+- `_ai_movement.dm`: basic `get_path_to()` walker with a greedy step fallback
+  while the pathfinder subsystem is not ready or has no route. Caches the path
+  per controller/target and repaths after `repath_after` steps or a target change.
 - `_ai_target_sources.dm`: `target_source` base plus `enemies` (closest pick,
   legacy distance rule) and `enemies/wounded` (weakest pick) sources. The
   `enemies` filter uses the pawn's `CanAttack()`, so only mobs that override it
@@ -52,8 +54,11 @@ basic mob behavior set is still pending.
   runs `bt_ranged_hostile_tree()`: fire at range through `use_ability`, melee when
   adjacent. The beacon-spawned `hivebot`, `range` and `rapid` variants are still on
   the legacy AI on purpose (they need retreat-distance handling).
-- `code/controllers/subsystem/ai_controllers.dm`: `SSai_controllers` tick path
-  for `AI_STATUS_ON` / `AI_STATUS_ON_LOW`.
+- `code/controllers/subsystem/ai_controllers.dm`: two subsystems —
+  `SSai_controllers` for `AI_STATUS_ON` and `SSai_controllers_low` for
+  `AI_STATUS_ON_LOW` at half rate. Controllers created before the subsystems
+  start (mapped mobs load first) wait in `ai_controllers_pending` and are
+  adopted by their owner subsystem.
 - `behavior_tree_test.dm`: test leaves used by the auxtools scenario.
 
 ## Descriptor format
@@ -68,10 +73,12 @@ childless and it fails every tick.
 
 - **No DCS signals.** vgstation uses `/event` handlers instead of TG's
   `RegisterSignal`/`COMSIG` system. Decorator observer aborts use the polling
-  fallback (`polling_observers` + `polling_rate`) instead of signals. A future
-  pass can register real vg events where they exist.
-- **One controller subsystem.** Both `AI_STATUS_ON` and `AI_STATUS_ON_LOW` are
-  processed by the same subsystem for now; the two-subsystem split is pending.
+  fallback (`polling_observers` + `polling_rate`) instead of signals, and
+  sentience listens to the vg `/event/living_login` and `/event/logout` events.
+- **Two controller subsystems, no z-level split yet.** High and low statuses
+  have their own tick rate, but each subsystem walks one flat list instead of
+  per-z lists. vg fires every z level anyway; revisit if a busy z level makes AI
+  a measurable hotspot.
 - **Simplified movement.** `ai_movement/basic` uses `get_path_to()` and has no
   cell grid or path caching yet. If `SSpathfinder.mobs` is not initialized or
   returns no route, it falls back to one greedy step instead of runtiming. That
@@ -96,8 +103,9 @@ childless and it fails every tick.
   acquisition, movement and attack are owned by the tree. Mobs can hook
   `ai_target_acquired()` / `ai_target_lost()` for reaction flavor; the target
   leaf also drops dead or unattackable targets instead of chasing them forever.
-- **Death hook only.** Possession registers `/event/death` and turns the AI off.
-  Client login/logout sentience hooks are still pending.
+- **Death and sentience hooks.** Possession registers `/event/death`,
+  `/event/living_login` and `/event/logout`; a client turns the AI off and
+  logout resumes it unless the pawn is dead.
 - **No compiled JSON files or compiler.** `BT_COMPILED_PATH` and
   `load_tree_from_json` are present, but WIP trees are built from typepaths or
   descriptor lists. The `.bt.json` compiler still needs to be ported/tooled.
@@ -109,22 +117,23 @@ childless and it fails every tick.
 
 1. **Behaviors:** port the remaining basic mob leaves (environment smashing,
    speech variants, more target sources) and keep migrating existing mobs.
-2. **Controller integration:** client login/logout sentience hooks, the
-   high/low priority subsystem split, z-level lists and path caching.
+2. **Controller integration:** z-level lists if AI becomes a hotspot; higher
+   level path caching and multi-step movement.
 3. **Tree tooling:** `.bt.json` compiler and loader; BT viewer.
 4. **Migration:** move the remaining simple animal / NPC crew AI incrementally,
    with the behavior tree as the decision layer.
 
 ## Testing
 
-The phase-8 scenario lives outside the repository (local auxtools harness):
+The phase-8.5 scenario lives outside the repository (local auxtools harness):
 build a sequence/selector/decorator/subtree, tick it across RUNNING/SUCCESS/
 FAILURE, exercise the descriptor builder, cancel a running leaf, possess a mob,
-trigger its death event, move it towards a blackboard target, drive the example
-`bt_guard` against an adjacent victim, make it flee while badly hurt and resume
-combat after healing (in a cleared arena so the path is deterministic), say a
-line, drop a dead target during acquisition, verify the closest and wounded
-target sources pick the expected victim, fire the strong hivebot's ranged
-ability, make it melee at adjacency, charge with a pawn, and verify the migrated
-space bear and space carp attack adjacent humans. Keep the test leaves in
-`behavior_tree_test.dm` until real leaves and unit tests replace them.
+verify sentience login/logout and high/low subsystem routing, trigger its death
+event, test the path cache, move it towards a blackboard target, drive the
+example `bt_guard` against an adjacent victim, make it flee while badly hurt and
+resume combat after healing (in a cleared arena so the path is deterministic),
+say a line, drop a dead target during acquisition, verify the closest and
+wounded target sources pick the expected victim, fire the strong hivebot's
+ranged ability, make it melee at adjacency, charge with a pawn, and verify the
+migrated space bear and space carp attack adjacent humans. Keep the test leaves
+in `behavior_tree_test.dm` until real leaves and unit tests replace them.

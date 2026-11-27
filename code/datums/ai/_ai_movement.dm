@@ -10,6 +10,10 @@
 /datum/ai_movement/proc/start_moving_towards(datum/ai_controller/controller, atom/target, max_distance = 30)
 	return FALSE
 
+/// Returns TRUE when the caller should replace the stored path for this target.
+/datum/ai_movement/proc/needs_repath(datum/ai_controller/controller, atom/target)
+	return !has_path(controller)
+
 /// Advances one step. Returns TRUE if the pawn moved.
 /datum/ai_movement/proc/process(datum/ai_controller/controller)
 	return FALSE
@@ -30,6 +34,28 @@
 /datum/ai_movement/basic
 	/// Recompute a path when this many steps have been consumed and the target moved.
 	var/repath_after = 8
+	/// controller -> target the cached path was built for.
+	var/list/path_targets = list()
+	/// controller -> steps consumed from the cached path.
+	var/list/path_steps = list()
+
+/datum/ai_movement/basic/Destroy()
+	path_targets = null
+	path_steps = null
+	return ..()
+
+/datum/ai_movement/basic/stop_moving_towards(datum/ai_controller/controller)
+	path_targets -= controller
+	path_steps -= controller
+	return ..()
+
+/datum/ai_movement/basic/needs_repath(datum/ai_controller/controller, atom/target)
+	if(!has_path(controller))
+		return TRUE
+	// A different target always invalidates the cached path.
+	if(!target || path_targets[controller] != target)
+		return TRUE
+	return path_steps[controller] >= repath_after
 
 /datum/ai_movement/basic/start_moving_towards(datum/ai_controller/controller, atom/target, max_distance = 30)
 	var/mob/living/pawn = controller.pawn
@@ -61,9 +87,13 @@
 			paths -= controller
 			return FALSE
 		paths[controller] = list(fallback_step)
+		path_targets[controller] = target
+		path_steps[controller] = 0
 		return TRUE
 
 	paths[controller] = path
+	path_targets[controller] = target
+	path_steps[controller] = 0
 	return TRUE
 
 /datum/ai_movement/basic/process(datum/ai_controller/controller)
@@ -79,4 +109,5 @@
 		paths -= controller
 		return FALSE
 
+	path_steps[controller]++
 	return TRUE
