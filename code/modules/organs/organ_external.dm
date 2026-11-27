@@ -1838,15 +1838,17 @@ Note that amputating the affected organ does in fact remove the infection from t
 		native_enzymes = source.native_enzymes
 	else if(H.dna)
 		native_enzymes = H.dna.unique_enzymes
-	cancer_stage = source.cancer_stage
-	wounds = source.wounds.Copy()
-	burn_dam = source.burn_dam
-	brute_dam = source.brute_dam
-	if(!isnull(source.internal_organs)) //DM throws an error since Copy() can't run on a null object; some limbs don't have this var currently
-		internal_organs = source.internal_organs.Copy()
+	//Limbs that never were part of the body (like the extra arms Polymelia drops) have no source organ
+	if(source)
+		cancer_stage = source.cancer_stage
+		wounds = source.wounds.Copy()
+		burn_dam = source.burn_dam
+		brute_dam = source.brute_dam
+		if(!isnull(source.internal_organs)) //DM throws an error since Copy() can't run on a null object; some limbs don't have this var currently
+			internal_organs = source.internal_organs.Copy()
 
-	//Copy status flags except for ORGAN_CUT_AWAY and ORGAN_DESTROYED
-	status = source.status & ~(ORGAN_CUT_AWAY | ORGAN_DESTROYED)
+		//Copy status flags except for ORGAN_CUT_AWAY and ORGAN_DESTROYED
+		status = source.status & ~(ORGAN_CUT_AWAY | ORGAN_DESTROYED)
 
 	//Forming icon for the limb
 	//Setting base icon for this mob's race
