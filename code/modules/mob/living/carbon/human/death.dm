@@ -75,6 +75,9 @@
 			update_faction_icons()
 			to_chat(shade, "<span class='sinister'>Dark energies rip your dying body appart, anchoring your soul inside the form of a Shade. You retain your memories, and devotion to the cult.</span>")
 
+	..()
+
+	// After ..(), because mob/Destroy() deletes worn items, and unequipping them updates icons that read these.
 	if(species)
 		QDEL_NULL(species)
 
@@ -82,8 +85,6 @@
 		QDEL_NULL(vessel)
 
 	my_appearance = null
-
-	..()
 
 /mob/living/carbon/human/death(gibbed)
 	if((status_flags & BUDDHAMODE) || stat == DEAD)
