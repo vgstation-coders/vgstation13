@@ -1,0 +1,6 @@
+author: jknpj
+delete-after: true
+changes:
+- bugfix: The Death Squad commander now gets the Creed Commander ID and can pilot
+    the Seraph again.
+- bugfix: Death Squad members are now told to follow the actual squad leader.
