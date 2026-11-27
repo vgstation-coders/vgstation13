@@ -83,9 +83,8 @@ var/list/bee_calmers = list(
 	..()
 	bee_mobs_count++
 	home = new_home
-	// WIP: the behavior tree controller drives the bespoke swarm AI through the
-	// pawn_tick bridge.
-	use_idle_tree(bt_pawn_tick_tree())
+	// WIP: the behavior tree controller drives the swarm AI (bt_bee_tree()).
+	use_idle_tree(bt_bee_tree())
 
 
 /mob/living/simple_animal/bee/Destroy()
@@ -248,270 +247,356 @@ var/list/bee_calmers = list(
 		return 0
 	..()
 
-/mob/living/simple_animal/bee/ai_tick(seconds_per_tick)
-	if (!bees || bees.len <= 0)
-		qdel(src)
-		return
-	if (!bee_species.slow && !target)
-		walk(src,0)
-	if(stat == DEAD)
-		death()
-		return
+/*
+ * Behavior tree leaves. The swarm intent (intent) is still set by the bee datum
+ * mood changes; the leaves gate on it and run the same steps the legacy Life()
+ * state machine did. A sequence runs upkeep before the intent action each tick.
+ */
+
+/datum/bt_node/ai_behavior/bee_action
+	proc/get_bee(datum/ai_controller/controller)
+		var/mob/living/simple_animal/bee/bee = controller.pawn
+		if(!istype(bee, /mob/living/simple_animal/bee) || QDELETED(bee))
+			return null
+		return bee
+
+/// Shared swarm upkeep: poison, calming, merging/splitting, noise and intent.
+/datum/bt_node/ai_behavior/bee_action/bee_upkeep
+/datum/bt_node/ai_behavior/bee_action/bee_upkeep/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/simple_animal/bee/bee = get_bee(controller)
+	if(!bee)
+		return AI_BEHAVIOR_FAILED
+	if(!bee.bees || bee.bees.len <= 0)
+		qdel(bee)
+		return AI_BEHAVIOR_SUCCEEDED
+	if(!bee.bee_species)
+		qdel(bee)
+		return AI_BEHAVIOR_SUCCEEDED
+	if(!bee.bee_species.slow && !bee.target)
+		walk(bee, 0)
+	if(bee.stat == DEAD)
+		bee.death()
+		return AI_BEHAVIOR_SUCCEEDED
+
 	//Taking damage from high toxicity
-	if (((current_poison_damage - bees.len)/bees.len*100) > bee_species.toxic_threshold_death)
-		if (prob((((current_poison_damage - bees.len)/bees.len*100)-50)*2))
-			adjustBruteLoss(3)
-		if (bees.len <= 0)
-			return
+	if(((bee.current_poison_damage - bee.bees.len) / bee.bees.len * 100) > bee.bee_species.toxic_threshold_death)
+		if(prob((((bee.current_poison_damage - bee.bees.len) / bee.bees.len * 100) - 50) * 2))
+			bee.adjustBruteLoss(3)
+		if(bee.bees.len <= 0)
+			return AI_BEHAVIOR_SUCCEEDED
 
 	//Calming bees
-	for(var/obj/effect/check_effect in loc)
+	for(var/obj/effect/check_effect in bee.loc)
 		if(check_effect.reagents && is_type_in_list(check_effect, bee_calmers) && \
 			(check_effect.reagents.has_reagent(WATER) || check_effect.reagents.has_reagent(HOLYWATER)))
-			calming()
+			bee.calming()
 			break
 
-	if (calmed > 0)
-		calmed--
+	if(bee.calmed > 0)
+		bee.calmed--
 		//Calmed bees will split apart until there's no more than 5 bee per swarm.
-		if(target)
-			target = null
-		if(bees.len > 5)
+		if(bee.target)
+			bee.target = null
+		if(bee.bees.len > 5)
 			//calm down and spread out a little
 			var/list/bees_to_split = list()
-			for (var/datum/bee/B in bees)
-				if (bees_to_split.len == 0 || prob(33))
+			for(var/datum/bee/B in bee.bees)
+				if(bees_to_split.len == 0 || prob(33))
 					bees_to_split += B
-					if (bees_to_split.len >= 5)
+					if(bees_to_split.len >= 5)
 						break
-			step_rand(SplitSwarm(bees_to_split,intent))
+			step_rand(bee.SplitSwarm(bees_to_split, bee.intent))
 
-		if (!calmed)//wild bees will re-become angry right away
-			for (var/datum/bee/B in bees)
-				if (B.wild)
+		if(!bee.calmed)//wild bees will re-become angry right away
+			for(var/datum/bee/B in bee.bees)
+				if(B.wild)
 					B.intent = BEE_OUT_FOR_ENEMIES
-					intent_change = 1
+					bee.intent_change = 1
 
 	//A change of intent has been detected among the swarm so we'll split up if needed and re-assess our current main intent
-	if (intent_change)
-		UpdateIntent()
+	if(bee.intent_change)
+		bee.UpdateIntent()
 
 	//Making noise
 	if(prob(1))
 		if(prob(50))
-			src.visible_message("<span class='notice'>[pick("Buzzzz.","Hmmmmm.","Bzzz.")]</span>")
-		playsound(src, 'sound/effects/bees.ogg', min(20 * bees.len, 100), 1)
-
+			bee.visible_message("<span class='notice'>[pick("Buzzzz.","Hmmmmm.","Bzzz.")]</span>")
+		playsound(bee, 'sound/effects/bees.ogg', min(20 * bee.bees.len, 100), 1)
 
 	//If there are other bee mobs on our tile we might group up with them
-	for(var/mob/living/simple_animal/bee/B_mob in src.loc)
-		if(B_mob == src)
+	for(var/mob/living/simple_animal/bee/B_mob in bee.loc)
+		if(B_mob == bee)
 			continue
 		//bees don't mix with bees from other hives
-		if(B_mob.home != home)
+		if(B_mob.home != bee.home)
 			continue
 		//or other species
-		if(B_mob.bee_species != bee_species)
+		if(B_mob.bee_species != bee.bee_species)
 			continue
 		//no more than 20 bees per swarm to avoid people abusing their damage
-		if(bees.len + B_mob.bees.len > MAX_BEES_PER_SWARM)
+		if(bee.bees.len + B_mob.bees.len > MAX_BEES_PER_SWARM)
 			continue
 		//angry bees will drag other bees along with them
-		if(intent == BEE_OUT_FOR_ENEMIES)
+		if(bee.intent == BEE_OUT_FOR_ENEMIES)
 			if((prob(10) && B_mob.intent == BEE_OUT_FOR_PLANTS) || (prob(60) && B_mob.intent == BEE_OUT_FOR_ENEMIES))
-				MergeSwarms(B_mob)
-		else if((intent == BEE_BUILDING) || (prob(30) && intent != BEE_OUT_FOR_ENEMIES && pollinating <= 0  && B_mob.pollinating <= 0 && intent == B_mob.intent))
-			MergeSwarms(B_mob)
+				bee.MergeSwarms(B_mob)
+		else if((bee.intent == BEE_BUILDING) || (prob(30) && bee.intent != BEE_OUT_FOR_ENEMIES && bee.pollinating <= 0 && B_mob.pollinating <= 0 && bee.intent == B_mob.intent))
+			bee.MergeSwarms(B_mob)
 
 	//We might also randomly split up, with increased chance the more bees in the swarm
-	if(bees.len > 1 && pollinating <= 0 && prob(bees.len*2) && intent != BEE_SWARM && intent != BEE_BUILDING && intent != BEE_HEADING_HOME)
+	if(bee.bees.len > 1 && bee.pollinating <= 0 && prob(bee.bees.len * 2) && bee.intent != BEE_SWARM && bee.intent != BEE_BUILDING && bee.intent != BEE_HEADING_HOME)
 		var/queen = 0
-		for (var/single_B in bees)
-			if (istype(single_B,/datum/bee/queen_bee))
+		for(var/single_B in bee.bees)
+			if(istype(single_B, /datum/bee/queen_bee))
 				queen = 1
 				break
-		if (intent != BEE_ROAMING || !queen)//homeless bees spread out if there's no queen among them
-			step_rand(SplitSwarm(list(pick(bees)),intent))
+		if(bee.intent != BEE_ROAMING || !queen)//homeless bees spread out if there's no queen among them
+			step_rand(bee.SplitSwarm(list(pick(bee.bees)), bee.intent))
 
-	///////// Combat ! ////////
+	return AI_BEHAVIOR_SUCCEEDED
 
-	if(intent == BEE_OUT_FOR_ENEMIES)
-		target_turf = null
-		if(target && (target in view(src,7)) && target.stat != DEAD)//making sure that we still have our target in sight and breathing
-			target_turf = get_turf(target)
-			wander = 0
-		else//no target? let's find one!
-			FindTarget()
+/// Out for enemies: chase and sting, then get bored and go home.
+/datum/bt_node/ai_behavior/bee_action/bee_combat
+/datum/bt_node/ai_behavior/bee_action/bee_combat/setup(datum/ai_controller/controller)
+	var/mob/living/simple_animal/bee/bee = get_bee(controller)
+	return bee && bee.intent == BEE_OUT_FOR_ENEMIES
 
-		if(target_turf)//got a target? let's move toward them now.
-			MoveToTarget()
+/datum/bt_node/ai_behavior/bee_action/bee_combat/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/simple_animal/bee/bee = get_bee(controller)
+	if(!bee)
+		return AI_BEHAVIOR_FAILED
+	bee.target_turf = null
+	if(bee.target && (bee.target in view(bee, 7)) && bee.target.stat != DEAD)
+		bee.target_turf = get_turf(bee.target)
+		bee.wander = 0
+	else
+		bee.FindTarget()
 
-			if(loc == target_turf)
-				wander = 1
+	if(bee.target_turf)
+		bee.MoveToTarget()
+		if(bee.loc == bee.target_turf)
+			bee.wander = 1
 
-		//Attacking our current target if it's adjacent
-		if(target in view(src,1))
-			AttackTarget()
+	if(bee.target in view(bee, 1))
+		bee.AttackTarget()
 
-		//bees out for enemies eventually get bored and go back home
-		for (var/datum/bee/B in bees)
-			if (!B.wild)//unless they're "wild"!
-				B.bored++
-				if (B.bored > BOREDOM_TO_RETURN)
-					if (B.home)
-						B.homeCall()
+	//bees out for enemies eventually get bored and go back home
+	for(var/datum/bee/B in bee.bees)
+		if(!B.wild)//unless they're "wild"!
+			B.bored++
+			if(B.bored > BOREDOM_TO_RETURN)
+				if(B.home)
+					B.homeCall()
+	return AI_BEHAVIOR_SUCCEEDED
 
-	//////////// Pollinating ! //////////
+/// Out for plants: fly to a hydroponics tray and pollinate it.
+/datum/bt_node/ai_behavior/bee_action/bee_pollinate
+/datum/bt_node/ai_behavior/bee_action/bee_pollinate/setup(datum/ai_controller/controller)
+	var/mob/living/simple_animal/bee/bee = get_bee(controller)
+	return bee && bee.intent == BEE_OUT_FOR_PLANTS
 
-	if(intent == BEE_OUT_FOR_PLANTS)
-		if (pollinating <= 0)//not yet pollinating
-			target_turf = null
-			if(target_plant && (target_plant in view(src,7)))
-				target_turf = get_turf(target_plant)
-				wander = 0
+/datum/bt_node/ai_behavior/bee_action/bee_pollinate/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/simple_animal/bee/bee = get_bee(controller)
+	if(!bee)
+		return AI_BEHAVIOR_FAILED
+	if(bee.pollinating <= 0)
+		bee.target_turf = null
+		if(bee.target_plant && (bee.target_plant in view(bee, 7)))
+			bee.target_turf = get_turf(bee.target_plant)
+			bee.wander = 0
+		else
+			var/list/nearbyPlants = list()
+			for(var/obj/machinery/portable_atmospherics/hydroponics/H in view(bee, 2))
+				if(!H.dead && H.seed && !H.closed_system)
+					nearbyPlants += H
+			nearbyPlants -= bee.visited_plants
+			if(nearbyPlants.len > 0)
+				bee.target_plant = pick(nearbyPlants)
 			else
-				var/list/nearbyPlants = list()
-				for(var/obj/machinery/portable_atmospherics/hydroponics/H in view(src,2))//small search radius to more easily control which plants may the bees harvest pollen from
-					if (!H.dead && H.seed && !H.closed_system)
-						nearbyPlants += H
-				nearbyPlants -= visited_plants
-				if (nearbyPlants.len > 0)
-					target_plant = pick(nearbyPlants)
-				else
-					for (var/datum/bee/B in bees)
+				for(var/datum/bee/B in bee.bees)
+					B.fatigue++
+					if(B.fatigue > FATIGUE_TO_RETURN)
+						B.homeCall()
+		if(bee.target_turf)
+			if(bee.calmed <= 0)
+				var/turf/loc_old = bee.loc
+				step_to(bee, bee.target_turf)
+				if(bee.loc == loc_old)//our path is blocked for whatever reason
+					for(var/datum/bee/B in bee.bees)
 						B.fatigue++
-						if (B.fatigue > FATIGUE_TO_RETURN)
+						if(B.fatigue > FATIGUE_TO_RETURN)
 							B.homeCall()
-			if(target_turf)
-				if (calmed <= 0)
-					var/turf/loc_old = loc
-					step_to(src, target_turf)
-					if (loc == loc_old)//our path is blocked for whatever reason
-						for (var/datum/bee/B in bees)
-							B.fatigue++
-							if (B.fatigue > FATIGUE_TO_RETURN)
-								B.homeCall()
-				if(loc == target_turf)
-					add_plants(list(target_plant))
-					pollinating = TIME_TO_POLLINATE
-					target_plant.pollination = DURATION_OF_POLLINATION//technically the plant gets the benefits immediately
-		else if (pollinating > 0)//currently pollinating
-			pollinating--
-			if (pollinating == 0)
-				for (var/datum/bee/B in bees)
-					B.pollens += target_plant.seed
-					B.toxins += target_plant.get_toxinlevel()
-					B.fatigue += FATIGUE_PER_POLLINATIONS
-					if (B.fatigue > FATIGUE_TO_RETURN)
-						B.homeCall()
-				target_plant = null
-				wander = 1
+			if(bee.loc == bee.target_turf)
+				bee.add_plants(list(bee.target_plant))
+				bee.pollinating = TIME_TO_POLLINATE
+				bee.target_plant.pollination = DURATION_OF_POLLINATION//technically the plant gets the benefits immediately
+	else if(bee.pollinating > 0)
+		bee.pollinating--
+		if(bee.pollinating == 0)
+			for(var/datum/bee/B in bee.bees)
+				B.pollens += bee.target_plant.seed
+				B.toxins += bee.target_plant.get_toxinlevel()
+				B.fatigue += FATIGUE_PER_POLLINATIONS
+				if(B.fatigue > FATIGUE_TO_RETURN)
+					B.homeCall()
+			bee.target_plant = null
+			bee.wander = 1
+	return AI_BEHAVIOR_SUCCEEDED
 
-//////////////// Going Home ! ////////////////////
+/// Heading home (or the swarm call): return to the apiary and enter it.
+/datum/bt_node/ai_behavior/bee_action/bee_go_home
+/datum/bt_node/ai_behavior/bee_action/bee_go_home/setup(datum/ai_controller/controller)
+	var/mob/living/simple_animal/bee/bee = get_bee(controller)
+	return bee && (bee.intent == BEE_HEADING_HOME || bee.intent == BEE_SWARM)
 
-	if(intent == BEE_HEADING_HOME || intent == BEE_SWARM)
-		wander = 0
-		target_turf = get_turf(home)
-		if(target_turf)
-			if(src.loc == target_turf)
-				if (!home.species || bee_species == home.species)
-					for(var/datum/bee/B in bees)
-						home.enterHive(B)
-					qdel(src)
-				else
-					visible_message("<span class='notice'>A swarm has lost its way.</span>")
-					home = null
-					mood_change(BEE_ROAMING)
-			if (calmed <= 0)
-				step_to(src, target_turf)
-		else
-			visible_message("<span class='notice'>A swarm has lost its way.</span>")
-			home = null
-			mood_change(BEE_ROAMING)
-
-//////////////// Being Homeless ! ////////////////////
-
-	if(intent == BEE_ROAMING)
-		wander = 1
-		for (var/datum/bee/B in bees)
-			B.home = null
-		home = null
-		//if there's a queen among us, let's gather a following
-		var/datum/bee/queen_bee/queen = null
-		var/list/queen_list = list()
-		for (var/D in bees)
-			if (istype(D,/datum/bee/queen_bee))
-				queen_list.Add(D)
-				queen = D
-		if (queen)//a queen being part of the swarm will keep it alive indefinitely
-			if (bees.len < MAX_BEES_PER_SWARM)
-				var/turf/T = get_turf(loc)
-				for(var/mob/living/simple_animal/bee/B in range(src,3))
-					if (bee_species == B.bee_species && B.intent == BEE_ROAMING && B.loc != T)
-						step_to(B, T)//come closer, the GROUPING segment above should take care of the merging after a moment.
-
-			if (bees.len >= 11)
-			//once there's enough of us, let's find a new home
-				for(var/obj/machinery/apiary/A in range(src,3))
-					if (exile_swarm(A))
-						mood_change(BEE_SWARM,null,A)
-						A.reserve_apiary(src)
-						queen.colonizing = 1
-						update_icon()
-						return
-
-				for (var/datum/bee/queen_bee/QB in queen_list)
-					QB.searching++
-					if (QB.searching>60)
-						//and if there isn't any decent home nearby (after searching for a while)...let's build one!
-						var/list/available_turfs = list()
-						for (var/turf/simulated/floor/T in range(src,2))
-							if(!T.has_dense_content() && !(locate(/obj/structure/wild_apiary) in T))
-								available_turfs.Add(T)
-						if (available_turfs.len>0)
-							building = pick(available_turfs)
-							if (building)
-								mood_change(BEE_BUILDING)
-						break
-
-
-		else//swarms without a queen will eventually die of exhaustion, unless they're hornets or the produce of infestations
-			for (var/datum/bee/B in bees)
-				if (!B.wild)
-					B.exhaustion++
-					if (B.exhaustion > EXHAUSTION_TO_DIE)
-						adjustBruteLoss(1)
-
-		if (intent == BEE_ROAMING && home && home.loc)
-			mood_change(BEE_HEADING_HOME)
-
-
-	//BUILDING A WILD APIARY
-	if(intent == BEE_BUILDING)
-		wander = 0
-		var/datum/bee/queen_bee/queen = null
-		for (var/D in bees)
-			if (istype(D,/datum/bee/queen_bee))
-				queen = D
-		if(queen && building)
-			if (bees.len < MAX_BEES_PER_SWARM)//Gathering some more volunteers.
-				var/turf/T = get_turf(loc)
-				for(var/mob/living/simple_animal/bee/B in range(src,3))
-					if (bee_species == B.bee_species && B.intent == BEE_ROAMING && B.loc != T)
-						step_to(B, T)
-
-			if (building != loc)
-				step_to(src, building)
+/datum/bt_node/ai_behavior/bee_action/bee_go_home/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/simple_animal/bee/bee = get_bee(controller)
+	if(!bee)
+		return AI_BEHAVIOR_FAILED
+	bee.wander = 0
+	bee.target_turf = bee.home ? get_turf(bee.home) : null
+	if(bee.target_turf)
+		if(bee.loc == bee.target_turf)
+			if(!bee.home.species || bee.bee_species == bee.home.species)
+				for(var/datum/bee/B in bee.bees)
+					bee.home.enterHive(B)
+				qdel(bee)
+				return AI_BEHAVIOR_SUCCEEDED
 			else
-				var/obj/structure/wild_apiary/W = locate() in building
-				if (W)
-					W.work()
-				else
-					new /obj/structure/wild_apiary(loc,bee_species.prefix)
-		else
-			mood_change(BEE_ROAMING)
+				bee.visible_message("<span class='notice'>A swarm has lost its way.</span>")
+				bee.home = null
+				bee.mood_change(BEE_ROAMING)
+		if(bee.calmed <= 0)
+			step_to(bee, bee.target_turf)
+	else
+		bee.visible_message("<span class='notice'>A swarm has lost its way.</span>")
+		bee.home = null
+		bee.mood_change(BEE_ROAMING)
+	return AI_BEHAVIOR_SUCCEEDED
 
-	update_icon()
+/// Homeless swarm: group with nearby bees, find a new home or die out.
+/datum/bt_node/ai_behavior/bee_action/bee_roam
+/datum/bt_node/ai_behavior/bee_action/bee_roam/setup(datum/ai_controller/controller)
+	var/mob/living/simple_animal/bee/bee = get_bee(controller)
+	return bee && bee.intent == BEE_ROAMING
+
+/datum/bt_node/ai_behavior/bee_action/bee_roam/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/simple_animal/bee/bee = get_bee(controller)
+	if(!bee)
+		return AI_BEHAVIOR_FAILED
+	bee.wander = 1
+	for(var/datum/bee/B in bee.bees)
+		B.home = null
+	bee.home = null
+	//if there's a queen among us, let's gather a following
+	var/datum/bee/queen_bee/queen = null
+	var/list/queen_list = list()
+	for(var/D in bee.bees)
+		if(istype(D, /datum/bee/queen_bee))
+			queen_list.Add(D)
+			queen = D
+	if(queen)//a queen being part of the swarm will keep it alive indefinitely
+		if(bee.bees.len < MAX_BEES_PER_SWARM)
+			var/turf/T = get_turf(bee.loc)
+			for(var/mob/living/simple_animal/bee/B in range(bee, 3))
+				if(bee.bee_species == B.bee_species && B.intent == BEE_ROAMING && B.loc != T)
+					step_to(B, T)//come closer, the GROUPING segment above should take care of the merging after a moment.
+
+		if(bee.bees.len >= 11)
+			//once there's enough of us, let's find a new home
+			for(var/obj/machinery/apiary/A in range(bee, 3))
+				if(bee.exile_swarm(A))
+					bee.mood_change(BEE_SWARM, null, A)
+					A.reserve_apiary(bee)
+					queen.colonizing = 1
+					bee.update_icon()
+					return AI_BEHAVIOR_SUCCEEDED
+
+			for(var/datum/bee/queen_bee/QB in queen_list)
+				QB.searching++
+				if(QB.searching > 60)
+					//and if there isn't any decent home nearby (after searching for a while)...let's build one!
+					var/list/available_turfs = list()
+					for(var/turf/simulated/floor/T in range(bee, 2))
+						if(!T.has_dense_content() && !(locate(/obj/structure/wild_apiary) in T))
+							available_turfs.Add(T)
+					if(available_turfs.len > 0)
+						bee.building = pick(available_turfs)
+						if(bee.building)
+							bee.mood_change(BEE_BUILDING)
+					break
+	else//swarms without a queen will eventually die of exhaustion, unless they're hornets or the produce of infestations
+		for(var/datum/bee/B in bee.bees)
+			if(!B.wild)
+				B.exhaustion++
+				if(B.exhaustion > EXHAUSTION_TO_DIE)
+					bee.adjustBruteLoss(1)
+
+	if(bee.intent == BEE_ROAMING && bee.home && bee.home.loc)
+		bee.mood_change(BEE_HEADING_HOME)
+	return AI_BEHAVIOR_SUCCEEDED
+
+/// Building a wild apiary for a homeless queen-led swarm.
+/datum/bt_node/ai_behavior/bee_action/bee_build
+/datum/bt_node/ai_behavior/bee_action/bee_build/setup(datum/ai_controller/controller)
+	var/mob/living/simple_animal/bee/bee = get_bee(controller)
+	return bee && bee.intent == BEE_BUILDING
+
+/datum/bt_node/ai_behavior/bee_action/bee_build/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/simple_animal/bee/bee = get_bee(controller)
+	if(!bee)
+		return AI_BEHAVIOR_FAILED
+	bee.wander = 0
+	var/datum/bee/queen_bee/queen = null
+	for(var/D in bee.bees)
+		if(istype(D, /datum/bee/queen_bee))
+			queen = D
+	if(queen && bee.building)
+		if(bee.bees.len < MAX_BEES_PER_SWARM)//Gathering some more volunteers.
+			var/turf/T = get_turf(bee.loc)
+			for(var/mob/living/simple_animal/bee/B in range(bee, 3))
+				if(bee.bee_species == B.bee_species && B.intent == BEE_ROAMING && B.loc != T)
+					step_to(B, T)
+
+		if(bee.building != bee.loc)
+			step_to(bee, bee.building)
+		else
+			var/obj/structure/wild_apiary/W = locate() in bee.building
+			if(W)
+				W.work()
+			else
+				new /obj/structure/wild_apiary(bee.loc, bee.bee_species.prefix)
+	else
+		bee.mood_change(BEE_ROAMING)
+	return AI_BEHAVIOR_SUCCEEDED
+
+/// Refresh the swarm icon at the end of the tick.
+/datum/bt_node/ai_behavior/bee_action/bee_finish
+/datum/bt_node/ai_behavior/bee_action/bee_finish/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/simple_animal/bee/bee = get_bee(controller)
+	if(bee)
+		bee.update_icon()
+	return AI_BEHAVIOR_SUCCEEDED
+
+/// Bee tree: upkeep, then the current swarm intent, then the icon refresh.
+/proc/bt_bee_tree()
+	return list(
+		BT_DESC_TYPE = /datum/bt_node/composite/sequence,
+		BT_DESC_CHILDREN = list(
+			list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/bee_action/bee_upkeep),
+			list(
+				BT_DESC_TYPE = /datum/bt_node/composite/selector,
+				BT_DESC_CHILDREN = list(
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/bee_action/bee_combat),
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/bee_action/bee_pollinate),
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/bee_action/bee_go_home),
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/bee_action/bee_roam),
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/bee_action/bee_build),
+				),
+			),
+			list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/bee_action/bee_finish),
+		),
+	)
 
 ///////////////////////////Custom Procs//////////////////////////////////
 
