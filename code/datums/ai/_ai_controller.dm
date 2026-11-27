@@ -352,3 +352,7 @@
 	if(target)
 		UnarmedAttack(target)
 	return TRUE
+
+/// Returns the mob this pawn follows (pets and chickens with a master).
+/mob/living/proc/ai_get_follow_target()
+	return null

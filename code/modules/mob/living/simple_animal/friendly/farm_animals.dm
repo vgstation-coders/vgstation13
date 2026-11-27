@@ -342,13 +342,18 @@
 
 	init_butchering_list()
 
-	// WIP: the chicken's decision layer is an idle/wander behavior tree; legacy
-	// egg laying, feather regen and speech stay in Life().
+	// WIP: the chicken's decision layer is a follow/idle behavior tree; legacy
+	// egg laying, feather regen and speech stay in Life(). Petting sets `master`,
+	// so a befriended chicken trails its new owner.
 	stop_automated_movement = TRUE
 	wander = 0
 	var/datum/ai_controller/controller = new(src)
-	controller.behavior_nodes = list(bt_idle_tree())
+	controller.behavior_nodes = list(bt_following_idle_tree())
 	controller.initialize_behavior_tree()
+
+// Chickens follow the mob that befriended them.
+/mob/living/simple_animal/chicken/ai_get_follow_target()
+	return master
 
 /mob/living/simple_animal/chicken/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown/wheat)) //feedin' dem chickens

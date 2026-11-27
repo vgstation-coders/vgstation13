@@ -104,6 +104,16 @@
 		),
 	)
 
+/// Follows the pawn's leader when it wanders off, otherwise wanders/rests.
+/proc/bt_following_idle_tree(wander_chance = 50, wander_cooldown = 5 SECONDS, rest_time = 4 SECONDS)
+	return list(
+		BT_DESC_TYPE = /datum/bt_node/composite/selector,
+		BT_DESC_CHILDREN = list(
+			list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/follow_leader),
+			bt_idle_tree(wander_chance, wander_cooldown, rest_time),
+		),
+	)
+
 /// Default combat tree used by migrated mobs. Kept as a named entry point so
 /// call sites do not depend on the composition details.
 /proc/bt_basic_hostile_tree()
@@ -579,6 +589,50 @@
 	return AI_BEHAVIOR_DELAY
 
 /datum/bt_node/ai_behavior/hunt_target/finish_action(datum/ai_controller/controller, succeeded)
+	if(controller?.ai_movement)
+		controller.ai_movement.stop_moving_towards(controller)
+	return ..()
+
+/// Follows the pawn's leader (ai_get_follow_target()) to within follow_distance,
+/// then yields so the idle branch can run. Pets use this to trail their master.
+/datum/bt_node/ai_behavior/follow_leader
+	/// Stop chasing once the leader is this close (tiles).
+	var/follow_distance = 2
+	/// Give up and idle if the leader is farther than this (tiles).
+	var/max_distance = 12
+
+/datum/bt_node/ai_behavior/follow_leader/setup(datum/ai_controller/controller)
+	var/mob/living/pawn = controller.pawn
+	if(!pawn || QDELETED(pawn) || !controller.ai_movement)
+		return FALSE
+	var/atom/leader = pawn.ai_get_follow_target()
+	if(!leader || QDELETED(leader) || leader.z != pawn.z)
+		return FALSE
+	var/distance = get_dist(pawn, leader)
+	return distance > follow_distance && distance <= max_distance
+
+/datum/bt_node/ai_behavior/follow_leader/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/pawn = controller.pawn
+	if(!pawn || QDELETED(pawn))
+		return AI_BEHAVIOR_FAILED
+	var/atom/leader = pawn.ai_get_follow_target()
+	if(!leader || QDELETED(leader) || leader.z != pawn.z)
+		return AI_BEHAVIOR_FAILED
+
+	if(get_dist(pawn, leader) <= follow_distance)
+		if(controller.ai_movement)
+			controller.ai_movement.stop_moving_towards(controller)
+		return AI_BEHAVIOR_SUCCEEDED
+
+	if(!controller.ai_movement)
+		return AI_BEHAVIOR_FAILED
+	if(controller.ai_movement.needs_repath(controller, leader) && !controller.ai_movement.start_moving_towards(controller, leader, max_distance))
+		return AI_BEHAVIOR_FAILED
+	if(!controller.ai_movement.process(controller))
+		return AI_BEHAVIOR_FAILED
+	return AI_BEHAVIOR_DELAY
+
+/datum/bt_node/ai_behavior/follow_leader/finish_action(datum/ai_controller/controller, succeeded)
 	if(controller?.ai_movement)
 		controller.ai_movement.stop_moving_towards(controller)
 	return ..()

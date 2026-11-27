@@ -4,10 +4,10 @@ Source: [tgstation/tgstation](https://github.com/tgstation/tgstation) `master`,
 `code/datums/ai/_ai_bt_*.dm`, `code/datums/ai/_ai_behavior.dm`,
 `code/datums/ai/_ai_controller.dm` and `code/__DEFINES/ai/behavior_trees.dm`.
 
-**Status:** phase 13. The core, subsystem/possession path, sentience hooks,
+**Status:** phase 14. The core, subsystem/possession path, sentience hooks,
 z-level-gated subsystems, path-cached movement, starter behavior leaves (attack,
-flee, retreat, hold, smash, wait, wander, hunt, speak, blackboard keys), target
-lifecycle hooks and target sources (enemies, wounded, retaliate, prey), an
+flee, retreat, hold, smash, wait, wander, hunt, follow, speak, blackboard keys),
+target lifecycle hooks and target sources (enemies, wounded, retaliate, prey), an
 ability system with a ranged and a charge ability, a health decorator, the
 `.bt.json` compiler, the admin BT viewer, an example hostile consumer and eleven
 existing mapped mob types (space bear, space carp, strong/ranged/rapid hivebot,
@@ -54,8 +54,9 @@ wider basic mob behavior set is still pending.
   `clear_blackboard_key` and `wander`, plus the `bt_hostile_combat_tree()` /
   `bt_basic_hostile_tree()` / `bt_fleeing_hostile_tree()` /
   `bt_ranged_hostile_tree()` / `bt_retaliating_hostile_tree()` /
-  `bt_idle_tree()` / `bt_idle_hostile_tree()` / `bt_hunting_idle_tree()`
-  descriptors and the `hunt_target` leaf.
+  `bt_idle_tree()` / `bt_idle_hostile_tree()` / `bt_hunting_idle_tree()` /
+  `bt_following_idle_tree()` descriptors and the `hunt_target` and
+  `follow_leader` leaves.
 - `bt_guard.dm`: example first consumer, a hostile simple animal whose decision
   layer is a behavior tree controller (not mapped; admin/spawn use). It composes
   a fleeing combat tree in parallel with ambient chatter.
@@ -80,8 +81,10 @@ wider basic mob behavior set is still pending.
   `bt_idle_hostile_tree(retaliate)`: passive wander/rest until something fills
   the legacy `enemies` list (anger or damage), then fight. `Calm()` clears the
   tree's blackboard target as well as the legacy one.
-- `chicken.dm`: seventh migration. Chickens run `bt_idle_tree()`; egg laying,
-  feather regen and speech stay in `Life()`.
+- `chicken.dm`: seventh migration. Chickens run `bt_following_idle_tree()`; a
+  befriended chicken (`master` set by petting) trails its owner within a few
+  tiles, otherwise it wanders/rests. Egg laying, feather regen and speech stay in
+  `Life()`.
 - `cat.dm`: eighth migration and the first hunter. Cats run
   `bt_hunting_idle_tree(/mob/living/simple_animal/mouse)`: the `prey` source finds
   mice, `hunt_target` walks over and calls `ai_hunt_kill()`, which the cat
@@ -144,6 +147,9 @@ childless and it fails every tick.
   `prey_type` on a turf instead, so a friendly hunter (the cat) can target mice it
   is not allowed to "attack". The kill goes through the `ai_hunt_kill()` pawn
   hook, which defaults to `UnarmedAttack()` and is overridden for special kills.
+- **Following uses a pawn hook.** `follow_leader` asks `ai_get_follow_target()`
+  (default null; the chicken returns its `master`) and gives up when the leader is
+  on another z level or farther than `max_distance`, falling back to idle.
 - **Target sources are polled, not event driven.** `acquire_target` asks its
   `target_source` for candidates on every run, so sources are cheap filters
   instead of signal subscriptions.
@@ -198,7 +204,7 @@ hivebot retreats to its keep distance, smash surroundings as a hostile pawn,
 test the wait/blackboard-key leaves, verify a retaliator stays passive until its
 enemies list is filled, verify a destroyed pawn deletes its controller, verify
 the cow and chicken idle trees wander, verify the goat fights its enemies and
-`Calm()` clears the tree target, verify the cat hunts and kills a mouse, and
-verify the migrated space bear and space carp attack adjacent humans. Keep the
-test leaves in `behavior_tree_test.dm` until real leaves and unit tests replace
-them.
+`Calm()` clears the tree target, verify the cat hunts and kills a mouse, verify a
+befriended chicken follows its master, and verify the migrated space bear and
+space carp attack adjacent humans. Keep the test leaves in `behavior_tree_test.dm`
+until real leaves and unit tests replace them.
