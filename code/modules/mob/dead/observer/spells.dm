@@ -53,9 +53,26 @@ var/global/list/boo_phrases_silicon=list(
 	override_base = "grey"
 	hud_state = "boo"
 
-/spell/aoe_turf/boo/New()
+//Ghost spells are created anew with every observer, so the time of the last cast is kept on the mind.
+//That way the cooldown can't be reset by re-entering and leaving a body, and a ghost that never cast it starts fully charged.
+/spell/aoe_turf/boo/on_added(mob/user)
 	..()
-	take_charge(holder) //Prevent re-entering body to recharge Boo!
+	if(!user.mind || !user.mind.spell_last_cast)
+		return
+	var/last_cast = user.mind.spell_last_cast[type]
+	if(isnull(last_cast))
+		return
+	charge_counter = clamp(world.time - last_cast, 0, charge_cooldown_max)
+	process()
+
+/spell/aoe_turf/boo/take_charge(mob/user = user, var/skipcharge)
+	if(isAdminGhost(user))
+		return ..(user, TRUE) //Adminghosts have no cooldown
+	if(!skipcharge && user && user.mind)
+		if(!user.mind.spell_last_cast)
+			user.mind.spell_last_cast = list()
+		user.mind.spell_last_cast[type] = world.time
+	return ..()
 
 /spell/aoe_turf/boo/cast(list/targets)
 	for(var/turf/T in targets)

@@ -83,6 +83,9 @@
 
 	var/mob_legacy_fac
 
+	/// Spell type -> world.time of its last cast, for spells that are recreated with their mob but whose cooldown must carry over (see /spell/aoe_turf/boo)
+	var/list/spell_last_cast
+
 /datum/mind/New(var/key)
 	src.key = key
 
