@@ -56,9 +56,6 @@
 	..()
 	use_behavior_tree(bt_ranged_hostile_tree(retreat_distance = retreat_distance))
 
-/mob/living/simple_animal/hostile/hivebot/range/FindTarget()
-	return null
-
 /mob/living/simple_animal/hostile/hivebot/rapid
 	name = "Rapidfire Hivebot"
 	desc = "A biggish robot. This one has an automatic submachine gun!"
@@ -70,9 +67,6 @@
 /mob/living/simple_animal/hostile/hivebot/rapid/New()
 	..()
 	use_behavior_tree(bt_ranged_hostile_tree(retreat_distance = retreat_distance))
-
-/mob/living/simple_animal/hostile/hivebot/rapid/FindTarget()
-	return null
 
 /mob/living/simple_animal/hostile/hivebot/strong
 	name = "Strong Hivebot"
@@ -86,9 +80,6 @@
 /mob/living/simple_animal/hostile/hivebot/strong/New()
 	..()
 	use_behavior_tree(bt_ranged_hostile_tree())
-
-/mob/living/simple_animal/hostile/hivebot/strong/FindTarget()
-	return null
 
 /mob/living/simple_animal/hostile/hivebot/emp_act(severity)
 	if(flags & INVULNERABLE)

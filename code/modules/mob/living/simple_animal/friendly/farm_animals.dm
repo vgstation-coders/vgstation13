@@ -45,9 +45,6 @@
 	use_retaliating_tree()
 
 // The behavior tree owns target acquisition; keep the legacy hostile AI idle.
-/mob/living/simple_animal/hostile/retaliate/goat/FindTarget()
-	return null
-
 /mob/living/simple_animal/hostile/retaliate/goat/Life()
 	if(timestopped)
 		return 0 //under effects of time magick
@@ -566,11 +563,6 @@
 	..()
 	// WIP: the idle/wander decision layer is a behavior tree.
 	use_idle_tree()
-
-/mob/living/simple_animal/rabbit/Life()
-	if(timestopped)
-		return FALSE
-	..()
 
 /mob/living/simple_animal/rabbit/get_butchering_products()
 	return list(/datum/butchering_product/rabbit_ears, /datum/butchering_product/rabbit_foot)

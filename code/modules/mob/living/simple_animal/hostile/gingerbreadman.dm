@@ -46,5 +46,3 @@
 	controller.behavior_nodes = list(bt_basic_hostile_tree())
 	controller.initialize_behavior_tree()
 
-/mob/living/simple_animal/hostile/gingerbread/FindTarget()
-	return null

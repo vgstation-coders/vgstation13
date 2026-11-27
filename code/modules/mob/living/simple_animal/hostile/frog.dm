@@ -216,5 +216,3 @@
 	controller.behavior_nodes = list(bt_ranged_hostile_tree())
 	controller.initialize_behavior_tree()
 
-/mob/living/simple_animal/hostile/frog/FindTarget()
-	return null

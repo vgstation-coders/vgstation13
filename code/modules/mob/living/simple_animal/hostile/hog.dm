@@ -416,6 +416,8 @@ if ungreased adult: l containers
 	..()
 	homes += loc
 	CS = new(src) //The hog can already squeeze through any door, but this makes sure he knows it.
+	// WIP: the path-dash movement loop is a behavior tree leaf.
+	use_idle_tree(bt_rampage_hog_tree())
 
 /mob/living/simple_animal/rampagingspacehog/Destroy()
 	QDEL_NULL(CS)
@@ -449,15 +451,6 @@ if ungreased adult: l containers
 	path = get_path_to(src, target, max_distance=500, id = CS, diagonally = TRUE)
 	pathers += src
 
-/mob/living/simple_animal/rampagingspacehog/Life()
-	..()
-
-	for(var/i = 1 to dashspeed)
-		if(path.len>0)
-			process_path_step()
-		else
-			break
-
 /mob/living/simple_animal/rampagingspacehog/process_path_step()
 	if(gcDestroyed || stat == DEAD)
 		return FALSE
@@ -470,6 +463,23 @@ if ungreased adult: l containers
 		playsound(loc, snort_sound, 50, 0)
 		return FALSE
 	return TRUE
+
+/// Behavior tree leaf for the rampage hog's path dash. The path is built by
+/// adjustBruteLoss(); this leaf consumes up to dashspeed steps per tick.
+/datum/bt_node/ai_behavior/rampage_dash
+/datum/bt_node/ai_behavior/rampage_dash/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/simple_animal/rampagingspacehog/hog = controller.pawn
+	if(!istype(hog, /mob/living/simple_animal/rampagingspacehog) || QDELETED(hog))
+		return AI_BEHAVIOR_FAILED
+	for(var/i in 1 to hog.dashspeed)
+		if(hog.path && hog.path.len > 0)
+			hog.process_path_step()
+		else
+			break
+	return AI_BEHAVIOR_SUCCEEDED
+
+/proc/bt_rampage_hog_tree()
+	return list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/rampage_dash)
 
 //This is a new forme of your living nightmares
 /mob/living/simple_animal/rampagingspacehog/sleeperclown

@@ -99,9 +99,6 @@
 	controller.behavior_nodes = list(bt_basic_hostile_tree())
 	controller.initialize_behavior_tree()
 
-/mob/living/simple_animal/hostile/bigroach/FindTarget()
-	return null
-
 /mob/living/simple_animal/hostile/bigroach/death(var/gibbed = FALSE)
 	..(gibbed)
 	playsound(src, pick('sound/effects/gib1.ogg','sound/effects/gib2.ogg','sound/effects/gib3.ogg'), 40, 1) //Splat

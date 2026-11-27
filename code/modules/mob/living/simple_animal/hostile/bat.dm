@@ -56,10 +56,9 @@
 				return FALSE
 	return ..()
 
-/mob/living/simple_animal/hostile/scarybat/FindTarget()
-	. = ..()
-	if(.)
-		emote("me",, "flutters towards [.]!")
+/mob/living/simple_animal/hostile/scarybat/ai_target_acquired(atom/target)
+	if(target)
+		emote("me",, "flutters towards [target]!")
 
 /mob/living/simple_animal/hostile/scarybat/Found(var/atom/A) //This is here as a potential override to pick a specific target if available
 	if(!istype(A, /mob/living))

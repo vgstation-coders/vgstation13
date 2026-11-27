@@ -244,5 +244,3 @@
 	..()
 	use_humanoid_tree()
 
-/mob/living/simple_animal/hostile/humanoid/mummy/FindTarget()
-	return null

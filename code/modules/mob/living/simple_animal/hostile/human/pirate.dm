@@ -41,5 +41,3 @@
 	..()
 	use_humanoid_tree()
 
-/mob/living/simple_animal/hostile/humanoid/pirate/FindTarget()
-	return null

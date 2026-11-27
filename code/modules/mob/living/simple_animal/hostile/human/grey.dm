@@ -34,9 +34,6 @@
 	languages += all_languages[LANGUAGE_GREY]
 	use_humanoid_tree()
 
-/mob/living/simple_animal/hostile/humanoid/grey/FindTarget()
-	return null
-
 //////////////////////////////
 // GREY PRISONERS
 //////////////////////////////

@@ -42,5 +42,3 @@
 	..()
 	use_humanoid_tree()
 
-/mob/living/simple_animal/hostile/humanoid/russian/FindTarget()
-	return null

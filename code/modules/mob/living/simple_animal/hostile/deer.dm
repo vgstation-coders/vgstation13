@@ -42,9 +42,6 @@
 	))
 	controller.initialize_behavior_tree()
 
-/mob/living/simple_animal/hostile/deer/FindTarget()
-	return null
-
 /mob/living/simple_animal/hostile/deer/ai_target_acquired(atom/target)
 	if(!isliving(target))
 		return

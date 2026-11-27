@@ -35,5 +35,3 @@
 	..()
 	use_retaliating_tree()
 
-/mob/living/simple_animal/hostile/retaliate/tomato/FindTarget()
-	return null

@@ -91,9 +91,6 @@
 			return 0 //Carps who avoid pheromones don't target mobs with pheromones in their system. They just ignore them!
 	return ..(the_target)
 
-/mob/living/simple_animal/hostile/carp/FindTarget()
-	return null
-
 // Restores the legacy "gnashes at" emote now that the tree owns acquisition.
 /mob/living/simple_animal/hostile/carp/ai_target_acquired(atom/target)
 	if(target)

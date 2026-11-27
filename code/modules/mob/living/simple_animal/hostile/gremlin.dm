@@ -128,11 +128,16 @@ var/list/bad_gremlin_items = list()
 	if(timestopped)
 		return 0 //under effects of time magick
 	//Don't try to path to one target for too long. If it takes longer than a certain amount of time, assume it can't be reached and find a new one
-	if(!target)
+	var/chasing = ai_controller ? ai_has_target() : target
+	if(!chasing)
 		time_chasing_target = 0
 	else
 		if(++time_chasing_target > max_time_chasing_target)
-			LoseTarget()
+			if(ai_controller)
+				ai_controller.clear_blackboard_key(BB_TARGET)
+				ai_controller.cancel_current_plan()
+			else
+				LoseTarget()
 			time_chasing_target = 0
 
 	.=..()

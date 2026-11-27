@@ -122,5 +122,3 @@
 	..()
 	use_humanoid_tree()
 
-/mob/living/simple_animal/hostile/humanoid/jackal/FindTarget()
-	return null

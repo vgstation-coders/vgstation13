@@ -41,10 +41,9 @@
 /mob/living/simple_animal/hostile/faithless/Process_Spacemove(var/check_drift = 0)
 	return 1
 
-/mob/living/simple_animal/hostile/faithless/FindTarget()
-	. = ..()
-	if(.)
-		emote("me",,"wails at [.]!")
+/mob/living/simple_animal/hostile/faithless/ai_target_acquired(atom/target)
+	if(target)
+		emote("me",,"wails at [target]!")
 
 /mob/living/simple_animal/hostile/faithless/AttackingTarget()
 	. =..()

@@ -67,10 +67,9 @@
 		return ..(the_target)
 	return 0
 
-/mob/living/simple_animal/hostile/balloon/FindTarget()
-	. = ..()
-	if(.)
-		emote("me",,"squeaks at [.].")
+/mob/living/simple_animal/hostile/balloon/ai_target_acquired(atom/target)
+	if(target)
+		emote("me",,"squeaks at [target].")
 
 /mob/living/simple_animal/hostile/balloon/AttackingTarget()
 	if(!target)

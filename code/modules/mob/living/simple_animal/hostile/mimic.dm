@@ -151,9 +151,6 @@ var/global/list/crate_mimic_disguises = list(\
 	controller.behavior_nodes = list(bt_hostile_combat_tree(/datum/target_source/enemies/mimic))
 	controller.initialize_behavior_tree()
 
-/mob/living/simple_animal/hostile/mimic/crate/FindTarget()
-	return null
-
 /mob/living/simple_animal/hostile/mimic/crate/Life()
 	if(!angry)
 		if(health < maxHealth)

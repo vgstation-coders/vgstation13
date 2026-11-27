@@ -384,5 +384,3 @@
 	..()
 	use_humanoid_tree()
 
-/mob/living/simple_animal/hostile/humanoid/nazi/FindTarget()
-	return null

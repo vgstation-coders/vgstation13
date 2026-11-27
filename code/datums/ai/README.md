@@ -272,10 +272,10 @@ childless and it fails every tick.
 - **Migrations disable the legacy target acquisition.** The base hostile proc
   returns null from `FindTarget()` and makes `MoveToTarget()` / `AttackTarget()`
   inert whenever a controller is attached; the legacy `Life()` stance switch and
-  `adjustBruteLoss()` acquisition are skipped too. Mobs with a custom migration
-  may also add a `FindTarget()` override. The legacy `Life()` still runs
-  health/speech; only target acquisition, movement and attack are owned by the
-  tree. Mobs can hook
+  `adjustBruteLoss()` acquisition are skipped too. Mob flavor that used to live
+  in `FindTarget()` overrides now uses `ai_target_acquired()`. The legacy
+  `Life()` still runs health/speech; only target acquisition, movement and attack
+  are owned by the tree. Mobs can hook
   `ai_target_acquired()` / `ai_target_lost()` for reaction flavor; the target
   leaf also drops dead or unattackable targets instead of chasing them forever.
 - **Death and sentience hooks.** Possession registers `/event/death`,

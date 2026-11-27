@@ -543,5 +543,3 @@
 	..()
 	use_humanoid_tree()
 
-/mob/living/simple_animal/hostile/humanoid/vox/FindTarget()
-	return null

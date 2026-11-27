@@ -51,9 +51,6 @@
 	controller.behavior_nodes = list(bt_basic_hostile_tree())
 	controller.initialize_behavior_tree()
 
-/mob/living/simple_animal/hostile/ginger/FindTarget()
-	return null
-
 /mob/living/simple_animal/hostile/ginger/gingerchefman
 	name = "gingerchef man"
 	desc = "Prepare to meet your baker."

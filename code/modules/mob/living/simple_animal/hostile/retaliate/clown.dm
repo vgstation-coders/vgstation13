@@ -44,5 +44,3 @@
 	..()
 	use_retaliating_tree()
 
-/mob/living/simple_animal/hostile/retaliate/clown/FindTarget()
-	return null

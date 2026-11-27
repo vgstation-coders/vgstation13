@@ -50,9 +50,6 @@
 	))
 	controller.initialize_behavior_tree()
 
-/mob/living/simple_animal/hostile/giant_spider/nurse/FindTarget()
-	return null
-
 /mob/living/simple_animal/hostile/giant_spider/nurse/proc/check_evolve()
 	if(get_spider_count() >= get_queen_req(MIN_SPIDERS_PER_NPC_QUEEN) && !key && prob(10))	//don't evolve if there's a player inside
 		grow_up()

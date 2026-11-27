@@ -78,13 +78,6 @@
 	gender = NEUTER
 	size = SIZE_TINY
 
-/mob/living/simple_animal/cat/Life()
-	if(timestopped)
-		return 0 //under effects of time magick
-	// Mouse hunting and growling moved to the behavior tree
-	// (bt_hunting_idle_tree); keep the generic Life tick only.
-	. = ..()
-
 /mob/living/simple_animal/cat/New()
 	..()
 	stop_automated_movement = TRUE

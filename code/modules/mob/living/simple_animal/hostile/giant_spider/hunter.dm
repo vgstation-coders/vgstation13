@@ -38,5 +38,3 @@
 	controller.behavior_nodes = list(bt_idle_hostile_tree())
 	controller.initialize_behavior_tree()
 
-/mob/living/simple_animal/hostile/giant_spider/hunter/FindTarget()
-	return null

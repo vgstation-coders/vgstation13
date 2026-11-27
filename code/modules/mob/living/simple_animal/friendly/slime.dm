@@ -91,11 +91,6 @@
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle9"
 
-/mob/living/simple_animal/slime/Life()
-	if(timestopped)
-		return 0 //under effects of time magick
-	..()
-
 /mob/living/simple_animal/slime/handle_regular_hud_updates()
 	if(!..())
 		return FALSE
