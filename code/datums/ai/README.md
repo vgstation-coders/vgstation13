@@ -13,8 +13,8 @@ with a ranged and a charge ability, a health decorator, the `.bt.json` compiler,
 the admin BT viewer, an example hostile consumer and the full hostile simple
 animal tree (every hostile mob gets a controller, either explicitly or lazily on
 its first `Life()` tick) plus a set of non-hostile idle mobs compile and pass the
-auxtools scenario. The wider basic mob behavior set (friendly custom state
-machines, bee swarms, corgis, parrots, mice) is still pending.
+auxtools scenario. The parrot and bee state machines are controller-driven through
+the transitional `pawn_tick` bridge; splitting them into leaves is still pending.
 
 ## Ported so far
 
@@ -174,6 +174,11 @@ machines, bee swarms, corgis, parrots, mice) is still pending.
 - `friendly/mouse.dm`: mice run `bt_mouse_tree()`: snacks first, then an
   occasional cable chew (`target_source/wires`, 10% poll gate), then idle. The
   disease, cage and nutrition code stays in `Life()`.
+- `parrot.dm` + `bees/bees_mob.dm`: these two state machines are too entwined to
+  split into leaves in this pass, so they run through the `pawn_tick` bridge: the
+  controller calls `ai_tick()` every tick and the parrot perch/steal/flee and the
+  bee swarm intents stay intact. `Life()` no longer drives their AI. This is a
+  transitional wrapper, not a full leaf decomposition.
 - `_ai_target_sources.dm`: added `food`, `pointer` and `wires` sources.
 - `mimic.dm`: mimics run the combat tree with `target_source/enemies/mimic`,
   which stays empty until `anger()`; losing the target calls `calm_down()` again
@@ -307,11 +312,11 @@ childless and it fails every tick.
 3. **Tree tooling:** richer viewer (execution log, TGUI window) and a subtree
    override editor.
 4. **Migration:** the hostile tree covers every `/hostile` simple animal and the
-   idle tree covers the simple non-hostiles. The remaining bespoke state machines
-   are the corgi (food/pointer fetching), the mouse (food/wire seeking and
-   disease), the parrot (perch/fly/steal) and the bee swarm (intent-based colony
-   AI). Each needs its own target sources/behaviors rather than the shared combat
-   leaves.
+   idle tree covers the simple non-hostiles; the corgi, mouse, parrot and bee
+   have controllers too (the parrot and bee through the transitional
+   `pawn_tick` bridge). The remaining work is decomposing those two state
+   machines into real leaves (perch/steal/flee; swarm intents) and any
+   player-controlled/special mobs.
 
 ## Testing
 

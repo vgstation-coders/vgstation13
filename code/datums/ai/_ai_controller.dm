@@ -364,6 +364,11 @@
 /mob/living/proc/ai_idle_work()
 	return
 
+/// Bespoke per-tick AI step for mobs whose state machine is not split into
+/// leaves yet (parrot, bee). Called by the pawn_tick leaf.
+/mob/living/proc/ai_tick(seconds_per_tick)
+	return
+
 /// TRUE when the pawn is hungry enough for the food target source to look for
 /// snacks. Defaults to never; pets override it.
 /mob/living/proc/ai_wants_food()

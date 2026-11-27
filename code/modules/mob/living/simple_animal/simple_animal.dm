@@ -264,8 +264,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(purge)
 		purge -= 1
 
-	//Movement
-	if((!client||deny_client_move) && !stop_automated_movement && wander && !anchored && (ckey == null) && !(flags & INVULNERABLE))
+	//Movement. A behavior tree controller owns locomotion for its pawn.
+	if(!ai_controller && (!client||deny_client_move) && !stop_automated_movement && wander && !anchored && (ckey == null) && !(flags & INVULNERABLE))
 		if(isturf(src.loc) && canmove)		//This is so it only moves if it's not inside a closet, gentics machine, etc.
 			turns_since_move++
 			if(turns_since_move >= turns_per_move)

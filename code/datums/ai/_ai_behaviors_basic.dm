@@ -586,6 +586,21 @@
 /datum/bt_node/ai_behavior/idle/perform(seconds_per_tick, datum/ai_controller/controller)
 	return AI_BEHAVIOR_SUCCEEDED
 
+/// Runs a mob's bespoke ai_tick() once per controller tick. Transitional bridge
+/// for state machines too entwined to split into leaves yet (parrot, bee).
+/datum/bt_node/ai_behavior/pawn_tick
+
+/datum/bt_node/ai_behavior/pawn_tick/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/pawn = controller.pawn
+	if(!pawn || QDELETED(pawn))
+		return AI_BEHAVIOR_FAILED
+	pawn.ai_tick(seconds_per_tick)
+	return AI_BEHAVIOR_SUCCEEDED
+
+/// Tree that only drives the pawn's bespoke ai_tick() bridge.
+/proc/bt_pawn_tick_tree()
+	return list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/pawn_tick)
+
 /// Runs to the blackboard target and consumes/interacts with it through the
 /// legacy attack_animal hook (food, cables, ...). Begs when the target is held
 /// by a human. Override ai_beg_for_food() for a mob-specific line.

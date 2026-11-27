@@ -130,6 +130,10 @@
 
 	parrot_sleep_dur = parrot_sleep_max //In case someone decides to change the max without changing the duration var
 
+	// WIP: the behavior tree controller drives the bespoke parrot AI through
+	// the pawn_tick bridge.
+	use_idle_tree(bt_pawn_tick_tree())
+
 	verbs.Add(/mob/living/simple_animal/parrot/proc/steal_from_ground, \
 			  /mob/living/simple_animal/parrot/proc/steal_from_mob, \
 			  /mob/living/simple_animal/parrot/verb/drop_held_item_player, \
@@ -410,7 +414,9 @@
 		if(!client)
 			parrot_state = PARROT_WANDER
 		return
+	// The behavior tree controller drives the rest through ai_tick().
 
+/mob/living/simple_animal/parrot/ai_tick(seconds_per_tick)
 	if(client || stat)
 		return //Lets not force players or dead/incap parrots to move
 

@@ -83,6 +83,9 @@ var/list/bee_calmers = list(
 	..()
 	bee_mobs_count++
 	home = new_home
+	// WIP: the behavior tree controller drives the bespoke swarm AI through the
+	// pawn_tick bridge.
+	use_idle_tree(bt_pawn_tick_tree())
 
 
 /mob/living/simple_animal/bee/Destroy()
@@ -244,6 +247,8 @@ var/list/bee_calmers = list(
 	if(timestopped)
 		return 0
 	..()
+
+/mob/living/simple_animal/bee/ai_tick(seconds_per_tick)
 	if (!bees || bees.len <= 0)
 		qdel(src)
 		return
