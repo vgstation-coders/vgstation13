@@ -250,11 +250,7 @@
 	name = "bedroom curtain";
 	pixel_y = -32
 	},
-/obj/machinery/computer/telecomms/server/hackershack{
-	network = "tcommsat";
-	name = "Hacked telecommunications server monitoring console";
-	emagged = 1
-	},
+/obj/machinery/computer/telecomms/server/hackershack,
 /turf/simulated/floor/carpet/shag{
 	color = "#AAAAFF"
 	},

@@ -23,7 +23,7 @@ var/list/static/list_of_animal_types = typesof(/mob/living/simple_animal)
 
 	var/universal_translate = 0 // set to 1 if it can translate nonhuman speech
 
-	var/scanningrange = 25
+	var/long_range_scan = FALSE // set to TRUE to also reach servers through a working relay on this z-level and the hub it links to
 	circuit = "/obj/item/weapon/circuitboard/comm_server"
 
 	req_access = list(access_tcomsat)
@@ -180,9 +180,7 @@ var/list/static/list_of_animal_types = typesof(/mob/living/simple_animal)
 					temp = "<font color = #D70B00>- FAILED: CANNOT PROBE WHEN BUFFER FULL -</font color>"
 
 				else
-					for(var/obj/machinery/telecomms/server/T in range(scanningrange, src))
-						if(T.network == network)
-							servers.Add(T)
+					find_servers()
 
 					if(!servers.len)
 						temp = "<font color = #D70B00>- FAILED: UNABLE TO LOCATE SERVERS IN \[[network]\] -</font color>"
@@ -238,6 +236,35 @@ var/list/static/list_of_animal_types = typesof(/mob/living/simple_animal)
 			to_chat(user, "<span class='notice'>You disable the security protocols</span>")
 		return 1
 
-/obj/machinery/computer/telecomms/server/hackershack //this one should be able to connect to the stationside one via the mining outpost relay
+/obj/machinery/computer/telecomms/server/proc/find_servers()
+	for(var/obj/machinery/telecomms/server/T in range(25, src))
+		if(T.network == network)
+			servers |= T
+
+	if(!long_range_scan)
+		return
+	var/turf/our_turf = get_turf(src)
+	if(!our_turf)
+		return
+	// Piggyback on a relay on our z-level: it reaches the hubs it is linked to, which reach their servers
+	for(var/obj/machinery/telecomms/relay/R in telecomms_list)
+		if(!R.on || !R.receiving)
+			continue
+		var/turf/relay_turf = get_turf(R)
+		if(!relay_turf || relay_turf.z != our_turf.z)
+			continue
+		for(var/obj/machinery/telecomms/hub/H in R.links)
+			if(!H.on)
+				continue
+			for(var/obj/machinery/telecomms/server/T in H.links)
+				if(T.network == network)
+					servers |= T
+
+//This one can reach the station's servers through a relay on its z-level, like the mining outpost relay
+/obj/machinery/computer/telecomms/server/hackershack
+	name = "hacked telecommunications server monitoring console"
 	desc = "This one seems to have been upgraded with extremely fragile custom-built subspace amplifiers and hyperwave filters."
-	scanningrange = 999
+	circuit = "/obj/item/weapon/circuitboard/comm_server/hackershack"
+	network = "tcommsat"
+	emagged = 1
+	long_range_scan = TRUE

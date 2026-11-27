@@ -296,6 +296,10 @@
 	desc = "A circuit board for running a computer used to view active telecommunications servers and their message logs."
 	build_path = /obj/machinery/computer/telecomms/server
 	origin_tech = Tc_PROGRAMMING + "=3"
+/obj/item/weapon/circuitboard/comm_server/hackershack
+	name = "Circuit board (Hacked Telecommunications Server Monitor)"
+	desc = "A circuit board for running a computer used to view active telecommunications servers and their message logs. Someone has soldered custom subspace amplifiers onto it, letting it reach distant servers through a nearby relay."
+	build_path = /obj/machinery/computer/telecomms/server/hackershack
 /obj/item/weapon/circuitboard/comm_traffic
 	name = "Circuitboard (Telecommunications Traffic Control)"
 	desc = "A circuit board for running a computer used to manipulate telecommunications traffic."
