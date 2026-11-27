@@ -30,27 +30,7 @@
 	wander = 0
 
 	var/datum/ai_controller/controller = new(src)
-	controller.behavior_nodes = list(list(
-		BT_DESC_TYPE = /datum/bt_node/composite/selector,
-		BT_DESC_CHILDREN = list(
-			list(
-				BT_DESC_TYPE = /datum/bt_node/composite/sequence,
-				BT_DESC_CHILDREN = list(
-					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/acquire_target),
-					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/attack_target),
-				),
-			),
-			list(
-				BT_DESC_TYPE = /datum/bt_node/composite/sequence,
-				BT_DESC_CHILDREN = list(
-					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/acquire_target),
-					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/move_to_target),
-					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/acquire_target),
-					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/attack_target),
-				),
-			),
-		),
-	))
+	controller.behavior_nodes = list(bt_basic_hostile_tree())
 	controller.initialize_behavior_tree()
 
 // The behavior tree owns target acquisition; keep the legacy hostile AI idle.

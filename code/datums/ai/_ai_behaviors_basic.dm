@@ -2,6 +2,31 @@
 // These are intentionally small and use simple_animal primitives; the full
 // basic mob behavior set is still to be ported.
 
+// Shared starter tree for the first hostile consumers: try to attack an
+// adjacent target, otherwise acquire and walk to it, then attack.
+/proc/bt_basic_hostile_tree()
+	return list(
+		BT_DESC_TYPE = /datum/bt_node/composite/selector,
+		BT_DESC_CHILDREN = list(
+			list(
+				BT_DESC_TYPE = /datum/bt_node/composite/sequence,
+				BT_DESC_CHILDREN = list(
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/acquire_target),
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/attack_target),
+				),
+			),
+			list(
+				BT_DESC_TYPE = /datum/bt_node/composite/sequence,
+				BT_DESC_CHILDREN = list(
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/acquire_target),
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/move_to_target),
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/acquire_target),
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/attack_target),
+				),
+			),
+		),
+	)
+
 /// Finds a living target in view and stores it in the blackboard.
 /datum/bt_node/ai_behavior/acquire_target
 	var/target_key = BB_TARGET

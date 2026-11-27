@@ -58,6 +58,19 @@
 		burger = null
 	..()
 
+// WIP: space bears are the first existing mob migrated to the behavior tree
+// controller. The legacy hostile AI no longer acquires targets.
+/mob/living/simple_animal/hostile/bear/New()
+	..()
+	stop_automated_movement = TRUE
+	wander = 0
+	var/datum/ai_controller/controller = new(src)
+	controller.behavior_nodes = list(bt_basic_hostile_tree())
+	controller.initialize_behavior_tree()
+
+/mob/living/simple_animal/hostile/bear/FindTarget()
+	return null
+
 //SPACE BEARS! SQUEEEEEEEE~     OW! FUCK! IT BIT MY HAND OFF!!
 /mob/living/simple_animal/hostile/bear/Hudson
 	name = "Hudson"
