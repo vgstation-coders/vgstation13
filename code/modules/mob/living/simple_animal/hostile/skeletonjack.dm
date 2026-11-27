@@ -36,3 +36,16 @@
 /mob/living/simple_animal/hostile/skeletonjack/Destroy()
 	..()
 	ourBucket = null
+
+// WIP: skeleton jack runs the shared combat tree; its candybucket drop on death
+// is untouched.
+/mob/living/simple_animal/hostile/skeletonjack/New()
+	..()
+	stop_automated_movement = TRUE
+	wander = 0
+	var/datum/ai_controller/controller = new(src)
+	controller.behavior_nodes = list(bt_basic_hostile_tree())
+	controller.initialize_behavior_tree()
+
+/mob/living/simple_animal/hostile/skeletonjack/FindTarget()
+	return null

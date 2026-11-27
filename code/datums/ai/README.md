@@ -4,15 +4,16 @@ Source: [tgstation/tgstation](https://github.com/tgstation/tgstation) `master`,
 `code/datums/ai/_ai_bt_*.dm`, `code/datums/ai/_ai_behavior.dm`,
 `code/datums/ai/_ai_controller.dm` and `code/__DEFINES/ai/behavior_trees.dm`.
 
-**Status:** phase 15. The core, subsystem/possession path, sentience hooks,
+**Status:** phase 16. The core, subsystem/possession path, sentience hooks,
 z-level-gated subsystems, path-cached movement, starter behavior leaves (attack,
 flee, retreat, hold, smash, wait, wander, hunt, follow, speak, blackboard keys),
 target lifecycle hooks and target sources (enemies, wounded, retaliate, prey), an
 ability system with a ranged and a charge ability, a health decorator, the
-`.bt.json` compiler, the admin BT viewer, an example hostile consumer and thirteen
+`.bt.json` compiler, the admin BT viewer, an example hostile consumer and fifteen
 existing mapped mob types (space bear, space carp, strong/ranged/rapid hivebot,
-viscerator, cow, goat, chicken, cat, crab, bigroach) compile and pass the
-auxtools scenario. The wider basic mob behavior set is still pending.
+viscerator, cow, goat, chicken, cat, crab, bigroach, gingerbread, ginger family,
+skeleton jack) compile and pass the auxtools scenario. The wider basic mob
+behavior set is still pending.
 
 ## Ported so far
 
@@ -93,6 +94,10 @@ auxtools scenario. The wider basic mob behavior set is still pending.
 - `crab.dm` + `bigroach.dm`: ninth and tenth migrations. The megamadcrab and the
   roaches (queen included) run the shared combat tree; the queen keeps laying
   eggs because `attack_target` bridges to the legacy `AttackingTarget()` hook.
+- `gingerbreadman.dm`, `gingerbreadmobs.dm` + `skeletonjack.dm`: eleventh to
+  thirteenth migrations. The gingerbread man, the whole ginger family (chef,
+  knight, broodmother, ...) and skeleton jack run the shared combat tree; the
+  broodmother's special attack and skeleton jack's candybucket drop are untouched.
 - `_ai_bt_viewer.dm` + `code/modules/admin/verbs/behavior_trees.dm`: admin
   "View Behavior Tree" verb rendering the tree, blackboard and live markers.
 - `living.dm`: `/mob/living/Destroy()` now deletes the attached
@@ -214,6 +219,7 @@ the cow and chicken idle trees wander, verify the goat fights its enemies and
 `Calm()` clears the tree target, verify the cat hunts and kills a mouse, verify a
 befriended chicken follows its master, verify the crab attacks through the combat
 tree, verify the queen roach lays an egg through the legacy `AttackingTarget()`
-bridge, and verify the migrated space bear and space carp attack adjacent humans.
-Keep the test leaves in `behavior_tree_test.dm` until real leaves and unit tests
-replace them.
+bridge, verify the gingerbread/ginger/skeleton jack batch attacks through the
+combat tree, and verify the migrated space bear and space carp attack adjacent
+humans. Keep the test leaves in `behavior_tree_test.dm` until real leaves and
+unit tests replace them.
