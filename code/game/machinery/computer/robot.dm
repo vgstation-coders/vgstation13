@@ -128,8 +128,8 @@
 				if(!R.SetLockdown(!R.lockdown, TRUE))
 					return TRUE
 				if(R.connected_ai && usr != R.connected_ai)
-					message_admins("[key_name(usr)] [formatJumpTo(usr)] [!R.lockdown ? "locked down" : "released"] [key_name(R)] [formatJumpTo(R)] using a robotics console!")
-					log_game("[key_name(usr)] [!R.lockdown ? "locked down" : "released"] [key_name(R)] using a robotics console at [T.loc] (@[T.x],[T.y],[T.z])!")
+					message_admins("[key_name(usr)] [formatJumpTo(usr)] [R.lockdown ? "locked down" : "released"] [key_name(R)] [formatJumpTo(R)] using a robotics console!")
+					log_game("[key_name(usr)] [R.lockdown ? "locked down" : "released"] [key_name(R)] using a robotics console at [T.loc] (@[T.x],[T.y],[T.z])!")
 					if(R.lockdown)
 						to_chat(R.connected_ai, "<span style=\"font-family:Courier\"><b>\[<span class='danger'>ALERT</span>\] Slaved Cyborg [R.name] locked down. Signal traced to [get_area(src).name]</b></span>")
 						R.connected_ai << 'sound/machines/twobeep.ogg'
@@ -162,15 +162,20 @@
 				else
 					to_chat(usr, "You are already hacking a cyborg.")
 		if("sequence")
-			if(cyborg_detonation_time == 0 || cyborg_detonation_time < world.time)
-				start_sequence()
-				message_admins("<span class='notice'>[key_name_admin(usr)] [formatJumpTo(usr)] has initiated the global cyborg killswitch!</span>")
-				log_game("<span class='notice'>[key_name(usr)] has initiated the global cyborg killswitch!</span>")
-			else
+			var/halt = text2num(params["halt"])
+			var/active = cyborg_detonation_time > world.time // same test as ui_data's sequence_activated
+			if(halt ? !active : active)
+				// Stale UI: the killswitch is already in the state this button asked for.
+				to_chat(usr, "<span class='warning'>The self-destruct sequence is [active ? "already running" : "not running"].</span>")
+				return TRUE
+			if(halt)
 				stop_sequence()
 				message_admins("<span class='notice'>[key_name_admin(usr)] [formatJumpTo(usr)] has halted the global cyborg killswitch!</span>")
 				log_game("<span class='notice'>[key_name(usr)] has halted the global cyborg killswitch!</span>")
-			SStgui.try_update_ui(ui.user, src, ui)
+			else
+				start_sequence()
+				message_admins("<span class='notice'>[key_name_admin(usr)] [formatJumpTo(usr)] has initiated the global cyborg killswitch!</span>")
+				log_game("<span class='notice'>[key_name(usr)] has initiated the global cyborg killswitch!</span>")
 	return TRUE
 
 /obj/machinery/computer/robotics/proc/can_control(var/mob/living/silicon/robot/robot, var/mob/controller)
@@ -184,7 +189,7 @@
 
 
 /obj/machinery/computer/robotics/proc/start_sequence()
-	speak("Emergency self-destruct sequence initiatied.")
+	speak("Emergency self-destruct sequence initiated.")
 	cyborg_detonation_time = world.time + DEFAULT_SEQUENCE_TIME
 	update_icon()
 
