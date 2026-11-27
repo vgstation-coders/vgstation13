@@ -38,8 +38,8 @@
 	var/can_ventcrawl = FALSE // If the mob can ventcrawl
 	var/avoids_poisonous = FALSE
 	var/mob/living/simple_animal/hostile/asteroid/hivelord/hivelord = null
-	/// Opt out of the generic behavior-tree install while a mob keeps its own
-	/// bespoke AI (gourmonger prey charging, hex guard/escort, ...).
+	/// Opt out of the generic behavior-tree install when a subtype keeps a
+	/// bespoke AI that cannot share the controller.
 	var/uses_legacy_ai = FALSE
 	/// Target set by GiveTarget() before the lazy controller install; used by
 	/// spawned minions and callers that propagate aggro through GiveTarget().
@@ -441,6 +441,8 @@
 	walk(src, 0)
 	stop_chase()
 	LoseAggro()
+	if(ai_controller)
+		ai_controller.clear_blackboard_key(BB_TARGET)
 
 /mob/living/simple_animal/hostile/proc/LostTarget()
 	stance = HOSTILE_STANCE_IDLE

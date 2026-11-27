@@ -8,8 +8,6 @@ var/global/gourmonger_saturation = 0
 /mob/living/simple_animal/hostile/gourmonger
 	name = "\improper Gourmonger"
 	desc = "A bio-engineered lifeform designed to recycle excess organic matter into fuel."
-	// The bespoke hunger/sniff/charge AI is not ported to a tree yet.
-	uses_legacy_ai = TRUE
 	icon = 'icons/mob/gourmonger.dmi'
 	icon_state = "gourmonger"
 	icon_living = "gourmonger"
@@ -34,7 +32,6 @@ var/global/gourmonger_saturation = 0
 	var/mealCount = 0	//How close to splitting we are
 	var/fastingTime = 0	//Goes up every tick. Decides how much kcal we lose and how close to losing a mealCount we are.
 	var/currentlyMunching = FALSE	//If it's currently eating so it doesn't keep trying.
-	var/mob/living/sniffTarget = null	//The target we're hunting while loose.
 	var/beenStuckCount = 0		//Work around for it being stuck on things it can't charge through
 	var/turf/stuckTurf = null	//Where we're stuck
 	var/list/justBreakIt = list(	//Fuck it and fuck mecha
@@ -53,11 +50,6 @@ var/global/gourmonger_saturation = 0
 	metabolizeTick()	//Process kcal/meal loss over time
 	radBurst(kcalPower/3)	//Generate power every tick
 	hungerCheck()	//Are we loose?
-	if(hangry && !target)
-		if(sniffTarget)
-			chargeToPrey()	//Hunt man down
-		else
-			findPrey()	//Find man to hunt
 
 /mob/living/simple_animal/hostile/gourmonger/death()
 	gourmonger_saturation--
@@ -117,34 +109,11 @@ var/global/gourmonger_saturation = 0
 				return 0
 		if(!L.stat && !hangry)	//So we attack corpses but not living creatures unless we're starving
 			return 0
-		if(sniffTarget)	//Why are we running across the station if there's food right in front of us?
-			sniffTarget = null
 		return 1
 	if(isobj(the_target))
 		if(is_type_in_list(the_target, wanted_objects))
-			if(sniffTarget)
-				sniffTarget = null
 			return 1
 	return 0
-
-/mob/living/simple_animal/hostile/gourmonger/PickTarget(var/list/Targets)	//Removed fuzzyrules eval as it was hindering their targeting priority
-	if(target)
-		for(var/atom/A in Targets)
-			var/target_dist = get_dist(src, target)
-			var/possible_target_distance = get_dist(src, A)
-			if(target_dist < possible_target_distance)
-				Targets -= A
-	if(!Targets.len)
-		return
-	var/chosen_target = pick(Targets)	//Gours pick a random target rather than the top priority target. The latter had them all starve trying to eat the same pumpkin.
-	return chosen_target
-
-
-
-/mob/living/simple_animal/hostile/gourmonger/Goto(var/target, var/delay, var/minimum_distance)
-	if(hangry)
-		chargeToPrey(target)	//Chases people at normal speed + 1 tile a tick. Call it a runner's kick. If they put a window between them and it it will still break it.
-	..()
 
 /mob/living/simple_animal/hostile/gourmonger/proc/metabolizeTick()
 	if(kcalPower > 0)
@@ -213,11 +182,19 @@ var/global/gourmonger_saturation = 0
 /mob/living/simple_animal/hostile/gourmonger/AttackingTarget()
 	if(currentlyMunching)
 		return
+	// The attack leaf points the legacy target at the blackboard target for this
+	// call, but eatFood/eatCorpse sleep, so capture the target in a local before
+	// spawning the eating thread.
+	var/atom/the_target = target
+	if(!the_target && ai_controller)
+		the_target = ai_controller.blackboard[BB_TARGET]
+	if(!the_target)
+		return
 	spawn()
-		if(istype(target, /obj/item/weapon/reagent_containers/food/snacks))
-			eatFood(target)
-		if(isliving(target))
-			var/mob/living/M = target
+		if(istype(the_target, /obj/item/weapon/reagent_containers/food/snacks))
+			eatFood(the_target)
+		if(isliving(the_target))
+			var/mob/living/M = the_target
 			if(M.isDeadorDying())
 				eatCorpse(M)
 			else if(hangry)
@@ -297,33 +274,10 @@ var/global/gourmonger_saturation = 0
 	if(mealCount > growToSplit)
 		gourSplit()
 
-/mob/living/simple_animal/hostile/gourmonger/proc/sniffForPrey()
-	var/sniffMeal = null
-	var/sniffDist = 50	//Easy way to make 50 the max range and avoids needing to use get_dist twice per loop
-	for(var/client/C in clients)
-		if(isliving(C.mob) && !issilicon(C.mob))
-			var/mob/living/L = C.mob
-			if(get_dist(src, L) < sniffDist && z == L.z)
-				sniffMeal = L
-				sniffDist = get_dist(src, L)
-	if(sniffMeal)
-		sniffTarget = sniffMeal
-		return TRUE
-	if(istype(loc, /obj/structure))	//Really? No players in 50 tiles? Maybe our z is 0, let's check
-		gourEscape()
-
-/mob/living/simple_animal/hostile/gourmonger/proc/findPrey()
-	flick("gourmonger_sniff", src)
-	visible_message("<span class='warning'>\The [src] is tasting for a scent.</span>")
-	if(sniffForPrey())
-		spawn(1 SECONDS)
-			chargeToPrey()
-
-/mob/living/simple_animal/hostile/gourmonger/proc/chargeToPrey(var/mob/living/cTarg = sniffTarget)
+/mob/living/simple_animal/hostile/gourmonger/proc/chargeToPrey(var/mob/living/cTarg = null)
 	if(currentlyMunching)
 		return
 	if(!cTarg || cTarg.gcDestroyed)
-		sniffTarget = null
 		return
 	if(cTarg.loc == loc)
 		return
@@ -356,7 +310,6 @@ var/global/gourmonger_saturation = 0
 		beenStuckCount = 0
 		stuckTurf = null
 	else if(beenStuckCount >= 10)	//Aight fuck this we're finding a new target
-		sniffTarget = null
 		LoseTarget()
 
 /mob/living/simple_animal/hostile/gourmonger/proc/chargeThrough(var/turf/cT, var/cDir)
@@ -402,8 +355,12 @@ var/global/gourmonger_saturation = 0
 		H.Knockdown(2)
 	L.adjustBruteLoss(20)
 	if(!issilicon(L))
-		target = L	//Oh hey meat. Also lets them eat each other if they're too hungry, but not specifically seek to.
-		sniffTarget = L
+		// Oh hey meat. Also lets them eat each other if they're too hungry, but
+		// not specifically seek to.
+		if(ai_controller)
+			ai_controller.blackboard[BB_TARGET] = L
+		else
+			target = L
 
 /mob/living/simple_animal/hostile/gourmonger/proc/gourEscape()
 	var/obj/structure/S = loc
@@ -416,3 +373,101 @@ var/global/gourmonger_saturation = 0
 /obj/item/weapon/reagent_containers/food/snacks/monkeycube/gourmonger
 	name = "gourmonger cube"
 	contained_mob = /mob/living/simple_animal/hostile/gourmonger
+
+/mob/living/simple_animal/hostile/gourmonger/use_hostile_tree()
+	return ..(bt_gourmonger_tree())
+
+/// Gourmongers pick a random target instead of the closest one, so a pack does
+/// not all starve staring at the same pumpkin.
+/datum/target_source/enemies/gourmonger_prey
+/datum/target_source/enemies/gourmonger_prey/pick_target(datum/ai_controller/controller, mob/living/pawn, list/candidates)
+	if(!length(candidates))
+		return null
+	return pick(candidates)
+
+/// While hangry, sniff out client mobs within 50 tiles (the legacy findPrey()
+/// range) in addition to the normal local targets.
+/datum/target_source/enemies/gourmonger_sniff
+/datum/target_source/enemies/gourmonger_sniff/pick_target(datum/ai_controller/controller, mob/living/pawn, list/candidates)
+	if(!length(candidates))
+		return null
+	return pick(candidates)
+
+/datum/target_source/enemies/gourmonger_sniff/find_targets(datum/ai_controller/controller, mob/living/pawn, search_range)
+	var/mob/living/simple_animal/hostile/gourmonger/gour = pawn
+	if(!istype(gour) || !gour.hangry || gour.currentlyMunching)
+		return list()
+	// Keep the legacy local vision range for normal targets; sniffed players can
+	// be farther away.
+	var/list/candidates = ..(controller, pawn, min(search_range, 7))
+	for(var/client/C in clients)
+		var/mob/living/L = C.mob
+		if(!isliving(L) || issilicon(L) || L == gour || L.z != gour.z)
+			continue
+		if(get_dist(gour, L) > search_range)
+			continue
+		if(!gour.CanAttack(L))
+			continue
+		if(L in candidates)
+			continue
+		candidates += L
+	return candidates
+
+/datum/target_source/enemies/gourmonger_sniff/is_valid_target(datum/ai_controller/controller, mob/living/pawn, atom/existing)
+	var/mob/living/simple_animal/hostile/gourmonger/gour = pawn
+	if(!istype(gour) || !gour.hangry || gour.currentlyMunching)
+		return FALSE
+	return ..(controller, pawn, existing)
+
+/// Charges at the sniffed target through walls and machinery.
+/datum/bt_node/ai_behavior/gourmonger_charge
+/datum/bt_node/ai_behavior/gourmonger_charge/setup(datum/ai_controller/controller)
+	var/mob/living/simple_animal/hostile/gourmonger/gour = controller.pawn
+	var/atom/target = controller.blackboard[BB_TARGET]
+	if(!istype(gour) || !target || QDELETED(target))
+		return FALSE
+	return get_dist(gour, target) > 1
+
+/datum/bt_node/ai_behavior/gourmonger_charge/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/simple_animal/hostile/gourmonger/gour = controller.pawn
+	var/atom/target = controller.blackboard[BB_TARGET]
+	if(!istype(gour) || !target || QDELETED(target) || get_dist(gour, target) <= 1)
+		return AI_BEHAVIOR_FAILED
+	gour.chargeToPrey(target)
+	return AI_BEHAVIOR_SUCCEEDED
+
+/// Legacy findPrey() escaped a gourmonger that was stuck inside a structure
+/// when no player was around.
+/datum/bt_node/ai_behavior/gourmonger_escape
+/datum/bt_node/ai_behavior/gourmonger_escape/setup(datum/ai_controller/controller)
+	var/mob/living/simple_animal/hostile/gourmonger/gour = controller.pawn
+	if(!istype(gour) || gour.ai_has_target())
+		return FALSE
+	return istype(gour.loc, /obj/structure)
+
+/datum/bt_node/ai_behavior/gourmonger_escape/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/simple_animal/hostile/gourmonger/gour = controller.pawn
+	if(!istype(gour) || !istype(gour.loc, /obj/structure))
+		return AI_BEHAVIOR_FAILED
+	gour.gourEscape()
+	return AI_BEHAVIOR_SUCCEEDED
+
+/proc/bt_gourmonger_tree()
+	return list(
+		BT_DESC_TYPE = /datum/bt_node/composite/selector,
+		BT_DESC_CHILDREN = list(
+			list(
+				BT_DESC_TYPE = /datum/bt_node/composite/sequence,
+				BT_DESC_CHILDREN = list(
+					list(
+						BT_DESC_TYPE = /datum/bt_node/ai_behavior/acquire_target,
+						target_source_type = /datum/target_source/enemies/gourmonger_sniff,
+						search_range = 50,
+					),
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/gourmonger_charge),
+				),
+			),
+			bt_hostile_combat_tree(/datum/target_source/enemies/gourmonger_prey),
+			list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/gourmonger_escape),
+		),
+	)

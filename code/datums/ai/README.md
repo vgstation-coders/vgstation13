@@ -4,15 +4,15 @@ Source: [tgstation/tgstation](https://github.com/tgstation/tgstation) `master`,
 `code/datums/ai/_ai_bt_*.dm`, `code/datums/ai/_ai_behavior.dm`,
 `code/datums/ai/_ai_controller.dm` and `code/__DEFINES/ai/behavior_trees.dm`.
 
-**Status:** phase 26. The core, subsystem/possession path, sentience hooks,
+**Status:** phase 27. The core, subsystem/possession path, sentience hooks,
 z-level-gated subsystems, path-cached movement, starter behavior leaves (attack,
 flee, retreat, hold, smash, wait, wander, hunt, follow, idle work, speak,
 blackboard keys), async actions, target lifecycle hooks and target sources
-(enemies, wounded, retaliate, prey, including wanted objects), an ability system
-with a ranged and a charge ability, a health decorator, the `.bt.json` compiler,
-the admin BT viewer, an example hostile consumer and the full hostile simple
-animal tree (every hostile mob gets a controller, either explicitly or lazily on
-its first `Life()` tick, apart from the documented legacy exceptions) plus the
+(enemies, wounded, retaliate, prey, food, pointer, wires, including wanted
+objects), an ability system with a ranged and a charge ability, a health
+decorator, the `.bt.json` compiler, the admin BT viewer, an example hostile
+consumer and the full hostile simple animal tree (every hostile mob gets a
+controller, either explicitly or lazily on its first `Life()` tick) plus the
 out-of-dir `complex_animal` state machine and a set of non-hostile idle mobs
 compile and pass the auxtools scenario. The remaining player-controlled/no-AI
 mobs (borer, shade, spiderbot, space_worm, constructs, vox, dracson, grue_egg)
@@ -46,12 +46,11 @@ are out of scope.
   while the pathfinder subsystem is not ready or has no route. Caches the path
   per controller/target and repaths after `repath_after` steps or a target change.
 - `_ai_target_sources.dm`: `target_source` base plus `enemies` (closest pick,
-  legacy distance rule, plus wanted objects while the pawn still searches for
-  them), `enemies/wounded` (weakest pick), `enemies/retaliate` (only mobs already
-  in the pawn's legacy `enemies` list) and `prey` (a specific mob type, ignoring
-  `CanAttack` so friendly hunters work) sources. The `enemies` filter uses the
-  pawn's `CanAttack()`, so only mobs that override it (hostile mobs) see healthy
-  prey; the base simple_animal version only allows targets already in crit.
+  legacy distance rule, `isValidTarget()`/`CanAttack()` filters, plus wanted
+  objects while the pawn still searches for them), `enemies/wounded` (weakest
+  pick), `enemies/retaliate` (only mobs already in the pawn's legacy `enemies`
+  list) and `prey` (a specific mob type, ignoring `CanAttack` so friendly hunters
+  work) sources.
 - `_ai_abilities.dm`: `ai_ability` base with cooldowns, plus `ranged_attack`
   (wraps the legacy `OpenFire`/`ranged_cooldown`) and `charge` (closes two tiles).
 - `_ai_behaviors_basic.dm`: `acquire_target` (target sources, dead/invalid target
@@ -211,6 +210,25 @@ are out of scope.
   hunger/territory/fear interrupt leaves and one leaf per behavior state, all
   calling the existing state ticks. The tree ticks at 1 s but the gate keeps the
   original 2 s state cadence.
+- `power/gourmonger.dm`: `bt_gourmonger_tree()` keeps the legacy hunger/sniff/
+  charge behavior: `target_source/enemies/gourmonger_sniff` adds client mobs
+  within 50 tiles while hangry, `gourmonger_charge` drives the through-wall
+  charge, `gourmonger_escape` leaves a structure when there is nobody to chase,
+  and the generic combat tree handles food/corpses with the legacy random target
+  pick. `AttackingTarget()` captures its target before the eating thread sleeps.
+- `bloodcult/bloodcult_mobs_and_constructs.dm`: the hex runs `bt_hex_tree()`.
+  Guard mode fights normally and walks back to `guard_spot` afterwards; escort
+  mode shoots/melees without chasing and trails the master's satellite through
+  `get_escort_anchor()`; roaming keeps the ranged tree plus idle wander.
+- `giant_spider/spiderling.dm`: `bt_spiderling_tree()` wanders until the
+  spiderling is hurt, then flees from humans/robots through
+  `target_source/enemies/spiderling_threat`.
+- `mining/mine_items.dm`: `bt_mining_drone_tree()` switches between collect
+  (ore target + wander) and combat (ranged tree) on every tick through the
+  `mining_drone_collect` decorator; mode toggles clear the stale target, and
+  collecting an ore clears its blackboard entry.
+- `hostile.dm`: `LoseTarget()` clears `BB_TARGET` on controlled mobs as well, so
+  legacy give-up paths (the gourmonger's stuck handling) release the tree target.
 - `_ai_target_sources.dm`: added `food`, `pointer` and `wires` sources.
 - `mimic.dm`: mimics run the combat tree with `target_source/enemies/mimic`,
   which stays empty until `anger()`; losing the target calls `calm_down()` again
@@ -342,16 +360,14 @@ childless and it fails every tick.
 
 ## Legacy AI exceptions
 
-- `gourmonger`, `hex` and `giant_spider/spiderling` set
-  `uses_legacy_ai = TRUE`: their bespoke hunger/charge, guard/escort and
-  flee/GiveTarget AI stays legacy until it gets a dedicated tree.
-- `mining_drone` uses the generic tree; its collect-mode wander and the
-  `search_objects`/`ranged` mode toggles deserve a dedicated tree later.
 - `capybara`, `hamster`, `bait` and `meat_blob_chunk` live outside the
-  `simple_animal/` directory and keep their base/custom Life behavior.
+  `simple_animal/` directory and have no decision AI to port: the capybara and
+  hamster only extend base wandering/treadmill movement, `bait` is a static lure
+  and `meat_blob_chunk` is a dead corpse that deletes itself on `Life()`.
 - The `GiveTarget()` compatibility bridge seeds the blackboard for controlled
   mobs and stores `pending_ai_target` for minions spawned before their lazy
-  controller install, so legacy aggro propagation still works.
+  controller install, so legacy aggro propagation still works. `LoseTarget()`
+  clears the same blackboard key.
 
 ## Next phases
 
@@ -364,7 +380,8 @@ childless and it fails every tick.
    override editor.
 4. **Migration:** complete for simple animal decision AI. The hostile tree covers
    every `/hostile` simple animal, the idle tree covers the simple non-hostiles,
-   and the corgi, mouse, parrot, bee and SCP-173 are real trees.
+   the out-of-dir `complex_animal` state machine is scheduled by a tree, and the
+   gourmonger, hex, spiderling and mining drone have dedicated trees.
    Player-controlled/no-AI mobs (borer, shade, spiderbot, space_worm, constructs,
    vox, dracson, grue_egg) are out of scope.
 
@@ -399,6 +416,11 @@ verify the syndicate melee/gunner, mummy warrior/priest and jackal embalmer
 families behave, verify the vox assassin fires and the base raider loots
 spacecash, verify the grey regular fires and a grey prisoner melees, verify the
 nazi trooper fires at its keep distance, verify the mimic stays passive until
-angered, verify the frog leaps and the deer spooks/flees/calms, and verify the
-migrated space bear and space carp attack adjacent humans. Keep the test leaves
-in `behavior_tree_test.dm` until real leaves and unit tests replace them.
+angered, verify the frog leaps and the deer spooks/flees/calms, verify the
+migrated space bear and space carp attack adjacent humans, verify the complex
+animal gate runs its state tree once per Life tick, the gourmonger charge closes
+distance, a hurt spiderling flees, the hex records its guard spot, the mining
+drone switches collect/combat branches and clears its target on a mode toggle,
+and the `GiveTarget()`/`LoseTarget()` bridge seeds and clears the blackboard.
+Keep the test leaves in `behavior_tree_test.dm` until real leaves and unit tests
+replace them.

@@ -49,9 +49,13 @@
 			// CanAttack() is vg's "would I attack this" contract: hostile mobs
 			// override it with faction and stat_attack rules (embalmers and nurse
 			// spiders target dead bodies), while the base simple_animal version
-			// only allows targets already in crit.
+			// only allows targets already in crit. isValidTarget() holds the
+			// per-mob filters (cultist hexes, poisonous animals, pacify auras).
 			if(istype(pawn, /mob/living/simple_animal))
 				var/mob/living/simple_animal/animal = pawn
+				var/mob/living/simple_animal/hostile/hostile_animal = istype(pawn, /mob/living/simple_animal/hostile) ? pawn : null
+				if(hostile_animal && !hostile_animal.isValidTarget(candidate))
+					continue
 				if(!animal.CanAttack(candidate))
 					continue
 			else if(living_candidate.stat == DEAD)
@@ -67,6 +71,10 @@
 /datum/target_source/enemies/is_valid_target(datum/ai_controller/controller, mob/living/pawn, atom/existing)
 	if(istype(pawn, /mob/living/simple_animal))
 		var/mob/living/simple_animal/animal = pawn
+		if(istype(pawn, /mob/living/simple_animal/hostile))
+			var/mob/living/simple_animal/hostile/hostile_animal = pawn
+			if(!hostile_animal.isValidTarget(existing))
+				return FALSE
 		return animal.CanAttack(existing)
 	return TRUE
 

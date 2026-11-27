@@ -647,6 +647,7 @@
 	minimum_distance = 1
 	retreat_distance = null
 	icon_state = "mining_drone"
+	reset_mode_target()
 	if(client)
 		to_chat(src, "<span class='info' style=\"font-family:Courier\">Ore collection mode active.</span>")
 
@@ -659,12 +660,28 @@
 	retreat_distance = 1
 	minimum_distance = 2
 	icon_state = "mining_drone_offense"
+	reset_mode_target()
 	if(client)
 		to_chat(src, "<span class='info' style=\"font-family:Courier\">Combat mode active.</span>")
+
+/// Drop the blackboard target when the mode changes so a drone does not keep
+/// chasing an ore pile after switching to combat (or a mob after switching to
+/// ore collection).
+/mob/living/simple_animal/hostile/mining_drone/proc/reset_mode_target()
+	if(ai_controller)
+		ai_controller.clear_blackboard_key(BB_TARGET)
+		ai_controller.cancel_current_plan()
+
+/mob/living/simple_animal/hostile/mining_drone/proc/is_collecting()
+	return search_objects >= 2
 
 /mob/living/simple_animal/hostile/mining_drone/AttackingTarget()
 	if(istype(target, /obj/item/stack/ore))
 		CollectOre()
+		// The ore is now inside the drone; drop the stale blackboard target so
+		// the tree looks for the next pile instead of re-attacking this one.
+		if(ai_controller)
+			ai_controller.clear_blackboard_key(BB_TARGET)
 		return
 	..()
 
@@ -718,6 +735,38 @@
 	set name = "Unload Ore"
 
 	DropOre()
+
+/mob/living/simple_animal/hostile/mining_drone/use_hostile_tree()
+	return ..(bt_mining_drone_tree())
+
+/// Mode-specific gate: the drone's search_objects/ranged flags are toggled at
+/// runtime, so the tree picks the collect or the combat branch on every tick.
+/datum/bt_node/decorator/mining_drone_collect
+/datum/bt_node/decorator/mining_drone_collect/check_condition(datum/ai_controller/controller)
+	var/mob/living/simple_animal/hostile/mining_drone/drone = controller.pawn
+	return istype(drone, /mob/living/simple_animal/hostile/mining_drone) && drone.is_collecting()
+
+/proc/bt_mining_drone_tree()
+	return list(
+		BT_DESC_TYPE = /datum/bt_node/composite/selector,
+		BT_DESC_CHILDREN = list(
+			// Collect mode: scoop up loose ore, wander when there is none nearby.
+			list(
+				BT_DESC_TYPE = /datum/bt_node/decorator/mining_drone_collect,
+				BT_DESC_CHILDREN = list(
+					list(
+						BT_DESC_TYPE = /datum/bt_node/composite/selector,
+						BT_DESC_CHILDREN = list(
+							bt_basic_hostile_tree(),
+							bt_idle_tree(50, 5 SECONDS, 4 SECONDS, FALSE),
+						),
+					),
+				),
+			),
+			// Combat mode: keep the laser/melee behavior.
+			bt_ranged_hostile_tree(retreat_distance = 1),
+		),
+	)
 
 /**********************Lazarus Injector**********************/
 
