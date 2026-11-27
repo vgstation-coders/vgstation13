@@ -1,0 +1,4 @@
+author: jknpj
+delete-after: true
+changes:
+- bugfix: Death Squad leaders are no longer named "Rescue Leader".
