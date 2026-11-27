@@ -1,5 +1,0 @@
-author: jknpj
-delete-after: true
-changes:
-- bugfix: Hookshot chains can no longer be sealed inside crates, and a hookshot tether
-    can't drag what it hooked into a container.
