@@ -763,7 +763,6 @@
 		if (M.minions.len >= P.controller)
 			var/mob/living/simple_animal/hostile/hex/H = M.minions[P.controller]
 			H.mode = HEX_MODE_ESCORT
-			H.escort_routine()
 			P.Display()
 
 /obj/abstract/mind_ui_element/hoverable/hex_controller/escort/UpdateIcon()

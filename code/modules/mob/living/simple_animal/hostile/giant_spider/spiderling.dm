@@ -7,8 +7,6 @@
 /mob/living/simple_animal/hostile/giant_spider/spiderling
 	name = "spiderling"
 	desc = "It never stays still for long."
-	// The custom GiveTarget/flee handling is not ported to a tree yet.
-	uses_legacy_ai = TRUE
 	icon_state = "spiderling"
 	icon_living = "spiderling"
 
@@ -104,10 +102,30 @@
 			hud_used.spiderling_growth_display.maptext = "<div align='center' valign='middle' style='position:relative; top:0px; left:6px'>Growth:<br><font color='#FFFF00'>[min(amount_grown,100)]%</font></div>"
 
 /mob/living/simple_animal/hostile/giant_spider/spiderling/GiveTarget(var/new_target)
-	if(isliving(target) && (ishuman(target)||isrobot(target)) && !isMoMMI(target))
-		target = new_target
-		Aggro()
-		visible_message("<span class='danger'>The [src.name] tries to flee from [target.name]!</span>")
+	if(ai_controller)
+		return ..()
+	. = ..()
+	var/atom/flee_from = new_target
+	if(isliving(flee_from) && (ishuman(flee_from)||isrobot(flee_from)) && !isMoMMI(flee_from))
+		visible_message("<span class='danger'>The [src.name] tries to flee from [flee_from.name]!</span>")
+
+/mob/living/simple_animal/hostile/giant_spider/spiderling/use_hostile_tree()
+	return ..(bt_spiderling_tree())
+
+/// Spiderlings cannot damage anything; the tree only wanders while they grow,
+/// matching the legacy behavior.
+/proc/bt_spiderling_tree()
+	return bt_idle_tree(50, 5 SECONDS, 4 SECONDS, FALSE)
+
+/mob/living/simple_animal/hostile/giant_spider/spiderling/ai_target_lost(atom/target)
+	..()
+	// Do not call LoseAggro(): it re-enables the legacy automated movement that
+	// the controller replaced.
+	retreat_distance = 0
+	minimum_distance = 0
+	search_objects = 0
+	stance = HOSTILE_STANCE_IDLE
+	vision_range = idle_vision_range
 
 /mob/living/simple_animal/hostile/giant_spider/spiderling/proc/growth()
 	if(isturf(loc) && (client || amount_grown > 0))//player-controlled spiderlings will always eventually mature, others have a 75% chance.

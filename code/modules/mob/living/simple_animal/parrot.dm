@@ -446,7 +446,6 @@
 		parrot.parrot_interest = null
 		parrot.parrot_state = PARROT_WANDER
 		return AI_BEHAVIOR_SUCCEEDED
-	stop_flying(parrot)
 	walk_away(parrot, threat, 1, parrot.parrot_speed)
 	parrot.isStuck()
 	return AI_BEHAVIOR_SUCCEEDED
@@ -473,8 +472,8 @@
 		parrot.melee_damage_upper = parrot.parrot_damage_upper
 		parrot.a_intent = I_HURT
 
-	stop_flying(parrot)
 	if(get_dist(parrot, victim) <= 1)
+		stop_flying(parrot)
 		if(victim.stat)
 			parrot.parrot_interest = null
 			if(!parrot.held_item)
@@ -511,8 +510,8 @@
 		parrot.parrot_state = PARROT_SWOOP | PARROT_RETURN
 		return AI_BEHAVIOR_SUCCEEDED
 
-	stop_flying(parrot)
 	if(get_dist(parrot, interest) <= 1)
+		stop_flying(parrot)
 		if(isliving(interest))
 			parrot.steal_from_mob()
 		else if(!parrot.parrot_perch || interest.loc != parrot.parrot_perch.loc)
@@ -540,12 +539,12 @@
 	var/mob/living/simple_animal/parrot/parrot = get_parrot(controller)
 	if(!parrot)
 		return AI_BEHAVIOR_FAILED
-	stop_flying(parrot)
 	if(!parrot.parrot_perch || !isturf(parrot.parrot_perch.loc))
 		parrot.parrot_perch = null
 		parrot.parrot_state = PARROT_WANDER
 		return AI_BEHAVIOR_SUCCEEDED
 	if(get_dist(parrot, parrot.parrot_perch) <= 1)
+		stop_flying(parrot)
 		parrot.forceMove(parrot.parrot_perch.loc)
 		parrot.drop_held_item()
 		parrot.parrot_state = PARROT_PERCH
@@ -568,7 +567,9 @@
 	if(!parrot)
 		return AI_BEHAVIOR_FAILED
 	parrot.icon_state = "parrot_sit"
-	if(--parrot.parrot_sleep_dur)
+	// The legacy Life() tick is 2 s; the controller ticks at 1 s.
+	parrot.parrot_sleep_dur -= seconds_per_tick / 2
+	if(parrot.parrot_sleep_dur > 0)
 		return AI_BEHAVIOR_SUCCEEDED
 	parrot.parrot_sleep_dur = parrot.parrot_sleep_max
 	parrot.parrot_cycle_radio_speech()
@@ -582,12 +583,18 @@
 
 /// Random flight, occasionally finding a perch or something to steal.
 /datum/bt_node/ai_behavior/parrot_action/parrot_wander
+	/// world.time of the next wander step; the legacy Life() tick is 2 s.
+	var/next_wander_time = 0
+
 /datum/bt_node/ai_behavior/parrot_action/parrot_wander/perform(seconds_per_tick, datum/ai_controller/controller)
 	var/mob/living/simple_animal/parrot/parrot = get_parrot(controller)
 	if(!parrot)
 		return AI_BEHAVIOR_FAILED
 	stop_flying(parrot)
 	parrot.parrot_interest = null
+	if(world.time < next_wander_time)
+		return AI_BEHAVIOR_SUCCEEDED
+	next_wander_time = world.time + 2 SECONDS
 	if(prob(90))
 		step(parrot, pick(cardinal))
 		return AI_BEHAVIOR_SUCCEEDED

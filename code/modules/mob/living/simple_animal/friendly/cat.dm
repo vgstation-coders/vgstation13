@@ -86,10 +86,15 @@
 	controller.behavior_nodes = list(bt_hunting_idle_tree(/mob/living/simple_animal/mouse))
 	controller.initialize_behavior_tree()
 
-// Flavor that used to live in Life(): growl at a newly spotted mouse.
-/mob/living/simple_animal/cat/ai_target_acquired(atom/target)
-	if(istype(target, /mob/living/simple_animal/mouse) && prob(15))
-		emote("me",, pick("[pick(growl_verbs)] at [target]!", "eyes [target] hungrily."))
+// Keep the legacy once-per-Life growl while a mouse is in view; the tree owns
+// the actual hunt, but this flavor was not part of the decision layer.
+/mob/living/simple_animal/cat/Life()
+	. = ..()
+	if(!isUnconscious() && !stat)
+		for(var/mob/living/simple_animal/mouse/snack in oview(src, 3))
+			if(prob(15) && !snack.stat)
+				emote("me",, pick("[pick(growl_verbs)] at [snack]!", "eyes [snack] hungrily."))
+			break
 
 // The cat's kill is a splat, not a punch; the hunt leaf calls this hook.
 /mob/living/simple_animal/cat/ai_hunt_kill(atom/target)
