@@ -162,7 +162,14 @@
 				else
 					to_chat(usr, "You are already hacking a cyborg.")
 		if("sequence")
-			if(text2num(params["halt"]))
+			var/halt = text2num(params["halt"])
+			var/active = cyborg_detonation_time > world.time // same test as ui_data's sequence_activated
+			if(halt ? !active : active)
+				// Stale UI: the killswitch is already in the state this button asked for.
+				to_chat(usr, "<span class='warning'>The self-destruct sequence is [active ? "already running" : "not running"].</span>")
+				SStgui.try_update_ui(ui.user, src, ui)
+				return TRUE
+			if(halt)
 				stop_sequence()
 				message_admins("<span class='notice'>[key_name_admin(usr)] [formatJumpTo(usr)] has halted the global cyborg killswitch!</span>")
 				log_game("<span class='notice'>[key_name(usr)] has halted the global cyborg killswitch!</span>")
