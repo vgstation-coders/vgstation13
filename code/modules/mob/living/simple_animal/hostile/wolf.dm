@@ -246,7 +246,7 @@
 
 		for(var/obj/machinery/space_heater/campfire/fire in can_see)
 			var/dist = get_dist(src, fire)
-			if(dist < fire.light_range*2)
+			if(!ai_has_target() && dist < fire.light_range*2)
 				walk_away(src,fire,(fire.light_range*2),move_to_delay)
 
 		if(is_legacy_idle() && !client)
