@@ -268,6 +268,8 @@
 
 /mob/living/simple_animal/hostile/hex
 	name = "\improper Hex"
+	// The guard/escort Goto routine is not ported to a tree yet.
+	uses_legacy_ai = TRUE
 	desc = "A lesser construct, crafted by an Artificer."
 	stop_automated_movement_when_pulled = 1
 	ranged_cooldown_cap = 1

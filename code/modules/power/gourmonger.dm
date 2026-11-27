@@ -8,6 +8,8 @@ var/global/gourmonger_saturation = 0
 /mob/living/simple_animal/hostile/gourmonger
 	name = "\improper Gourmonger"
 	desc = "A bio-engineered lifeform designed to recycle excess organic matter into fuel."
+	// The bespoke hunger/sniff/charge AI is not ported to a tree yet.
+	uses_legacy_ai = TRUE
 	icon = 'icons/mob/gourmonger.dmi'
 	icon_state = "gourmonger"
 	icon_living = "gourmonger"

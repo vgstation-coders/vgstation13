@@ -38,6 +38,12 @@
 	var/can_ventcrawl = FALSE // If the mob can ventcrawl
 	var/avoids_poisonous = FALSE
 	var/mob/living/simple_animal/hostile/asteroid/hivelord/hivelord = null
+	/// Opt out of the generic behavior-tree install while a mob keeps its own
+	/// bespoke AI (gourmonger prey charging, hex guard/escort, ...).
+	var/uses_legacy_ai = FALSE
+	/// Target set by GiveTarget() before the lazy controller install; used by
+	/// spawned minions and callers that propagate aggro through GiveTarget().
+	var/atom/pending_ai_target = null
 
 /mob/living/simple_animal/hostile/New()
 	..()
@@ -60,6 +66,9 @@
 	else
 		controller.behavior_nodes = list(bt_basic_hostile_tree())
 	controller.initialize_behavior_tree()
+	if(pending_ai_target && !QDELETED(pending_ai_target))
+		controller.blackboard[BB_TARGET] = pending_ai_target
+	pending_ai_target = null
 	return controller
 
 /// TRUE when the legacy AI would consider this pawn idle: either no controller
@@ -132,7 +141,7 @@
 	// WIP: every hostile mob is driven by a behavior tree. The controller is
 	// created lazily on the first Life tick so subtype New() has already run and
 	// set up ranged/retreat/search vars; mobs with a custom tree already have one.
-	if(!ai_controller && !stat)
+	if(!ai_controller && !stat && !uses_legacy_ai)
 		use_hostile_tree()
 	. = ..()
 	//Cooldowns
@@ -302,6 +311,19 @@
 	return 0
 
 /mob/living/simple_animal/hostile/proc/GiveTarget(var/new_target)//Step 4, give us our selected target
+	// Behavior-tree pawns keep their target on the blackboard; spawned minions
+	// and legacy propagation callers still use GiveTarget().
+	if(ai_controller)
+		pending_ai_target = null
+		if(new_target)
+			ai_controller.blackboard[BB_TARGET] = new_target
+			ai_target_acquired(new_target)
+			Aggro()
+		else
+			ai_controller.clear_blackboard_key(BB_TARGET)
+			ai_controller.cancel_current_plan()
+		return
+	pending_ai_target = new_target
 	target = new_target
 	if(target != null)
 		Aggro()

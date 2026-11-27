@@ -7,6 +7,8 @@
 /mob/living/simple_animal/hostile/giant_spider/spiderling
 	name = "spiderling"
 	desc = "It never stays still for long."
+	// The custom GiveTarget/flee handling is not ported to a tree yet.
+	uses_legacy_ai = TRUE
 	icon_state = "spiderling"
 	icon_living = "spiderling"
 

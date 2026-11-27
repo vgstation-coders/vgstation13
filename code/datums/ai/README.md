@@ -12,10 +12,11 @@ blackboard keys), async actions, target lifecycle hooks and target sources
 with a ranged and a charge ability, a health decorator, the `.bt.json` compiler,
 the admin BT viewer, an example hostile consumer and the full hostile simple
 animal tree (every hostile mob gets a controller, either explicitly or lazily on
-its first `Life()` tick) plus a set of non-hostile idle mobs compile and pass the
-auxtools scenario. Every simple animal with decision AI now runs through the
-controller; the remaining mobs (borer, shade, spiderbot, space_worm, constructs,
-vox, dracson, grue_egg) are player-controlled or have no autonomous movement AI.
+its first `Life()` tick, apart from the documented legacy exceptions) plus a set
+of non-hostile idle mobs compile and pass the auxtools scenario. The out-of-dir
+`complex_animal` family is a separate state-machine AI and is not ported yet; the
+remaining player-controlled/no-AI mobs (borer, shade, spiderbot, space_worm,
+constructs, vox, dracson, grue_egg) are out of scope.
 
 ## Ported so far
 
@@ -333,6 +334,23 @@ childless and it fails every tick.
 - **Controller death safety net.** `SelectBehaviors()` turns the AI off when the
   pawn is dead, covering death overrides that skip `..()` and never fire
   `/event/death`.
+
+## Legacy AI exceptions
+
+- `code/modules/mob/living/complex_animal/` (jungle bears, crocodiles, dinosaurs,
+  frogs, gorillas, panthers, parrots, capybaras) is a separate state-machine AI
+  (idle/hunting/defending/attacking/fleeing/mating, food ranking, pack and
+  territory logic). It is not a `/hostile` subtype and is not ported yet.
+- `gourmonger`, `hex` and `giant_spider/spiderling` set
+  `uses_legacy_ai = TRUE`: their bespoke hunger/charge, guard/escort and
+  flee/GiveTarget AI stays legacy until it gets a dedicated tree.
+- `mining_drone` uses the generic tree; its collect-mode wander and the
+  `search_objects`/`ranged` mode toggles deserve a dedicated tree later.
+- `capybara`, `hamster`, `bait` and `meat_blob_chunk` live outside the
+  `simple_animal/` directory and keep their base/custom Life behavior.
+- The `GiveTarget()` compatibility bridge seeds the blackboard for controlled
+  mobs and stores `pending_ai_target` for minions spawned before their lazy
+  controller install, so legacy aggro propagation still works.
 
 ## Next phases
 
