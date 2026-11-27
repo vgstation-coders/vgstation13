@@ -1,5 +1,0 @@
-author: jknpj
-delete-after: true
-changes:
-- bugfix: Spider queens no longer feed on cocooned silicons, drones, golems and other
-    meatless mobs.
