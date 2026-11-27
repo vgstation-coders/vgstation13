@@ -1,23 +1,24 @@
-// Minimal behavior tree controller for the WIP behavior tree port.
+// Behavior tree controller for the WIP behavior tree port.
 //
-// This file intentionally contains only the tree/blackboard machinery needed to
-// run the ported nodes. The full tgstation ai_controller (subsystems, movement,
-// pathfinding, AI status, sentience/signal handling, basic mobs and the JSON
-// compiler) is the next phase; see code/datums/ai/README.md.
+// Phase 2 adds AI status, possession and the subsystem tick path. Movement,
+// pathfinding, sentience/event hooks and the basic mob integration are still
+// phase 3; see code/datums/ai/README.md.
 //
 // Ported from tgstation/tgstation (code/datums/ai/_ai_controller.dm).
 
 /datum/ai_controller
-	/// The atom this controller is controlling. May be null in isolated tree tests.
-	var/atom/pawn = null
+	/// The mob this controller is controlling. May be null in isolated tree tests.
+	var/mob/living/pawn = null
 	/// Associative list of data the AI knows and behaviors consume.
 	var/alist/blackboard = alist()
 	/// Roots of the behavior trees this controller runs.
 	var/list/behavior_nodes = null
 	/// Runtime override slots (assoc override_id -> /datum/bt_node/subtree).
 	var/list/override_slots = null
-	/// Decorators that will poll their condition in the observer phase.
+	/// Decorators that poll their condition because vg has no DCS signals.
 	var/list/polling_observers = null
+	/// Current AI status; only controllers not in AI_STATUS_OFF are ticked.
+	var/ai_status = AI_STATUS_OFF
 	/// Set by cancel_current_plan() mid-tick so composites abort the current tick loop.
 	var/cancelled_during_tick = FALSE
 	/// Execution index of the last leaf that returned BT_RUNNING.
@@ -25,12 +26,16 @@
 	/// Execution index of the leaf whose tick() is currently running.
 	var/ticking_execution_index = 0
 
-/datum/ai_controller/New(atom/new_pawn)
+/datum/ai_controller/New(mob/living/new_pawn)
 	if(!isnull(new_pawn))
-		pawn = new_pawn
+		PossessPawn(new_pawn)
 	return ..()
 
 /datum/ai_controller/Destroy()
+	set_ai_status(AI_STATUS_OFF)
+	if(pawn && pawn.ai_controller == src)
+		pawn.ai_controller = null
+	pawn = null
 	// behavior_nodes may still contain typepaths or descriptors if initialization
 	// never ran; only qdel resolved datum instances.
 	for(var/datum/entry in behavior_nodes)
@@ -40,6 +45,44 @@
 	polling_observers = null
 	blackboard = null
 	return ..()
+
+/// Attaches this controller to a living mob.
+/datum/ai_controller/proc/PossessPawn(mob/living/new_pawn)
+	if(!new_pawn)
+		return FALSE
+	if(pawn)
+		UnpossessPawn()
+	if(new_pawn.ai_controller)
+		QDEL_NULL(new_pawn.ai_controller)
+	pawn = new_pawn
+	pawn.ai_controller = src
+	blackboard[BB_MY_PAWN] = pawn
+	set_ai_status(AI_STATUS_ON)
+	return TRUE
+
+/// Detaches this controller from its pawn and stops processing it.
+/datum/ai_controller/proc/UnpossessPawn()
+	set_ai_status(AI_STATUS_OFF)
+	if(pawn)
+		if(pawn.ai_controller == src)
+			pawn.ai_controller = null
+		pawn = null
+	blackboard.Remove(BB_MY_PAWN)
+
+/// Moves the controller between AI status lists.
+/datum/ai_controller/proc/set_ai_status(new_status)
+	if(ai_status == new_status)
+		return FALSE
+	if(SSai_controllers)
+		if(ai_status)
+			SSai_controllers.ai_controllers_by_status[ai_status] -= src
+		if(new_status)
+			SSai_controllers.ai_controllers_by_status[new_status] += src
+	ai_status = new_status
+	if(ai_status == AI_STATUS_OFF)
+		cancel_current_plan()
+	return TRUE
+
 
 /// Builds the behavior tree roots from behavior_nodes (typepaths or descriptors).
 /datum/ai_controller/proc/initialize_behavior_tree()
@@ -69,6 +112,7 @@
 	if(!behavior_nodes || !length(behavior_nodes))
 		return
 	override_slots = null
+	polling_observers = null
 	var/list/to_visit = behavior_nodes.Copy()
 	for(var/datum/bt_node/root in behavior_nodes)
 		root.parent_node = null
@@ -84,6 +128,9 @@
 /datum/ai_controller/proc/SelectBehaviors(seconds_per_tick)
 	SHOULD_NOT_SLEEP(TRUE)
 	cancelled_during_tick = FALSE
+	if(polling_observers)
+		for(var/datum/bt_node/decorator/observer in polling_observers.Copy())
+			observer.poll_condition(src)
 	if(!behavior_nodes)
 		return
 	for(var/datum/bt_node/node in behavior_nodes)
@@ -203,3 +250,7 @@
 
 /datum/ai_controller/proc/clear_blackboard_key(key)
 	blackboard.Remove(key)
+
+// Attached controllers. Defined here so the AI port does not need to edit living.dm.
+/mob/living
+	var/datum/ai_controller/ai_controller = null

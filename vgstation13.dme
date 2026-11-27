@@ -202,6 +202,7 @@
 #include "code\controllers\mc\master.dm"
 #include "code\controllers\mc\subsystem.dm"
 #include "code\controllers\subsystem\air.dm"
+#include "code\controllers\subsystem\ai_controllers.dm"
 #include "code\controllers\subsystem\ambient_sound.dm"
 #include "code\controllers\subsystem\assets.dm"
 #include "code\controllers\subsystem\bots.dm"

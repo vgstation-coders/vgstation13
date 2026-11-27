@@ -72,3 +72,12 @@
 #define AI_BEHAVIOR_FAILED (1<<2)
 /// Performed to completion without returning a terminal flag.
 #define AI_BEHAVIOR_INSTANT 0
+
+// AI controller status. Controllers in AI_STATUS_OFF are not ticked.
+#define AI_STATUS_ON "ai_on"
+#define AI_STATUS_ON_LOW "ai_on_low"
+#define AI_STATUS_OFF "ai_off"
+
+// Minimal blackboard key used by the controller itself.
+#define BB_MY_PAWN "my_pawn"
+

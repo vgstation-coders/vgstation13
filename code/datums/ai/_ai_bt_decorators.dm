@@ -20,8 +20,16 @@
 	var/child_active = FALSE
 	/// TRUE while tick() is running our child.
 	var/ticking_child = FALSE
+	/// Last result seen by poll_condition(). null = not yet polled.
+	var/last_poll_result = null
+	/// world.time of the last poll_condition() evaluation.
+	var/last_poll_time = 0
+	/// Minimum deciseconds between condition polls when using polling observers. 0 = every controller tick.
+	var/polling_rate = 0
 
 /datum/bt_node/decorator/Destroy()
+	if(owning_controller?.polling_observers)
+		owning_controller.polling_observers -= src
 	QDEL_NULL(child)
 	return ..()
 
@@ -33,6 +41,10 @@
 
 /datum/bt_node/decorator/finalize_node(datum/ai_controller/controller, list/to_visit)
 	..()
+	if(observer_abort != BT_ABORT_NONE)
+		if(!controller.polling_observers)
+			controller.polling_observers = list()
+		controller.polling_observers |= src
 	if(child)
 		child.parent_node = src
 		to_visit += child
@@ -86,7 +98,40 @@
 /datum/bt_node/decorator/proc/check_condition(datum/ai_controller/controller)
 	return TRUE
 
+/// Returns the condition result as the observer system sees it.
+/datum/bt_node/decorator/proc/evaluate_for_observer(datum/ai_controller/controller)
+	return !!check_condition(controller) != invert
+
+/// Polls the condition when this decorator has an observer_abort and vg has no
+/// signal equivalent. Called by SelectBehaviors before ticking the tree.
+/datum/bt_node/decorator/proc/poll_condition(datum/ai_controller/controller)
+	if(polling_rate && last_poll_time + polling_rate > world.time)
+		return
+	last_poll_time = world.time
+	var/current = evaluate_for_observer(controller)
+	if(isnull(last_poll_result))
+		last_poll_result = current
+		return
+	if(current != last_poll_result)
+		last_poll_result = current
+		on_observed_change(controller, null)
+
+/// Applies the observer abort policy after the watched condition changes.
+/datum/bt_node/decorator/proc/on_observed_change(datum/ai_controller/controller, key)
+	var/condition_result = evaluate_for_observer(controller)
+
+	if(!condition_result && (observer_abort & BT_ABORT_SELF))
+		if(child_active || ticking_child)
+			controller.cancel_current_plan()
+
+	if(condition_result && (observer_abort & BT_ABORT_LOWER_PRIORITY))
+		var/active = controller.ticking_execution_index || controller.active_execution_index
+		if(execution_index && active && active > last_execution_index)
+			controller.cancel_current_plan()
+
 /datum/bt_node/decorator/reset_tick_state()
+	last_poll_result = null
+	last_poll_time = 0
 	child_active = FALSE
 	ticking_child = FALSE
 	..()
@@ -133,3 +178,14 @@
 
 /datum/bt_node/decorator/bb_key_greater/check_condition(datum/ai_controller/controller)
 	return bb_key_greater(controller, key, threshold)
+
+/// Gate on a named override slot currently having an active override installed.
+/// Polling observers can react to controller.override_slots changes.
+/datum/bt_node/decorator/override_id_set
+	var/override_id = null
+
+/datum/bt_node/decorator/override_id_set/check_condition(datum/ai_controller/controller)
+	if(isnull(override_id) || !controller.override_slots)
+		return FALSE
+	var/datum/bt_node/subtree/sub = controller.override_slots[override_id]
+	return !isnull(sub?.override_node)
