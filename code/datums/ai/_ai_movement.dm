@@ -18,6 +18,11 @@
 /datum/ai_movement/proc/stop_moving_towards(datum/ai_controller/controller)
 	paths -= controller
 
+/// Returns TRUE while there are queued steps for this controller.
+/datum/ai_movement/proc/has_path(datum/ai_controller/controller)
+	var/list/path = paths[controller]
+	return !!path && length(path) > 0
+
 /datum/ai_movement/Destroy()
 	paths = null
 	return ..()

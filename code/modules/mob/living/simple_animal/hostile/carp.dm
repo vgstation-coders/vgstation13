@@ -94,6 +94,11 @@
 /mob/living/simple_animal/hostile/carp/FindTarget()
 	return null
 
+// Restores the legacy "gnashes at" emote now that the tree owns acquisition.
+/mob/living/simple_animal/hostile/carp/ai_target_acquired(atom/target)
+	if(target)
+		emote("me",, "gnashes at [target]!")
+
 /mob/living/simple_animal/hostile/carp/AttackingTarget()
 	if(!target)
 		return

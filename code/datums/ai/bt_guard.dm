@@ -30,7 +30,22 @@
 	wander = 0
 
 	var/datum/ai_controller/controller = new(src)
-	controller.behavior_nodes = list(bt_basic_hostile_tree())
+	// Playground for the WIP tree: fight, flee when badly hurt and chat in the
+	// background. The parallel keeps chatter from blocking the decision branch.
+	controller.behavior_nodes = list(
+		list(
+			BT_DESC_TYPE = /datum/bt_node/composite/parallel,
+			BT_DESC_CHILDREN = list(
+				bt_fleeing_hostile_tree(0.3, 2),
+				list(
+					BT_DESC_TYPE = /datum/bt_node/ai_behavior/speak_line,
+					lines = list("Halt!", "Stop right there!", "You shall not pass!"),
+					speak_chance = 2,
+					cooldown = 8 SECONDS,
+				),
+			),
+		),
+	)
 	controller.initialize_behavior_tree()
 
 // The behavior tree owns target acquisition; keep the legacy hostile AI idle.

@@ -1,8 +1,9 @@
 // Behavior tree controller for the WIP behavior tree port.
 //
-// Phase 2 adds AI status, possession and the subsystem tick path. Movement,
-// pathfinding, sentience/event hooks and the basic mob integration are still
-// phase 3; see code/datums/ai/README.md.
+// Phase 7 adds target lifecycle hooks, a health decorator and the composed
+// hostile trees; movement, possession and the subsystem tick path came earlier.
+// Sentience/event hooks and the full basic mob integration are still pending;
+// see code/datums/ai/README.md.
 //
 // Ported from tgstation/tgstation (code/datums/ai/_ai_controller.dm).
 
@@ -147,6 +148,10 @@
 	if(polling_observers)
 		for(var/datum/bt_node/decorator/observer in polling_observers.Copy())
 			observer.poll_condition(src)
+	// An observer abort already cancelled the plan; do not run a half tick.
+	if(cancelled_during_tick)
+		cancelled_during_tick = FALSE
+		return
 	if(!behavior_nodes)
 		return
 	for(var/datum/bt_node/node in behavior_nodes)
@@ -270,3 +275,11 @@
 // Attached controllers. Defined here so the AI port does not need to edit living.dm.
 /mob/living
 	var/datum/ai_controller/ai_controller = null
+
+// Hooks called by the target acquisition leaf when the controller gains or drops
+// a target. Mobs override these for emotes/sounds; the leaves stay generic.
+/mob/living/proc/ai_target_acquired(atom/target)
+	return
+
+/mob/living/proc/ai_target_lost(atom/target)
+	return

@@ -179,6 +179,19 @@
 /datum/bt_node/decorator/bb_key_greater/check_condition(datum/ai_controller/controller)
 	return bb_key_greater(controller, key, threshold)
 
+/// Gate on the pawn's health being below a fraction of its maximum.
+/// Use observer_abort = BT_ABORT_SELF so a running respond-to-damage branch ends
+/// when the pawn heals back above the threshold.
+/datum/bt_node/decorator/pawn_health_below
+	/// Fraction of max health below which the condition is true (0 to 1).
+	var/threshold = 0.3
+
+/datum/bt_node/decorator/pawn_health_below/check_condition(datum/ai_controller/controller)
+	var/mob/living/pawn = controller.pawn
+	if(!pawn || QDELETED(pawn) || pawn.maxHealth <= 0)
+		return FALSE
+	return (pawn.health / pawn.maxHealth) < threshold
+
 /// Gate on a named override slot currently having an active override installed.
 /// Polling observers can react to controller.override_slots changes.
 /datum/bt_node/decorator/override_id_set
