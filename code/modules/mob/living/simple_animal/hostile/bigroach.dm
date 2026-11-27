@@ -93,8 +93,6 @@
 	// WIP: roaches (and the queen) run the shared combat tree. The queen's
 	// egg-laying AttackingTarget override still runs through attack_target's
 	// legacy bridge.
-	stop_automated_movement = TRUE
-	wander = 0
 	var/datum/ai_controller/controller = new(src)
 	controller.behavior_nodes = list(bt_basic_hostile_tree())
 	controller.initialize_behavior_tree()

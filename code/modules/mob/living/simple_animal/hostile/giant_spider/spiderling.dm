@@ -7,6 +7,8 @@
 /mob/living/simple_animal/hostile/giant_spider/spiderling
 	name = "spiderling"
 	desc = "It never stays still for long."
+	// The custom GiveTarget/flee handling is not ported to a tree yet.
+	uses_legacy_ai = TRUE
 	icon_state = "spiderling"
 	icon_living = "spiderling"
 
@@ -102,69 +104,10 @@
 			hud_used.spiderling_growth_display.maptext = "<div align='center' valign='middle' style='position:relative; top:0px; left:6px'>Growth:<br><font color='#FFFF00'>[min(amount_grown,100)]%</font></div>"
 
 /mob/living/simple_animal/hostile/giant_spider/spiderling/GiveTarget(var/new_target)
-	if(ai_controller)
-		return ..()
-	. = ..()
-	var/atom/flee_from = new_target
-	if(isliving(flee_from) && (ishuman(flee_from)||isrobot(flee_from)) && !isMoMMI(flee_from))
-		visible_message("<span class='danger'>The [src.name] tries to flee from [flee_from.name]!</span>")
-
-/// A hurt spiderling flees from humans and robots instead of fighting back.
-/datum/target_source/enemies/spiderling_threat
-/datum/target_source/enemies/spiderling_threat/find_targets(datum/ai_controller/controller, mob/living/pawn, search_range)
-	var/mob/living/simple_animal/hostile/giant_spider/spiderling/spider = pawn
-	if(!istype(spider) || spider.health >= spider.maxHealth)
-		return list()
-	var/list/candidates = ..()
-	for(var/atom/candidate in candidates.Copy())
-		if((!ishuman(candidate) && !isrobot(candidate)) || isMoMMI(candidate))
-			candidates -= candidate
-	return candidates
-
-/datum/target_source/enemies/spiderling_threat/is_valid_target(datum/ai_controller/controller, mob/living/pawn, atom/existing)
-	var/mob/living/simple_animal/hostile/giant_spider/spiderling/spider = pawn
-	if(!istype(spider) || spider.health >= spider.maxHealth)
-		return FALSE
-	if((!ishuman(existing) && !isrobot(existing)) || isMoMMI(existing))
-		return FALSE
-	return ..(controller, pawn, existing)
-
-/mob/living/simple_animal/hostile/giant_spider/spiderling/use_hostile_tree()
-	return ..(bt_spiderling_tree())
-
-/// The tree only flees: spiderlings cannot damage anything, so they wander until
-/// hurt and then run from whoever can stomp them.
-/proc/bt_spiderling_tree()
-	return list(
-		BT_DESC_TYPE = /datum/bt_node/composite/selector,
-		BT_DESC_CHILDREN = list(
-			list(
-				BT_DESC_TYPE = /datum/bt_node/composite/sequence,
-				BT_DESC_CHILDREN = list(
-					list(
-						BT_DESC_TYPE = /datum/bt_node/ai_behavior/acquire_target,
-						target_source_type = /datum/target_source/enemies/spiderling_threat,
-						search_range = 10,
-					),
-					list(
-						BT_DESC_TYPE = /datum/bt_node/ai_behavior/flee_target,
-						flee_distance = 10,
-					),
-				),
-			),
-			bt_idle_tree(50, 5 SECONDS, 4 SECONDS, FALSE),
-		),
-	)
-
-/mob/living/simple_animal/hostile/giant_spider/spiderling/ai_target_lost(atom/target)
-	..()
-	// Do not call LoseAggro(): it re-enables the legacy automated movement that
-	// the controller replaced.
-	retreat_distance = 0
-	minimum_distance = 0
-	search_objects = 0
-	stance = HOSTILE_STANCE_IDLE
-	vision_range = idle_vision_range
+	if(isliving(target) && (ishuman(target)||isrobot(target)) && !isMoMMI(target))
+		target = new_target
+		Aggro()
+		visible_message("<span class='danger'>The [src.name] tries to flee from [target.name]!</span>")
 
 /mob/living/simple_animal/hostile/giant_spider/spiderling/proc/growth()
 	if(isturf(loc) && (client || amount_grown > 0))//player-controlled spiderlings will always eventually mature, others have a 75% chance.

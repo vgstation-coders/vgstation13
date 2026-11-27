@@ -99,8 +99,15 @@ var/list/ai_controllers_pending = list()
 	var/list/active = list()
 	for(var/client/C in clients)
 		var/mob/mob = C.mob
-		if(mob && mob.z)
-			active[mob.z] = TRUE
+		if(!mob)
+			continue
+		var/z = mob.z
+		// Lobby/new-player mobs and detached holders can report z = 0; using a
+		// numeric list index for that would runtime, and an out-of-range z
+		// (admin-spawned holder, dynamic map) must not break the whole fire.
+		if(!isnum(z) || z < 1 || z > world.maxz)
+			continue
+		active["[z]"] = TRUE
 	return active
 
 /datum/subsystem/ai_controllers/fire(resumed = FALSE)
@@ -108,9 +115,11 @@ var/list/ai_controllers_pending = list()
 		sync_z_buckets()
 		currentrun = list()
 		var/list/active = get_active_z_levels()
+		if(!islist(active))
+			active = list()
 		for(var/key in ai_controllers_by_z)
 			var/z = text2num(key)
-			if(z != 0 && !active[z])
+			if(z != 0 && !active[key])
 				continue
 			currentrun += ai_controllers_by_z[key]
 	tick_ai_controllers(currentrun, wait / 10)

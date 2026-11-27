@@ -145,8 +145,6 @@ var/global/list/crate_mimic_disguises = list(\
 	// WIP: crate mimics (and their chest/item subtypes) only fight after anger();
 	// the tree uses an anger-gated target source and calms down when it loses the
 	// target. The wizard's mimic/copy is deliberately left on the legacy AI.
-	stop_automated_movement = TRUE
-	wander = 0
 	var/datum/ai_controller/controller = new(src)
 	controller.behavior_nodes = list(bt_hostile_combat_tree(/datum/target_source/enemies/mimic))
 	controller.initialize_behavior_tree()

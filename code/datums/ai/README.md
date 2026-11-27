@@ -12,11 +12,11 @@ blackboard keys), async actions, target lifecycle hooks and target sources
 objects), an ability system with a ranged and a charge ability, a health
 decorator, the `.bt.json` compiler, the admin BT viewer, an example hostile
 consumer and the full hostile simple animal tree (every hostile mob gets a
-controller, either explicitly or lazily on its first `Life()` tick) plus the
-out-of-dir `complex_animal` state machine and a set of non-hostile idle mobs
-compile and pass the auxtools scenario. The remaining player-controlled/no-AI
-mobs (borer, shade, spiderbot, space_worm, constructs, vox, dracson, grue_egg)
-are out of scope.
+controller, either explicitly or lazily on its first `Life()` tick, apart from
+the documented legacy exceptions) plus the out-of-dir `complex_animal` state
+machine and a set of non-hostile idle mobs compile and pass the auxtools
+scenario. The remaining player-controlled/no-AI mobs (borer, shade, spiderbot,
+space_worm, constructs, vox, dracson, grue_egg) are out of scope.
 
 ## Ported so far
 
@@ -82,10 +82,10 @@ are out of scope.
 - `cow.dm`: fifth migration and the first non-hostile consumer. Cows run
   `bt_idle_tree()` (wander/rest); legacy automated movement is disabled and
   legacy speech/milking stay untouched.
-- `goat.dm`: sixth migration and the first production retaliator. Goats run
-  `bt_idle_hostile_tree(retaliate)`: passive wander/rest until something fills
-  the legacy `enemies` list (anger or damage), then fight. `Calm()` clears the
-  tree's blackboard target as well as the legacy one.
+- `goat.dm`: sixth migration and the first production retaliator. Goats run the
+  retaliate combat tree: passive while the legacy `enemies` list stays empty
+  (anger or damage fills it), then fight; base wander keeps the idle behavior.
+  `Calm()` clears the tree's blackboard target as well as the legacy one.
 - `chicken.dm`: seventh migration. Chickens run `bt_following_idle_tree()`; a
   befriended chicken (`master` set by petting) trails its owner within a few
   tiles, otherwise it wanders/rests. Egg laying, feather regen and speech stay in
@@ -140,16 +140,18 @@ are out of scope.
   overlays now also key off `ai_has_target()` because the tree does not touch
   `stance`.
 - `hostile.dm` (generic migration): every hostile simple animal now gets a
-  controller. Mobs that do not install a custom tree are migrated lazily on their
-  first `Life()` tick by `use_hostile_tree()`: retaliators get the idle
-  retaliate tree, ranged mobs get the keep-distance tree and the rest share the
-  melee combat tree. The legacy stance switch, `adjustBruteLoss` acquisition,
-  `FindTarget()`, `MoveToTarget()` and `AttackTarget()` are inert while a
-  controller is attached, so untouched mob families stop running two decision
-  layers. `is_legacy_idle()` / `is_legacy_engaged()` let idle flavor code (wolf
-  pack following, grue feeding, glare/light checks) keep running only while the
-  tree has no target; the alien/queen/leaper/rockernaut idle work uses the
-  `idle_work` leaf instead.
+  controller, apart from the documented legacy exceptions. Mobs that do not
+  install a custom tree are migrated lazily on their first `Life()` tick by
+  `use_hostile_tree()`: retaliators get the retaliate combat tree, ranged mobs
+  get the keep-distance tree and the rest share the melee combat tree. The legacy
+  stance switch, `adjustBruteLoss` acquisition, `FindTarget()`, `MoveToTarget()`
+  and `AttackTarget()` are inert while a controller is attached, so untouched mob
+  families stop running two decision layers. Legacy base wandering is **not**
+  disabled: `simple_animal/Life()` keeps running it while the controller has no
+  target, and the tree owns movement only while a target exists. `is_legacy_idle()`
+  / `is_legacy_engaged()` let idle flavor code (wolf pack following, grue feeding,
+  glare/light checks) keep running only while the tree has no target; the
+  alien/queen/leaper/rockernaut idle work uses the `idle_work` leaf instead.
 - `arcane_golem.dm`: uses the new companion tree: it attacks adjacent enemies and
   otherwise follows its master through `ai_get_follow_target()` instead of the
   legacy `Goto(master)` loop.
@@ -210,25 +212,9 @@ are out of scope.
   hunger/territory/fear interrupt leaves and one leaf per behavior state, all
   calling the existing state ticks. The tree ticks at 1 s but the gate keeps the
   original 2 s state cadence.
-- `power/gourmonger.dm`: `bt_gourmonger_tree()` keeps the legacy hunger/sniff/
-  charge behavior: `target_source/enemies/gourmonger_sniff` adds client mobs
-  within 50 tiles while hangry, `gourmonger_charge` drives the through-wall
-  charge, `gourmonger_escape` leaves a structure when there is nobody to chase,
-  and the generic combat tree handles food/corpses with the legacy random target
-  pick. `AttackingTarget()` captures its target before the eating thread sleeps.
-- `bloodcult/bloodcult_mobs_and_constructs.dm`: the hex runs `bt_hex_tree()`.
-  Guard mode fights normally and walks back to `guard_spot` afterwards; escort
-  mode shoots/melees without chasing and trails the master's satellite through
-  `get_escort_anchor()`; roaming keeps the ranged tree plus idle wander.
-- `giant_spider/spiderling.dm`: `bt_spiderling_tree()` wanders until the
-  spiderling is hurt, then flees from humans/robots through
-  `target_source/enemies/spiderling_threat`.
-- `mining/mine_items.dm`: `bt_mining_drone_tree()` switches between collect
-  (ore target + wander) and combat (ranged tree) on every tick through the
-  `mining_drone_collect` decorator; mode toggles clear the stale target, and
-  collecting an ore clears its blackboard entry.
 - `hostile.dm`: `LoseTarget()` clears `BB_TARGET` on controlled mobs as well, so
-  legacy give-up paths (the gourmonger's stuck handling) release the tree target.
+  legacy give-up paths release the tree target. Target sources pick through the
+  legacy `PickTarget()` fuzzy rules, so target priority matches the old AI.
 - `_ai_target_sources.dm`: added `food`, `pointer` and `wires` sources.
 - `mimic.dm`: mimics run the combat tree with `target_source/enemies/mimic`,
   which stays empty until `anger()`; losing the target calls `calm_down()` again
@@ -360,6 +346,10 @@ childless and it fails every tick.
 
 ## Legacy AI exceptions
 
+- `gourmonger`, `hex`, `giant_spider/spiderling` and `mining_drone` set
+  `uses_legacy_ai = TRUE` and keep their original `Life()`/`Goto` AI. Porting
+  them changed movement, target priority or timing, so they stay legacy until
+  they can be migrated 1:1.
 - `capybara`, `hamster`, `bait` and `meat_blob_chunk` live outside the
   `simple_animal/` directory and have no decision AI to port: the capybara and
   hamster only extend base wandering/treadmill movement, `bait` is a static lure
@@ -379,9 +369,9 @@ childless and it fails every tick.
 3. **Tree tooling:** richer viewer (execution log, TGUI window) and a subtree
    override editor.
 4. **Migration:** complete for simple animal decision AI. The hostile tree covers
-   every `/hostile` simple animal, the idle tree covers the simple non-hostiles,
-   the out-of-dir `complex_animal` state machine is scheduled by a tree, and the
-   gourmonger, hex, spiderling and mining drone have dedicated trees.
+   every `/hostile` simple animal except the four documented legacy AIs, the idle
+   tree covers the simple non-hostiles, and the out-of-dir `complex_animal` state
+   machine is scheduled by a tree.
    Player-controlled/no-AI mobs (borer, shade, spiderbot, space_worm, constructs,
    vox, dracson, grue_egg) are out of scope.
 
@@ -418,9 +408,8 @@ spacecash, verify the grey regular fires and a grey prisoner melees, verify the
 nazi trooper fires at its keep distance, verify the mimic stays passive until
 angered, verify the frog leaps and the deer spooks/flees/calms, verify the
 migrated space bear and space carp attack adjacent humans, verify the complex
-animal gate runs its state tree once per Life tick, the gourmonger charge closes
-distance, a hurt spiderling flees, the hex records its guard spot, the mining
-drone switches collect/combat branches and clears its target on a mode toggle,
-and the `GiveTarget()`/`LoseTarget()` bridge seeds and clears the blackboard.
+animal gate runs its state tree once per Life tick, generic hostiles keep their
+legacy base wander, the four bespoke AIs stay opted out of the controller, and
+the `GiveTarget()`/`LoseTarget()` bridge seeds and clears the blackboard.
 Keep the test leaves in `behavior_tree_test.dm` until real leaves and unit tests
 replace them.

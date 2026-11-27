@@ -56,13 +56,11 @@
 			H.enemies |= enemies
 	return 0
 
-/// WIP: installs the idle retaliating behavior tree on this mob. Subtypes keep
-/// their own Life() and legacy `enemies` list; the tree only consumes it.
+/// WIP: installs the retaliating combat tree on this mob. Subtypes keep their
+/// own Life() and legacy `enemies` list; the tree only consumes it.
 /mob/living/simple_animal/hostile/retaliate/proc/use_retaliating_tree()
-	stop_automated_movement = TRUE
-	wander = 0
 	var/datum/ai_controller/controller = new(src)
-	controller.behavior_nodes = list(bt_idle_hostile_tree(/datum/target_source/enemies/retaliate))
+	controller.behavior_nodes = list(bt_hostile_combat_tree(/datum/target_source/enemies/retaliate))
 	controller.initialize_behavior_tree()
 
 /mob/living/simple_animal/hostile/retaliate/adjustBruteLoss(var/damage)

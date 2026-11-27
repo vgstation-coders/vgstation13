@@ -21,8 +21,6 @@
 // acquisition side of the deer behavior.
 /mob/living/simple_animal/hostile/deer/New()
 	..()
-	stop_automated_movement = TRUE
-	wander = 0
 	var/datum/ai_controller/controller = new(src)
 	controller.behavior_nodes = list(list(
 		BT_DESC_TYPE = /datum/bt_node/composite/selector,

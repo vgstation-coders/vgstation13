@@ -34,9 +34,15 @@
 /datum/target_source/proc/is_valid_target(datum/ai_controller/controller, mob/living/pawn, atom/existing)
 	return TRUE
 
-/// Living mobs the pawn is able to attack. Picks the closest one, matching the
-/// distance rule of the legacy hostile target selection.
+/// Living mobs the pawn is able to attack. Picks through the legacy
+/// `PickTarget()` fuzzy rules so target priority matches the old hostile AI.
 /datum/target_source/enemies
+
+/datum/target_source/enemies/pick_target(datum/ai_controller/controller, mob/living/pawn, list/candidates)
+	var/mob/living/simple_animal/hostile/hostile_pawn = istype(pawn, /mob/living/simple_animal/hostile) ? pawn : null
+	if(hostile_pawn)
+		return hostile_pawn.PickTarget(candidates)
+	return ..()
 
 /datum/target_source/enemies/find_targets(datum/ai_controller/controller, mob/living/pawn, search_range)
 	var/list/candidates = list()

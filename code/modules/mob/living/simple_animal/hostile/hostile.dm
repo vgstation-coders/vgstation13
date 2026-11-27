@@ -38,6 +38,9 @@
 	var/can_ventcrawl = FALSE // If the mob can ventcrawl
 	var/avoids_poisonous = FALSE
 	var/mob/living/simple_animal/hostile/asteroid/hivelord/hivelord = null
+	/// Opt out of the generic behavior-tree install while a subtype keeps its
+	/// own bespoke AI; those mobs keep the legacy stance machine.
+	var/uses_legacy_ai = FALSE
 	/// Target set by GiveTarget() before the lazy controller install; used by
 	/// spawned minions and callers that propagate aggro through GiveTarget().
 	var/atom/pending_ai_target = null
@@ -48,16 +51,16 @@
 
 /// WIP: installs the behavior tree controller on this hostile mob. Retaliators
 /// consume their legacy `enemies` list, ranged mobs get the keep-distance tree
-/// and the rest share the melee combat tree. Mobs that need a custom tree
-/// (mimics, deer, spiders) install their own controller in New() instead.
+/// and the rest share the melee combat tree. Legacy base wandering is left
+/// enabled: the tree only takes over acquisition/movement while it has a target.
+/// Mobs that need a custom tree (mimics, deer, spiders) install their own
+/// controller in New() instead.
 /mob/living/simple_animal/hostile/proc/use_hostile_tree(tree_type)
-	stop_automated_movement = TRUE
-	wander = 0
 	var/datum/ai_controller/controller = new(src)
 	if(tree_type)
 		controller.behavior_nodes = list(tree_type)
 	else if(istype(src, /mob/living/simple_animal/hostile/retaliate))
-		controller.behavior_nodes = list(bt_idle_hostile_tree(/datum/target_source/enemies/retaliate, 0))
+		controller.behavior_nodes = list(bt_hostile_combat_tree(/datum/target_source/enemies/retaliate))
 	else if(ranged_mode())
 		controller.behavior_nodes = list(bt_ranged_hostile_tree(retreat_distance = retreat_distance ? retreat_distance : 0))
 	else
@@ -138,7 +141,7 @@
 	// WIP: every hostile mob is driven by a behavior tree. The controller is
 	// created lazily on the first Life tick so subtype New() has already run and
 	// set up ranged/retreat/search vars; mobs with a custom tree already have one.
-	if(!ai_controller && !stat)
+	if(!ai_controller && !stat && !uses_legacy_ai)
 		use_hostile_tree()
 	. = ..()
 	//Cooldowns

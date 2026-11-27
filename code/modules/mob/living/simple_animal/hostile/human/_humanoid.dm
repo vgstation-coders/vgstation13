@@ -54,8 +54,6 @@
 /// WIP: installs the behavior tree on a humanoid. Ranged humanoids get the
 /// ranged tree (retreat + fire + hold); melee ones get the shared combat tree.
 /mob/living/simple_animal/hostile/humanoid/proc/use_humanoid_tree()
-	stop_automated_movement = TRUE
-	wander = 0
 	var/datum/ai_controller/controller = new(src)
 	if(ranged_mode())
 		controller.behavior_nodes = list(bt_ranged_hostile_tree(retreat_distance = retreat_distance ? retreat_distance : 0))
