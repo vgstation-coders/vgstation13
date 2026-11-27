@@ -158,6 +158,7 @@
 			list(
 				BT_DESC_TYPE = /datum/bt_node/ai_behavior/flee_target/retreat,
 				flee_distance = retreat_distance,
+				use_pawn_retreat_distance = TRUE,
 			),
 			list(
 				BT_DESC_TYPE = /datum/bt_node/ai_behavior/use_ability,
@@ -355,11 +356,21 @@
 	var/hold_while_target_alive = FALSE
 	/// When TRUE, act as a keep-distance stance instead of a full flee.
 	var/gate_on_distance = FALSE
+	/// When TRUE, read the keep distance from the pawn's `retreat_distance`
+	/// every activation instead of the configured `flee_distance`.
+	var/use_pawn_retreat_distance = FALSE
 
 /datum/bt_node/ai_behavior/flee_target/setup(datum/ai_controller/controller)
 	var/atom/threat = controller.blackboard[target_key]
 	if(!threat || QDELETED(threat) || !controller.pawn || !controller.ai_movement)
 		return FALSE
+	if(use_pawn_retreat_distance)
+		var/mob/living/simple_animal/hostile/hostile_pawn = controller.pawn
+		// Mobs flip retreat_distance at runtime (the nazi switches to melee when
+		// out of ammo, the grey grenadier reloads farther away).
+		if(!istype(hostile_pawn) || !hostile_pawn.retreat_distance)
+			return FALSE
+		flee_distance = hostile_pawn.retreat_distance
 	if(flee_distance <= 0)
 		return FALSE
 	if(gate_on_distance && get_dist(controller.pawn, threat) >= flee_distance)

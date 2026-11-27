@@ -365,3 +365,8 @@
 /// from the idle_work leaf in a background context, so it may sleep.
 /mob/living/proc/ai_idle_work()
 	return
+
+/// TRUE when this controller currently has a blackboard target. Mobs use it to
+/// drive visual state that the legacy AI keyed off `stance` (nazi gun overlays).
+/mob/living/proc/ai_has_target()
+	return ai_controller && ai_controller.blackboard && ai_controller.blackboard[BB_TARGET]

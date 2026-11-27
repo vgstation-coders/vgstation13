@@ -11,8 +11,9 @@ blackboard keys), async actions, target lifecycle hooks and target sources
 (enemies, wounded, retaliate, prey, including wanted objects), an ability system
 with a ranged and a charge ability, a health decorator, the `.bt.json` compiler,
 the admin BT viewer, an example hostile consumer and twenty-seven existing mapped
-mob types plus the syndicate, mummy, jackal, vox and grey families compile and
-pass the auxtools scenario. The wider basic mob behavior set is still pending.
+mob types plus the syndicate, mummy, jackal, vox, grey and nazi families compile
+and pass the auxtools scenario. The wider basic mob behavior set is still
+pending.
 
 ## Ported so far
 
@@ -132,8 +133,11 @@ pass the auxtools scenario. The wider basic mob behavior set is still pending.
   `use_humanoid_tree()`. Weapon-mode switching, shields, grenadier reloading and
   the leader's psychic heals stay in `Life()`; the leader's legacy focus-fire
   propagation was removed because it would flip soldiers back to the legacy
-  stance/movement, and the grenadier's runtime retreat-distance changes do not
-  reconfigure the already-built tree.
+  stance/movement.
+- `human/nazi.dm`: the nazi family runs `use_humanoid_tree()`. Ammo counting and
+  the "out of ammo -> knife" switch stay in `afterShoot()`; the drawn-weapon
+  overlays now also key off `ai_has_target()` because the tree does not touch
+  `stance`.
 - `_ai_bt_viewer.dm` + `code/modules/admin/verbs/behavior_trees.dm`: admin
   "View Behavior Tree" verb rendering the tree, blackboard and live markers.
 - `living.dm`: `/mob/living/Destroy()` now deletes the attached
@@ -232,6 +236,10 @@ childless and it fails every tick.
   `OpenFire()`. The legacy `Life()`'s idle `GiveTarget(null)` clears it again.
   `can_use()` also exposes the blackboard target while it asks `ranged_mode()`, so
   overrides like the vox raider's can tell money from a real target.
+- **Ranged retreat distance is dynamic.** The ranged tree's retreat leaf reads
+  `pawn.retreat_distance` on every activation, so mobs that change it at runtime
+  (grey grenadier reloading, nazi switching to a knife when out of ammo) stop or
+  start keeping distance without rebuilding the tree.
 - **Dead bodies are not pre-filtered.** For simple animals the enemy source leaves
   the dead/alive decision to `CanAttack()` (which encodes `stat_attack` and
   `stat_exclusive`), so embalmers and nurse spiders can target corpses.
@@ -280,6 +288,7 @@ pirate gunner fires its ranged ability, exercise the async leaf state machine,
 verify the nurse spider has the async attack leaf and spins a web in idle work,
 verify the syndicate melee/gunner, mummy warrior/priest and jackal embalmer
 families behave, verify the vox assassin fires and the base raider loots
-spacecash, verify the grey regular fires and a grey prisoner melees, and verify
-the migrated space bear and space carp attack adjacent humans. Keep the test
-leaves in `behavior_tree_test.dm` until real leaves and unit tests replace them.
+spacecash, verify the grey regular fires and a grey prisoner melees, verify the
+nazi trooper fires at its keep distance, and verify the migrated space bear and
+space carp attack adjacent humans. Keep the test leaves in `behavior_tree_test.dm`
+until real leaves and unit tests replace them.

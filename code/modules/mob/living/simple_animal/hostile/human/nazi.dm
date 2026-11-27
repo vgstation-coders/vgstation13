@@ -45,7 +45,9 @@
 /mob/living/simple_animal/hostile/humanoid/nazi/Life()
 	..()
 	overlays.len = 0
-	if(stance != HOSTILE_STANCE_IDLE)
+	// The behavior tree does not touch stance, so also show the drawn weapon
+	// while the controller has a target.
+	if(stance != HOSTILE_STANCE_IDLE || ai_has_target())
 		if(ranged)
 			overlays += icon('icons/mob/in-hand/right/items_righthand.dmi',"gun")
 			if(melee_damage_upper > 10)
@@ -136,7 +138,7 @@
 /mob/living/simple_animal/hostile/humanoid/nazi/soldier/Life()
 	..()
 	overlays.len = 0
-	if(stance != HOSTILE_STANCE_IDLE)
+	if(stance != HOSTILE_STANCE_IDLE || ai_has_target())
 		if(ranged)
 			overlays += icon('icons/mob/in-hand/right/guninhands_right.dmi',"PlasMP100")
 			if(melee_damage_upper > 10)
@@ -374,3 +376,13 @@
 	qdel(src)
 	explosion(eloc,1,2,3, whodunnit = src)
 	new /obj/item/weapon/gun/gatling(eloc)
+
+// WIP: the nazi family runs the humanoid behavior tree. Ammo counting and the
+// "out of ammo -> knife" switch stay in afterShoot(); the tree reads
+// retreat_distance live, so when it drops to 0 the trooper stops keeping range.
+/mob/living/simple_animal/hostile/humanoid/nazi/New()
+	..()
+	use_humanoid_tree()
+
+/mob/living/simple_animal/hostile/humanoid/nazi/FindTarget()
+	return null
