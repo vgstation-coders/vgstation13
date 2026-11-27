@@ -112,6 +112,7 @@ jobs:
           echo "PYTHON_VERSION=$PYTHON_VERSION" >> "$GITHUB_ENV"
           echo "BYOND_MAJOR=$BYOND_MAJOR" >> "$GITHUB_ENV"
           echo "BYOND_MINOR=$BYOND_MINOR" >> "$GITHUB_ENV"
+          echo "RUST_G_VERSION=$RUST_G_VERSION" >> "$GITHUB_ENV"
           echo "RUNNER_IMAGE=$ImageOS-$ImageVersion" >> "$GITHUB_ENV"
 
       - uses: actions/setup-python@v7
@@ -138,6 +139,19 @@ jobs:
           path: ~/BYOND-${{env.BYOND_MAJOR}}.${{env.BYOND_MINOR}}
           key: BYOND-${{runner.os}}-${{env.BYOND_MAJOR}}.${{env.BYOND_MINOR}}
 
+      # Only the test run executes DM code, so only it needs rust_g.
+      - uses: actions/cache@v6
+        name: Cache rust_g
+        id: rust-g-cache
+        if: matrix.dm-unit-tests == 1
+        with:
+          path: ~/rust-g
+          key: rust-g-${{env.RUST_G_VERSION}}
+
+      - name: Download rust_g
+        if: matrix.dm-unit-tests == 1 && steps.rust-g-cache.outputs.cache-hit != 'true'
+        run: tools/travis/install_rust_g.sh ~/rust-g
+
       - name: ${{matrix.job-name}}
         env:
           DM_UNIT_TESTS: ${{matrix.dm-unit-tests}}
@@ -147,7 +161,7 @@ jobs:
         run: |
           tools/travis/install-byond.sh
           source $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/byondsetup
-          export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$HOME/byond-libs"
+          export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$HOME/byond-libs:$HOME/rust-g"
           tools/travis/build.py 2>&1 | tee /dev/stderr | awk '/warning:|error:/ { exit 1 }'
           cp tools/travis/config/config.txt config/
           tools/travis/run_tests.py 2>&1 | tee /dev/stderr | awk '/UNIT TEST FAIL/ { exit 1 }'

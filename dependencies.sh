@@ -19,4 +19,4 @@ export SPACEMAN_DMM_VERSION=suite-1.11
 export PYTHON_VERSION=3.14
 
 #rust_g git tag
-export RUST_G_VERSION=3.0.0
+export RUST_G_VERSION=7.1.0
