@@ -4,9 +4,10 @@ Source: [tgstation/tgstation](https://github.com/tgstation/tgstation) `master`,
 `code/datums/ai/_ai_bt_*.dm`, `code/datums/ai/_ai_behavior.dm`,
 `code/datums/ai/_ai_controller.dm` and `code/__DEFINES/ai/behavior_trees.dm`.
 
-**Status:** phase 3. The core, subsystem/possession path, pathfinding movement
-adapter and starter behavior leaves compile and pass the auxtools scenario. The
-first real mob integration and the full basic mob behavior set are still pending.
+**Status:** phase 4. The core, subsystem/possession path, pathfinding movement
+adapter, starter behavior leaves and an example hostile simple animal compile and
+pass the auxtools scenario. The first migration of an existing mob and the full
+basic mob behavior set are still pending.
 
 ## Ported so far
 
@@ -22,8 +23,10 @@ first real mob integration and the full basic mob behavior set are still pending
   `SelectBehaviors()`, cancellation, tick-state reset, AI status, possession,
   movement adapter and pawn death handling.
 - `_ai_movement.dm`: basic `get_path_to()` walker with a greedy step fallback
-  while the pathfinder subsystem is not ready.
+  while the pathfinder subsystem is not ready or has no route.
 - `_ai_behaviors_basic.dm`: `acquire_target`, `move_to_target`, `attack_target`.
+- `bt_guard.dm`: example first consumer, a hostile simple animal whose decision
+  layer is a behavior tree controller (not mapped; admin/spawn use).
 - `code/controllers/subsystem/ai_controllers.dm`: `SSai_controllers` tick path
   for `AI_STATUS_ON` / `AI_STATUS_ON_LOW`.
 - `behavior_tree_test.dm`: test leaves used by the auxtools scenario.
@@ -37,8 +40,11 @@ first real mob integration and the full basic mob behavior set are still pending
 - **One controller subsystem.** Both `AI_STATUS_ON` and `AI_STATUS_ON_LOW` are
   processed by the same subsystem for now; the two-subsystem split is pending.
 - **Simplified movement.** `ai_movement/basic` uses `get_path_to()` and has no
-  cell grid or path caching yet. If `SSpathfinder.mobs` is not initialized it
-  falls back to one greedy step instead of runtiming.
+  cell grid or path caching yet. If `SSpathfinder.mobs` is not initialized or
+  returns no route, it falls back to one greedy step instead of runtiming.
+- **Example consumer, not a migration.** `bt_guard` disables the legacy hostile
+  target acquisition (`FindTarget()` returns null) and lets the tree drive it.
+  Existing mapped mobs are untouched.
 - **Death hook only.** Possession registers `/event/death` and turns the AI off.
   Client login/logout sentience hooks are still pending.
 - **No compiled JSON files or compiler.** `BT_COMPILED_PATH` and
@@ -50,9 +56,9 @@ first real mob integration and the full basic mob behavior set are still pending
 
 ## Next phases
 
-1. **Behaviors and mobs:** port the remaining basic mob leaves (flee, speech,
-   abilities, target sources) and wire the first real simple animal/hostile mob
-   to a controller/tree.
+1. **Behaviors:** port the remaining basic mob leaves (flee, speech, abilities,
+   target sources) and expand `bt_guard` or replace it with the first existing
+   hostile mob as the production consumer.
 2. **Controller integration:** client login/logout sentience hooks, the
    high/low priority subsystem split, z-level lists and path caching.
 3. **Tree tooling:** `.bt.json` compiler and loader; BT viewer.
@@ -61,8 +67,9 @@ first real mob integration and the full basic mob behavior set are still pending
 
 ## Testing
 
-The phase-3 scenario lives outside the repository (local auxtools harness):
+The phase-4 scenario lives outside the repository (local auxtools harness):
 build a sequence/selector/decorator/subtree, tick it across RUNNING/SUCCESS/
 FAILURE, exercise the descriptor builder, cancel a running leaf, possess a mob,
-trigger its death event, and move it towards a blackboard target. Keep the test
-leaves in `behavior_tree_test.dm` until real leaves and unit tests replace them.
+trigger its death event, move it towards a blackboard target, and drive the
+example `bt_guard` against an adjacent victim. Keep the test leaves in
+`behavior_tree_test.dm` until real leaves and unit tests replace them.

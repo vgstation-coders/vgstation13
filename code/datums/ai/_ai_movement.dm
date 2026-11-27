@@ -35,29 +35,28 @@
 
 	// Pathfinding can be unavailable while the pathfinder subsystem is still
 	// starting; fall back to one greedy step instead of runtiming.
-	if(!SSpathfinder || !SSpathfinder.mobs)
+	var/list/path
+	if(SSpathfinder && SSpathfinder.mobs)
+		// get_path_to() can briefly wait for a pathfinder slot; callers should not
+		// treat this as an instantaneous, sleep-free operation.
+		path = get_path_to(
+			pawn,
+			target,
+			max_distance = max_distance,
+			mintargetdist = 0,
+			simulated_only = TRUE,
+			skip_first = TRUE,
+			diagonally = FALSE,
+			cardinalize = TRUE,
+		)
+
+	if(!path || !length(path))
 		var/turf/fallback_step = get_step_towards(pawn, target)
 		if(!fallback_step)
 			paths -= controller
 			return FALSE
 		paths[controller] = list(fallback_step)
 		return TRUE
-
-	// get_path_to() can briefly wait for a pathfinder slot; callers should not
-	// treat this as an instantaneous, sleep-free operation.
-	var/list/path = get_path_to(
-		pawn,
-		target,
-		max_distance = max_distance,
-		mintargetdist = 0,
-		simulated_only = TRUE,
-		skip_first = TRUE,
-		diagonally = FALSE,
-		cardinalize = TRUE,
-	)
-	if(!path || !length(path))
-		paths -= controller
-		return FALSE
 
 	paths[controller] = path
 	return TRUE

@@ -3154,4 +3154,5 @@
 #include "code\datums\ai\_ai_behaviors_basic.dm"
 #include "code\datums\ai\_ai_controller.dm"
 #include "code\datums\ai\behavior_tree_test.dm"
+#include "code\datums\ai\bt_guard.dm"
 // END_INCLUDE
