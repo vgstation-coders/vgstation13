@@ -1,6 +1,6 @@
 // AI movement adapters for the WIP behavior tree port.
-// Phase 3: a basic pathfinding walker on top of vg's get_path_to().
-// The full tgstation movement/cell-tracker port is still pending.
+// A basic pathfinding walker on top of vg's get_path_to() with a per-controller
+// path cache. The full tgstation movement/cell-tracker port is still pending.
 
 /datum/ai_movement
 	/// controller -> list of turfs to walk through.

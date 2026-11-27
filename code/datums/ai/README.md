@@ -4,7 +4,7 @@ Source: [tgstation/tgstation](https://github.com/tgstation/tgstation) `master`,
 `code/datums/ai/_ai_bt_*.dm`, `code/datums/ai/_ai_behavior.dm`,
 `code/datums/ai/_ai_controller.dm` and `code/__DEFINES/ai/behavior_trees.dm`.
 
-**Status:** phase 21. The core, subsystem/possession path, sentience hooks,
+**Status:** phase 25. The core, subsystem/possession path, sentience hooks,
 z-level-gated subsystems, path-cached movement, starter behavior leaves (attack,
 flee, retreat, hold, smash, wait, wander, hunt, follow, idle work, speak,
 blackboard keys), async actions, target lifecycle hooks and target sources
@@ -23,7 +23,7 @@ is still pending.
   `/datum/bt_node` declarations, expands subtrees, converts enum names to DM
   defines and emits full-typepath descriptors. `--check` guards against stale
   output in CI.
-- `__DEFINES/behavior_trees.dm`: statuses, node types, abort modes, subplan and
+- `__DEFINES/behavior_trees.dm`: statuses, abort modes, subplan and
   parallel policies, descriptor keys, AI statuses, starter blackboard keys.
 - `_ai_bt_node.dm`: node base, execution indices, tick/reset/finalize hooks.
 - `_ai_bt_composites.dm`: sequence, selector, subplan, parallel.
@@ -57,10 +57,9 @@ is still pending.
   `hold_position`, `smash_surroundings`, `wait`, `set_blackboard_key`,
   `clear_blackboard_key` and `wander`, plus the `bt_hostile_combat_tree()` /
   `bt_basic_hostile_tree()` / `bt_fleeing_hostile_tree()` /
-  `bt_ranged_hostile_tree()` / `bt_retaliating_hostile_tree()` /
-  `bt_idle_tree()` / `bt_idle_hostile_tree()` / `bt_hunting_idle_tree()` /
-  `bt_following_idle_tree()` descriptors and the `hunt_target` and
-  `follow_leader` leaves.
+  `bt_ranged_hostile_tree()` / `bt_idle_tree()` / `bt_idle_hostile_tree()` /
+  `bt_hunting_idle_tree()` / `bt_following_idle_tree()` descriptors and the
+  `hunt_target` and `follow_leader` leaves.
 - `bt_guard.dm`: example first consumer, a hostile simple animal whose decision
   layer is a behavior tree controller (not mapped; admin/spawn use). It composes
   a fleeing combat tree in parallel with ambient chatter.
@@ -270,7 +269,7 @@ childless and it fails every tick.
 
 ## Testing
 
-The phase-20 scenario lives outside the repository (local auxtools harness):
+The auxtools scenario lives outside the repository (local harness):
 build a sequence/selector/decorator/subtree, tick it across RUNNING/SUCCESS/
 FAILURE, exercise the descriptor builder, cancel a running leaf, possess a mob,
 verify sentience login/logout and high/low subsystem routing (per-z buckets),

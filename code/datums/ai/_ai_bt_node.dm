@@ -1,30 +1,13 @@
 // Base node for the behavior tree system.
 // Ported from tgstation/tgstation (code/datums/ai/_ai_bt_node.dm).
-// The controller, JSON compiler and reactive observer aborts are ported in the
-// following phases; see code/datums/ai/README.md.
 
 /datum/bt_node
-	/// Node type identifier, used by the future BT viewer.
-	var/node_type = BT_NODE_LEAF
 	/// Pre-order depth-first index of this node in the tree. Assigned by assign_execution_indices().
 	var/execution_index = 0
 	/// Index of the last descendant node in this subtree. Equal to execution_index for leaves.
 	var/last_execution_index = 0
-	/// Reference to this node's parent in the resolved tree.
-	var/datum/bt_node/parent_node = null
 	/// Owning controller for this node.
 	var/datum/ai_controller/owning_controller = null
-	/// Short display label, set at New() by stripping standard path prefixes from the type.
-	var/label = ""
-
-/datum/bt_node/New()
-	. = ..()
-	if(!label)
-		var/t = "[type]"
-		t = replacetext(t, "/datum/bt_node/decorator/", "")
-		t = replacetext(t, "/datum/bt_node/ai_behavior/", "")
-		t = replacetext(t, "/datum/bt_node/subtree/", "")
-		label = t
 
 /// Ticked by the ai_controller. Returns BT_SUCCESS, BT_FAILURE, or BT_RUNNING.
 /datum/bt_node/proc/tick(datum/ai_controller/controller, seconds_per_tick)
@@ -60,10 +43,6 @@
 /datum/bt_node/proc/get_children()
 	return null
 
-/// Returns TRUE if this node or any descendant has an active (running) ai_behavior leaf.
-/datum/bt_node/proc/has_active_descendants()
-	return FALSE
-
 /// Walks descendants to find the node with the given execution_index. Returns null if not found.
 /datum/bt_node/proc/find_by_index(target_index)
 	if(execution_index == target_index)
@@ -94,6 +73,5 @@
 	return
 
 /datum/bt_node/Destroy()
-	parent_node = null
 	owning_controller = null
 	return ..()

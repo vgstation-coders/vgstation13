@@ -1,13 +1,12 @@
 // Behavior tree decorators (condition gates around a single child).
 // Ported from tgstation/tgstation (code/datums/ai/_ai_bt_decorators.dm).
 //
-// Phase 1 keeps the condition check synchronous: the condition is evaluated when
-// the child is not active. Reactive observer aborts (signals/polling) are left for
-// the controller phase, where vg's event system will replace TG's DCS signals.
+// Condition checks are synchronous: the condition is evaluated when the child is
+// not active. Reactive aborts use the polling observer because vg has no DCS
+// signals.
 
 /// Base decorator node. Wraps a single child with a condition check.
 /datum/bt_node/decorator
-	node_type = BT_NODE_DECORATOR
 	/// Typepath of the single child node. Resolved to an instance at tree construction.
 	var/child_typepath = null
 	/// Resolved child instance. Populated at tree construction. Do not set directly.
@@ -36,9 +35,6 @@
 /datum/bt_node/decorator/get_children()
 	return child ? list(child) : null
 
-/datum/bt_node/decorator/has_active_descendants()
-	return child ? child.has_active_descendants() : FALSE
-
 /datum/bt_node/decorator/finalize_node(datum/ai_controller/controller, list/to_visit)
 	..()
 	if(observer_abort != BT_ABORT_NONE)
@@ -46,7 +42,6 @@
 			controller.polling_observers = list()
 		controller.polling_observers |= src
 	if(child)
-		child.parent_node = src
 		to_visit += child
 
 /datum/bt_node/decorator/set_descriptor_children(list/children_descs, datum/ai_controller/controller)
@@ -114,10 +109,10 @@
 		return
 	if(current != last_poll_result)
 		last_poll_result = current
-		on_observed_change(controller, null)
+		on_observed_change(controller)
 
 /// Applies the observer abort policy after the watched condition changes.
-/datum/bt_node/decorator/proc/on_observed_change(datum/ai_controller/controller, key)
+/datum/bt_node/decorator/proc/on_observed_change(datum/ai_controller/controller)
 	var/condition_result = evaluate_for_observer(controller)
 
 	if(!condition_result && (observer_abort & BT_ABORT_SELF))

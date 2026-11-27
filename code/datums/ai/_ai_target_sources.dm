@@ -8,7 +8,6 @@
 // DCS signals, so sources are polled by the leaf each time it runs.
 
 /datum/target_source
-	var/name = "target source"
 
 /// Returns every candidate this source considers valid right now.
 /datum/target_source/proc/find_targets(datum/ai_controller/controller, mob/living/pawn, search_range)
@@ -38,7 +37,6 @@
 /// Living mobs the pawn is able to attack. Picks the closest one, matching the
 /// distance rule of the legacy hostile target selection.
 /datum/target_source/enemies
-	name = "enemies"
 
 /datum/target_source/enemies/find_targets(datum/ai_controller/controller, mob/living/pawn, search_range)
 	var/list/candidates = list()
@@ -75,7 +73,6 @@
 /// Like enemies, but prefers the candidate with the lowest health fraction so
 /// pack hunters finish wounded prey instead of scattering damage.
 /datum/target_source/enemies/wounded
-	name = "wounded enemies"
 /datum/target_source/enemies/wounded/pick_target(datum/ai_controller/controller, mob/living/pawn, list/candidates)
 	var/mob/living/best = null
 	var/best_fraction = INFINITY
@@ -91,7 +88,6 @@
 /// a behavior-tree retaliator shares the same list, so it stays passive until
 /// something attacks it.
 /datum/target_source/enemies/retaliate
-	name = "retaliating enemies"
 
 /datum/target_source/enemies/retaliate/find_targets(datum/ai_controller/controller, mob/living/pawn, search_range)
 	var/list/candidates = ..()
@@ -112,7 +108,6 @@
 /// Like enemies, but only once the mimic has been angered (opened, pulled or
 /// hit). Keeps mimics disguised and passive until something disturbs them.
 /datum/target_source/enemies/mimic
-	name = "mimic enemies"
 
 /datum/target_source/enemies/mimic/find_targets(datum/ai_controller/controller, mob/living/pawn, search_range)
 	var/mob/living/simple_animal/hostile/mimic/mimic_pawn = pawn
@@ -125,7 +120,6 @@
 /// "attack". Only mobs standing on a turf are considered, so caged or held prey
 /// is ignored like the legacy cat did.
 /datum/target_source/prey
-	name = "prey"
 	/// Typepath every candidate must match.
 	var/prey_type = null
 

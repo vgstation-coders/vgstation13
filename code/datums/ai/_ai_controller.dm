@@ -1,9 +1,7 @@
 // Behavior tree controller for the WIP behavior tree port.
 //
-// Phase 7 adds target lifecycle hooks, a health decorator and the composed
-// hostile trees; movement, possession and the subsystem tick path came earlier.
-// Sentience/event hooks and the full basic mob integration are still pending;
-// see code/datums/ai/README.md.
+// Owns the blackboard, the resolved tree, target lifecycle, sentience, movement
+// and the subsystem status. See code/datums/ai/README.md.
 //
 // Ported from tgstation/tgstation (code/datums/ai/_ai_controller.dm).
 
@@ -161,16 +159,14 @@
 	behavior_nodes = temp_subtree_list
 	finalize_tree()
 
-/// Walks the resolved tree to set owning_controller and parent_node on all nodes,
-/// populates override_slots, and assigns pre-order execution indices.
+/// Walks the resolved tree to set owning_controller on all nodes, populates
+/// override_slots, and assigns pre-order execution indices.
 /datum/ai_controller/proc/finalize_tree()
 	if(!behavior_nodes || !length(behavior_nodes))
 		return
 	override_slots = null
 	polling_observers = null
 	var/list/to_visit = behavior_nodes.Copy()
-	for(var/datum/bt_node/root in behavior_nodes)
-		root.parent_node = null
 	var/index = 1
 	while(index <= length(to_visit))
 		var/datum/bt_node/node = to_visit[index++]

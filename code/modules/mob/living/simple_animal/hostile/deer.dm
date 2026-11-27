@@ -17,18 +17,8 @@
 	treadmill_speed = 2.5
 	minbodytemp = 200
 
-/mob/living/simple_animal/hostile/deer/GiveTarget(var/new_target)
-	if(isDead())
-		return //The deers problems are over now, try not to be too jealous
-	if(isliving(new_target))
-		if(is_spooked(new_target))
-			var/list/can_see = view(src, vision_range)
-			get_spooked(new_target)
-			for(var/mob/living/simple_animal/hostile/deer/D in can_see)
-				D.get_spooked(new_target)
-
-// WIP: the tree acquires targets; the spook hook replaces GiveTarget's side of
-// the legacy behavior.
+// WIP: the tree acquires targets; the spook hook replaces the legacy target
+// acquisition side of the deer behavior.
 /mob/living/simple_animal/hostile/deer/New()
 	..()
 	stop_automated_movement = TRUE

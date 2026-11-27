@@ -6,7 +6,6 @@
 // behavior leaf with AI_BEHAVIOR_DELAY.
 
 /datum/ai_ability
-	var/name = "ability"
 	/// Deciseconds between uses. 0 means every tick is allowed.
 	var/cooldown = 0
 	/// world.time before which can_use() returns FALSE.
@@ -29,7 +28,6 @@
 /// Fires the pawn's legacy ranged attack (hostile projectiletype/ranged_mode).
 /// The mob keeps its own ranged_cooldown, so the ability respects both timers.
 /datum/ai_ability/ranged_attack
-	name = "ranged attack"
 	cooldown = 3 SECONDS
 
 /datum/ai_ability/ranged_attack/can_use(datum/ai_controller/controller)
@@ -66,7 +64,6 @@
 
 /// Closes the distance to the target by up to two tiles in one use.
 /datum/ai_ability/charge
-	name = "charge"
 	cooldown = 2 SECONDS
 
 /datum/ai_ability/charge/perform(datum/ai_controller/controller, atom/target)

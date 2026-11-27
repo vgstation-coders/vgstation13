@@ -1,10 +1,8 @@
 // Base type for AI behavior leaf nodes in the behavior tree system.
-// Ported from tgstation/tgstation (code/datums/ai/_ai_behavior.dm) with the
-// async perform path and event logging deferred to the controller phase.
+// Ported from tgstation/tgstation (code/datums/ai/_ai_behavior.dm). The async
+// perform path is ported; event logging is still deferred.
 
 /datum/bt_node/ai_behavior
-	/// Flags for extra behavior (reserved; see the controller port).
-	var/behavior_flags = NONE
 	/// Cooldown between perform() calls; read through get_cooldown().
 	var/time_between_perform = 0
 	/// TRUE after setup() has been called and before finish_action() completes.
@@ -19,9 +17,6 @@
 	var/async_result = null
 	/// Bumped on start/cancel so a stale background action is ignored.
 	var/async_token = 0
-
-/datum/bt_node/ai_behavior/has_active_descendants()
-	return running
 
 /datum/bt_node/ai_behavior/get_status_marker()
 	if(running)

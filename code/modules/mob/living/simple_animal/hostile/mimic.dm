@@ -221,14 +221,6 @@ var/global/list/crate_mimic_disguises = list(\
 		visible_message("<span class='warning'>\The [src] starts moving!</span>")
 		anger()
 
-/mob/living/simple_animal/hostile/mimic/crate/LoseTarget()
-	..()
-	calm_down()
-
-/mob/living/simple_animal/hostile/mimic/crate/LostTarget()
-	..()
-	calm_down()
-
 /mob/living/simple_animal/hostile/mimic/crate/proc/anger(berserk = 0, change_icon = 1)
 	angry = 1
 	if(change_icon)

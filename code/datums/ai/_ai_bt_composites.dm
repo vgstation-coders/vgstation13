@@ -15,20 +15,10 @@
 /datum/bt_node/composite/get_children()
 	return children
 
-/datum/bt_node/composite/has_active_descendants()
-	if(!children)
-		return FALSE
-	for(var/datum/bt_node/child in children)
-		if(child.has_active_descendants())
-			return TRUE
-	return FALSE
-
 /datum/bt_node/composite/finalize_node(datum/ai_controller/controller, list/to_visit)
 	..()
 	if(!children)
 		return
-	for(var/datum/bt_node/child in children)
-		child.parent_node = src
 	to_visit += children
 
 /datum/bt_node/composite/set_descriptor_children(list/children_descs, datum/ai_controller/controller)
@@ -60,8 +50,6 @@
  * Resumes from the last RUNNING child index rather than restarting from child 1.
  */
 /datum/bt_node/composite/sequence
-	node_type = BT_NODE_SEQUENCE
-	label = "SEQUENCE"
 	/// Index of the child that last returned BT_RUNNING.
 	var/running_child_index = 0
 
@@ -96,8 +84,6 @@
  * Resumes from the last RUNNING child index rather than restarting from child 1.
  */
 /datum/bt_node/composite/selector
-	node_type = BT_NODE_SELECTOR
-	label = "SELECTOR"
 	/// Index of the child that last returned BT_RUNNING.
 	var/running_child_index = 0
 
@@ -129,7 +115,6 @@
  * instead of propagating completion directly.
  */
 /datum/bt_node/composite/subplan
-	node_type = BT_NODE_SUBPLAN
 	/// BT_SUBPLAN_SUCCEED_ON_SUCCESS: propagate success (default). BT_SUBPLAN_LOOP_ON_SUCCESS: restart.
 	var/success_policy = BT_SUBPLAN_SUCCEED_ON_SUCCESS
 	/// BT_SUBPLAN_FAIL_ON_FAILURE: propagate failure (default). BT_SUBPLAN_LOOP_ON_FAILURE: restart.
@@ -188,8 +173,6 @@
  * Success and failure are determined by the configurable success_policy and failure_policy.
  */
 /datum/bt_node/composite/parallel
-	node_type = BT_NODE_PARALLEL
-	label = "PARALLEL"
 	/// BT_PARALLEL_SUCCESS_CHILD_ONE: succeed when child 1 succeeds (default).
 	/// BT_PARALLEL_SUCCESS_ALL: succeed only when all children succeed.
 	var/success_policy = BT_PARALLEL_SUCCESS_CHILD_ONE

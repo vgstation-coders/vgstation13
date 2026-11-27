@@ -49,11 +49,6 @@
 		),
 	)
 
-/// Retaliating tree: only fights mobs the pawn already considers enemies (the
-/// legacy /hostile/retaliate enemies list); otherwise it does nothing.
-/proc/bt_retaliating_hostile_tree()
-	return bt_hostile_combat_tree(/datum/target_source/enemies/retaliate)
-
 /// Idle layer: wander occasionally, otherwise rest. Used by non-hostile mobs
 /// and as the fallback of the idle hostile tree.
 /proc/bt_idle_tree(wander_chance = 50, wander_cooldown = 5 SECONDS, rest_time = 4 SECONDS)
@@ -559,7 +554,7 @@
 /datum/bt_node/ai_behavior/set_blackboard_key/perform(seconds_per_tick, datum/ai_controller/controller)
 	if(isnull(key))
 		return AI_BEHAVIOR_FAILED
-	controller.blackboard[key] = value
+	controller.set_blackboard_key(key, value)
 	return AI_BEHAVIOR_SUCCEEDED
 
 /// Removes a blackboard key. Fails without a key.
@@ -569,7 +564,7 @@
 /datum/bt_node/ai_behavior/clear_blackboard_key/perform(seconds_per_tick, datum/ai_controller/controller)
 	if(isnull(key))
 		return AI_BEHAVIOR_FAILED
-	controller.blackboard.Remove(key)
+	controller.clear_blackboard_key(key)
 	return AI_BEHAVIOR_SUCCEEDED
 
 /// Takes one random step, or fails so an idle sibling branch (wait) can run.

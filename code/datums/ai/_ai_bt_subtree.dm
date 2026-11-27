@@ -2,9 +2,8 @@
 // Ported from tgstation/tgstation (code/datums/ai/_ai_bt_subtree.dm).
 
 /datum/bt_node/subtree
-	node_type = BT_NODE_SUBTREE
-	/// Repo-relative path to the .bt.json source file. The compiled JSON loader is
-	/// part of the controller port; until then build subtrees from behavior_nodes.
+	/// Repo-relative path to the .bt.json source file. Compiled trees are
+	/// produced by tools/behavior_tree/bt_compiler.py.
 	var/behavior_tree_json = null
 	/// List of BT node descriptors defining this subtree's root.
 	var/list/behavior_nodes = null
@@ -35,11 +34,6 @@
 		return override_node.root ? list(override_node.root) : null
 	return root ? list(root) : null
 
-/datum/bt_node/subtree/has_active_descendants()
-	if(override_node)
-		return override_node.has_active_descendants()
-	return root ? root.has_active_descendants() : FALSE
-
 /datum/bt_node/subtree/finalize_node(datum/ai_controller/controller, list/to_visit)
 	..()
 	if(!isnull(override_id))
@@ -47,10 +41,8 @@
 			controller.override_slots = list()
 		controller.override_slots[override_id] = src
 	if(root)
-		root.parent_node = src
 		to_visit += root
 	if(override_node)
-		override_node.parent_node = src
 		to_visit += override_node
 
 /datum/bt_node/subtree/collect_reset_children(list/to_visit)

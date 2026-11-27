@@ -1,10 +1,6 @@
 // Behavior tree statuses, node types and policies.
-// Ported from tgstation/tgstation (code/__DEFINES/ai/behavior_trees.dm) with the
-// AI controller integration left for the next porting phase. See
-// code/datums/ai/README.md.
-
-/// Maximum number of execution indices the future bt_viewer drain log may hold.
-#define BT_EXECUTION_LOG_MAX 250
+// Ported from tgstation/tgstation (code/__DEFINES/ai/behavior_trees.dm).
+// See code/datums/ai/README.md.
 
 // BT node return values
 /// Node completed its goal and succeeded.
@@ -42,15 +38,6 @@
 /// Both BT_ABORT_SELF and BT_ABORT_LOWER_PRIORITY.
 #define BT_ABORT_BOTH (BT_ABORT_SELF | BT_ABORT_LOWER_PRIORITY)
 
-// BT viewer node type identifiers (stored on bt_node.node_type)
-#define BT_NODE_SELECTOR 0
-#define BT_NODE_SEQUENCE 1
-#define BT_NODE_PARALLEL 2
-#define BT_NODE_DECORATOR 3
-#define BT_NODE_LEAF 4
-#define BT_NODE_SUBTREE 5
-#define BT_NODE_SUBPLAN 6
-
 // Keys used by behavior tree descriptors/JSON.
 /// Key storing the node typepath in a descriptor list.
 #define BT_DESC_TYPE "type"
@@ -87,4 +74,3 @@
 #define BB_TARGET "target"
 /// Set by the deer spook handling; the deer tree flees while this key exists.
 #define BB_SPOOKED "spooked"
-
