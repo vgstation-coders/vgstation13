@@ -4,15 +4,15 @@ Source: [tgstation/tgstation](https://github.com/tgstation/tgstation) `master`,
 `code/datums/ai/_ai_bt_*.dm`, `code/datums/ai/_ai_behavior.dm`,
 `code/datums/ai/_ai_controller.dm` and `code/__DEFINES/ai/behavior_trees.dm`.
 
-**Status:** phase 14. The core, subsystem/possession path, sentience hooks,
+**Status:** phase 15. The core, subsystem/possession path, sentience hooks,
 z-level-gated subsystems, path-cached movement, starter behavior leaves (attack,
 flee, retreat, hold, smash, wait, wander, hunt, follow, speak, blackboard keys),
 target lifecycle hooks and target sources (enemies, wounded, retaliate, prey), an
 ability system with a ranged and a charge ability, a health decorator, the
-`.bt.json` compiler, the admin BT viewer, an example hostile consumer and eleven
+`.bt.json` compiler, the admin BT viewer, an example hostile consumer and thirteen
 existing mapped mob types (space bear, space carp, strong/ranged/rapid hivebot,
-viscerator, cow, goat, chicken, cat) compile and pass the auxtools scenario. The
-wider basic mob behavior set is still pending.
+viscerator, cow, goat, chicken, cat, crab, bigroach) compile and pass the
+auxtools scenario. The wider basic mob behavior set is still pending.
 
 ## Ported so far
 
@@ -90,6 +90,9 @@ wider basic mob behavior set is still pending.
   mice, `hunt_target` walks over and calls `ai_hunt_kill()`, which the cat
   overrides to splat the mouse with its legacy kill verbs. The legacy Life hunt
   loop was removed; the growl moved to `ai_target_acquired()`.
+- `crab.dm` + `bigroach.dm`: ninth and tenth migrations. The megamadcrab and the
+  roaches (queen included) run the shared combat tree; the queen keeps laying
+  eggs because `attack_target` bridges to the legacy `AttackingTarget()` hook.
 - `_ai_bt_viewer.dm` + `code/modules/admin/verbs/behavior_trees.dm`: admin
   "View Behavior Tree" verb rendering the tree, blackboard and live markers.
 - `living.dm`: `/mob/living/Destroy()` now deletes the attached
@@ -147,6 +150,10 @@ childless and it fails every tick.
   `prey_type` on a turf instead, so a friendly hunter (the cat) can target mice it
   is not allowed to "attack". The kill goes through the `ai_hunt_kill()` pawn
   hook, which defaults to `UnarmedAttack()` and is overridden for special kills.
+- **attack_target bridges to legacy `AttackingTarget()`.** For hostile pawns the
+  leaf sets the legacy `target` var for the call, invokes `AttackingTarget()` and
+  clears it, so mob overrides (queen roach eggs, flying skull animation) keep
+  working. Non-hostile pawns fall back to `UnarmedAttack()`.
 - **Following uses a pawn hook.** `follow_leader` asks `ai_get_follow_target()`
   (default null; the chicken returns its `master`) and gives up when the leader is
   on another z level or farther than `max_distance`, falling back to idle.
@@ -205,6 +212,8 @@ test the wait/blackboard-key leaves, verify a retaliator stays passive until its
 enemies list is filled, verify a destroyed pawn deletes its controller, verify
 the cow and chicken idle trees wander, verify the goat fights its enemies and
 `Calm()` clears the tree target, verify the cat hunts and kills a mouse, verify a
-befriended chicken follows its master, and verify the migrated space bear and
-space carp attack adjacent humans. Keep the test leaves in `behavior_tree_test.dm`
-until real leaves and unit tests replace them.
+befriended chicken follows its master, verify the crab attacks through the combat
+tree, verify the queen roach lays an egg through the legacy `AttackingTarget()`
+bridge, and verify the migrated space bear and space carp attack adjacent humans.
+Keep the test leaves in `behavior_tree_test.dm` until real leaves and unit tests
+replace them.

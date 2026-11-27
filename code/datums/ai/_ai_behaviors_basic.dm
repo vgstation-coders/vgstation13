@@ -304,7 +304,17 @@
 	if(get_dist(pawn, target) > 1)
 		return AI_BEHAVIOR_FAILED
 
-	pawn.UnarmedAttack(target)
+	// Bridge to the legacy combat hook so mob overrides keep working: the queen
+	// roach lays eggs, the flying skull plays its bite animation, and so on.
+	// The legacy hook reads src.target, so point it at the blackboard target for
+	// this call and clear it afterwards to avoid a stale legacy target.
+	if(istype(pawn, /mob/living/simple_animal/hostile))
+		var/mob/living/simple_animal/hostile/hostile_pawn = pawn
+		hostile_pawn.target = target
+		hostile_pawn.AttackingTarget()
+		hostile_pawn.target = null
+	else
+		pawn.UnarmedAttack(target)
 	return AI_BEHAVIOR_SUCCEEDED
 
 /// Runs away from the blackboard target until it is farther than flee_distance.
