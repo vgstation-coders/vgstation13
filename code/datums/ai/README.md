@@ -11,8 +11,8 @@ blackboard keys), async actions, target lifecycle hooks and target sources
 (enemies, wounded, retaliate, prey, including wanted objects), an ability system
 with a ranged and a charge ability, a health decorator, the `.bt.json` compiler,
 the admin BT viewer, an example hostile consumer and twenty-seven existing mapped
-mob types plus the syndicate, mummy, jackal and vox families compile and pass the
-auxtools scenario. The wider basic mob behavior set is still pending.
+mob types plus the syndicate, mummy, jackal, vox and grey families compile and
+pass the auxtools scenario. The wider basic mob behavior set is still pending.
 
 ## Ported so far
 
@@ -128,6 +128,12 @@ auxtools scenario. The wider basic mob behavior set is still pending.
   tree targets it and `AttackingTarget()` pockets it) and `ranged_attack` asks
   `ranged_mode()` with the blackboard target, so raiders run to the money instead
   of shooting it.
+- `human/grey.dm`: the grey family (prisoners, soldiers, researchers, leader) runs
+  `use_humanoid_tree()`. Weapon-mode switching, shields, grenadier reloading and
+  the leader's psychic heals stay in `Life()`; the leader's legacy focus-fire
+  propagation was removed because it would flip soldiers back to the legacy
+  stance/movement, and the grenadier's runtime retreat-distance changes do not
+  reconfigure the already-built tree.
 - `_ai_bt_viewer.dm` + `code/modules/admin/verbs/behavior_trees.dm`: admin
   "View Behavior Tree" verb rendering the tree, blackboard and live markers.
 - `living.dm`: `/mob/living/Destroy()` now deletes the attached
@@ -274,6 +280,6 @@ pirate gunner fires its ranged ability, exercise the async leaf state machine,
 verify the nurse spider has the async attack leaf and spins a web in idle work,
 verify the syndicate melee/gunner, mummy warrior/priest and jackal embalmer
 families behave, verify the vox assassin fires and the base raider loots
-spacecash, and verify the migrated space bear and space carp attack adjacent
-humans. Keep the test leaves in `behavior_tree_test.dm` until real leaves and
-unit tests replace them.
+spacecash, verify the grey regular fires and a grey prisoner melees, and verify
+the migrated space bear and space carp attack adjacent humans. Keep the test
+leaves in `behavior_tree_test.dm` until real leaves and unit tests replace them.

@@ -487,6 +487,10 @@
 	return 1
 
 /mob/living/simple_animal/hostile/proc/create_projectile(var/mob/user)
+	// Some mobs (grey soldiers) set their projectiletype from Life(); a shot that
+	// happens before the first Life tick must not runtime on a null type.
+	if(!projectiletype)
+		return null
 	return new projectiletype(user.loc)
 
 /mob/living/simple_animal/hostile/UnarmedAttack(var/atom/A,var/proximity,var/params)

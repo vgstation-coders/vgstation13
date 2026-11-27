@@ -32,6 +32,10 @@
 /mob/living/simple_animal/hostile/humanoid/grey/New() // grayy mobs can speak quack! thanks kurfurst!
 	..()
 	languages += all_languages[LANGUAGE_GREY]
+	use_humanoid_tree()
+
+/mob/living/simple_animal/hostile/humanoid/grey/FindTarget()
+	return null
 
 //////////////////////////////
 // GREY PRISONERS
@@ -1059,8 +1063,8 @@
 				S.health+=30
 				last_psychicrejuvenate = world.time
 
-			if(target && S.target != target)
-				S.GiveTarget(target)
+			// WIP: tree-driven soldiers acquire their own targets; legacy GiveTarget
+			// propagation would flip them back to the legacy stance/movement.
 
 	if(last_psychicdrain + psychicdrain_cooldown < world.time) // Or drain health from them to heal himself
 		for(var/mob/living/simple_animal/hostile/humanoid/grey/soldier/S in view(src, psychic_range))
@@ -1072,8 +1076,8 @@
 				S.health-=75
 				last_psychicdrain = world.time
 
-			if(target && S.target != target)
-				S.GiveTarget(target)
+			// WIP: tree-driven soldiers acquire their own targets; legacy GiveTarget
+			// propagation would flip them back to the legacy stance/movement.
 
 	if(health >= (maxHealth/3)) // Decently high health? Stay far back
 		retreat_distance = 8
