@@ -149,6 +149,13 @@
 	..()
 	milkable_reagents = new(150)
 	milkable_reagents.my_atom = src
+	// WIP: the cow's decision layer is an idle/wander behavior tree; legacy
+	// automated movement is disabled so it does not double-step.
+	stop_automated_movement = TRUE
+	wander = 0
+	var/datum/ai_controller/controller = new(src)
+	controller.behavior_nodes = list(bt_idle_tree())
+	controller.initialize_behavior_tree()
 
 /mob/living/simple_animal/cow/Destroy()
 	QDEL_NULL(milkable_reagents)

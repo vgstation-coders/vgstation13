@@ -54,6 +54,35 @@
 /proc/bt_retaliating_hostile_tree()
 	return bt_hostile_combat_tree(/datum/target_source/enemies/retaliate)
 
+/// Idle layer: wander occasionally, otherwise rest. Used by non-hostile mobs
+/// and as the fallback of the idle hostile tree.
+/proc/bt_idle_tree(wander_chance = 50, wander_cooldown = 5 SECONDS, rest_time = 4 SECONDS)
+	return list(
+		BT_DESC_TYPE = /datum/bt_node/composite/selector,
+		BT_DESC_CHILDREN = list(
+			list(
+				BT_DESC_TYPE = /datum/bt_node/ai_behavior/wander,
+				move_chance = wander_chance,
+				cooldown = wander_cooldown,
+			),
+			list(
+				BT_DESC_TYPE = /datum/bt_node/ai_behavior/wait,
+				wait_time = rest_time,
+			),
+		),
+	)
+
+/// Hostile tree with an idle layer: fight when there is a target, otherwise
+/// wander/rest instead of re-running target acquisition every tick.
+/proc/bt_idle_hostile_tree(target_source_type = /datum/target_source/enemies, wander_chance = 50, wander_cooldown = 5 SECONDS, rest_time = 4 SECONDS)
+	return list(
+		BT_DESC_TYPE = /datum/bt_node/composite/selector,
+		BT_DESC_CHILDREN = list(
+			bt_hostile_combat_tree(target_source_type),
+			bt_idle_tree(wander_chance, wander_cooldown, rest_time),
+		),
+	)
+
 /// Default combat tree used by migrated mobs. Kept as a named entry point so
 /// call sites do not depend on the composition details.
 /proc/bt_basic_hostile_tree()
@@ -459,4 +488,30 @@
 	if(isnull(key))
 		return AI_BEHAVIOR_FAILED
 	controller.blackboard.Remove(key)
+	return AI_BEHAVIOR_SUCCEEDED
+
+/// Takes one random step, or fails so an idle sibling branch (wait) can run.
+/// A manual cooldown keeps a selector from re-triggering it every tick.
+/datum/bt_node/ai_behavior/wander
+	/// Percent chance to take a step when off cooldown.
+	var/move_chance = 50
+	/// Cooldown between step attempts.
+	var/cooldown = 5 SECONDS
+	/// world.time before which this leaf reports failure.
+	var/next_move_time = 0
+
+/datum/bt_node/ai_behavior/wander/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/pawn = controller.pawn
+	if(!pawn || QDELETED(pawn))
+		return AI_BEHAVIOR_FAILED
+	if(world.time < next_move_time)
+		return AI_BEHAVIOR_FAILED
+
+	next_move_time = world.time + cooldown
+	if(!prob(move_chance))
+		return AI_BEHAVIOR_FAILED
+
+	var/turf/destination = get_step(pawn, pick(alldirs))
+	if(!destination || !pawn.Move(destination))
+		return AI_BEHAVIOR_FAILED
 	return AI_BEHAVIOR_SUCCEEDED

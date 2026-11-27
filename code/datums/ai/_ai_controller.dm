@@ -28,6 +28,8 @@
 	var/active_execution_index = 0
 	/// Execution index of the leaf whose tick() is currently running.
 	var/ticking_execution_index = 0
+	/// Z bucket this controller is indexed under in its subsystem (null = none).
+	var/ai_indexed_z = null
 
 /datum/ai_controller/New(mob/living/new_pawn)
 	change_ai_movement_type(/datum/ai_movement/basic)
@@ -119,13 +121,13 @@
 
 	var/datum/subsystem/ai_controllers/old_subsystem = get_subsystem_for_status(ai_status)
 	if(old_subsystem)
-		old_subsystem.ai_controllers -= src
+		old_subsystem.unindex_controller(src)
 	else if(ai_status != AI_STATUS_OFF)
 		ai_controllers_pending -= src
 
 	var/datum/subsystem/ai_controllers/new_subsystem = get_subsystem_for_status(new_status)
 	if(new_subsystem)
-		new_subsystem.ai_controllers += src
+		new_subsystem.index_controller(src)
 	else if(new_status != AI_STATUS_OFF)
 		// The map loads before the subsystems start, so mapped mobs create their
 		// controllers first. Wait here until the owner subsystem adopts us.

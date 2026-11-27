@@ -1432,6 +1432,7 @@
 #include "code\modules\admin\verbs\adminsay.dm"
 #include "code\modules\admin\verbs\apes.dm"
 #include "code\modules\admin\verbs\atmosdebug.dm"
+#include "code\modules\admin\verbs\behavior_trees.dm"
 #include "code\modules\admin\verbs\BrokenInhands.dm"
 #include "code\modules\admin\verbs\check_customitem_activity.dm"
 #include "code\modules\admin\verbs\cinematic.dm"
@@ -3155,6 +3156,7 @@
 #include "code\datums\ai\_ai_abilities.dm"
 #include "code\datums\ai\_ai_behaviors_basic.dm"
 #include "code\datums\ai\_ai_controller.dm"
+#include "code\datums\ai\_ai_bt_viewer.dm"
 #include "code\datums\ai\behavior_tree_test.dm"
 #include "code\datums\ai\bt_guard.dm"
 // END_INCLUDE

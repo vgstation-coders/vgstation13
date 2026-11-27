@@ -4,14 +4,15 @@ Source: [tgstation/tgstation](https://github.com/tgstation/tgstation) `master`,
 `code/datums/ai/_ai_bt_*.dm`, `code/datums/ai/_ai_behavior.dm`,
 `code/datums/ai/_ai_controller.dm` and `code/__DEFINES/ai/behavior_trees.dm`.
 
-**Status:** phase 10. The core, subsystem/possession path, sentience hooks,
-path-cached movement, starter behavior leaves (attack, flee, retreat, hold,
-smash, wait, speak, blackboard keys), target lifecycle hooks and target sources
-(including retaliation), an ability system with a ranged and a charge ability, a
-health decorator, the `.bt.json` compiler, an example hostile consumer and six
-existing mapped mob types (space bear, space carp, strong/ranged/rapid hivebot,
-viscerator) compile and pass the auxtools scenario. The wider basic mob behavior
-set is still pending.
+**Status:** phase 11. The core, subsystem/possession path, sentience hooks,
+z-level-gated subsystems, path-cached movement, starter behavior leaves (attack,
+flee, retreat, hold, smash, wait, wander, speak, blackboard keys), target
+lifecycle hooks and target sources (including retaliation), an ability system
+with a ranged and a charge ability, a health decorator, the `.bt.json` compiler,
+the admin BT viewer, an example hostile consumer and seven existing mapped mob
+types (space bear, space carp, strong/ranged/rapid hivebot, viscerator, cow)
+compile and pass the auxtools scenario. The wider basic mob behavior set is still
+pending.
 
 ## Ported so far
 
@@ -48,10 +49,11 @@ set is still pending.
 - `_ai_behaviors_basic.dm`: `acquire_target` (target sources, dead/invalid target
   cleanup), `move_to_target`, `attack_target`, `flee_target` (also the
   `retreat_from_target` keep-distance stance), `speak_line`, `use_ability`,
-  `hold_position`, `smash_surroundings`, `wait`, `set_blackboard_key` and
-  `clear_blackboard_key`, plus the `bt_hostile_combat_tree()` /
+  `hold_position`, `smash_surroundings`, `wait`, `set_blackboard_key`,
+  `clear_blackboard_key` and `wander`, plus the `bt_hostile_combat_tree()` /
   `bt_basic_hostile_tree()` / `bt_fleeing_hostile_tree()` /
-  `bt_ranged_hostile_tree()` / `bt_retaliating_hostile_tree()` descriptors.
+  `bt_ranged_hostile_tree()` / `bt_retaliating_hostile_tree()` /
+  `bt_idle_tree()` / `bt_idle_hostile_tree()` descriptors.
 - `bt_guard.dm`: example first consumer, a hostile simple animal whose decision
   layer is a behavior tree controller (not mapped; admin/spawn use). It composes
   a fleeing combat tree in parallel with ambient chatter.
@@ -69,6 +71,11 @@ set is still pending.
 - `viscerator.dm`: fourth migration. The viscerator runs the plain combat tree
   and is the first migrated mob that deletes itself on death, so it exercises
   controller cleanup (see below).
+- `cow.dm`: fifth migration and the first non-hostile consumer. Cows run
+  `bt_idle_tree()` (wander/rest); legacy automated movement is disabled and
+  legacy speech/milking stay untouched.
+- `_ai_bt_viewer.dm` + `code/modules/admin/verbs/behavior_trees.dm`: admin
+  "View Behavior Tree" verb rendering the tree, blackboard and live markers.
 - `living.dm`: `/mob/living/Destroy()` now deletes the attached
   `ai_controller`, so a qdeleted pawn cannot leave an orphaned entry in the AI
   subsystem.
@@ -93,10 +100,10 @@ childless and it fails every tick.
   `RegisterSignal`/`COMSIG` system. Decorator observer aborts use the polling
   fallback (`polling_observers` + `polling_rate`) instead of signals, and
   sentience listens to the vg `/event/living_login` and `/event/logout` events.
-- **Two controller subsystems, no z-level split yet.** High and low statuses
-  have their own tick rate, but each subsystem walks one flat list instead of
-  per-z lists. vg fires every z level anyway; revisit if a busy z level makes AI
-  a measurable hotspot.
+- **Two controller subsystems, z-level buckets, player gating.** Each subsystem
+  keeps controllers in per-z buckets and skips z levels without a client: an
+  unobserved z level does not need to simulate decisions. Buckets self-heal when
+  a pawn changes z (`sync_z_buckets()`). The per-controller rate is unchanged.
 - **Simplified movement.** `ai_movement/basic` uses `get_path_to()` with a
   per-controller path cache. If `SSpathfinder.mobs` is not initialized or
   returns no route, it falls back to one greedy step instead of runtiming. That
@@ -139,8 +146,8 @@ childless and it fails every tick.
   output is stale. Subtree references are expanded inline, so override slots are
   not reachable through JSON yet.
 - **No async perform and no event logging.** The async leaf path and `EVLOG_*`
-  calls are deferred with the controller/subsystem port.
-- The BT viewer's `append_*` helpers are not ported yet.
+  calls are deferred with the controller/subsystem port. The viewer renders
+  on demand and does not drain a per-tick execution log yet.
 
 ## Next phases
 
@@ -149,18 +156,20 @@ childless and it fails every tick.
    existing mobs.
 2. **Controller integration:** z-level lists if AI becomes a hotspot; higher
    level path caching and multi-step movement.
-3. **Tree tooling:** the BT viewer (the compiler and loader are in place).
+3. **Tree tooling:** richer viewer (execution log, TGUI window) and a subtree
+   override editor.
 4. **Migration:** move the remaining simple animal / NPC crew AI incrementally,
    with the behavior tree as the decision layer.
 
 ## Testing
 
-The phase-10 scenario lives outside the repository (local auxtools harness):
+The phase-11 scenario lives outside the repository (local auxtools harness):
 build a sequence/selector/decorator/subtree, tick it across RUNNING/SUCCESS/
 FAILURE, exercise the descriptor builder, cancel a running leaf, possess a mob,
-verify sentience login/logout and high/low subsystem routing, trigger its death
-event, test the path cache, load and run the compiled `guard.bt.compiled.json`
-tree, move it towards a blackboard target, drive the
+verify sentience login/logout and high/low subsystem routing (per-z buckets),
+trigger its death event, test the path cache, load and run the compiled
+`guard.bt.compiled.json` tree, render a tree with the BT viewer, move it towards
+a blackboard target, drive the
 example `bt_guard` against an adjacent victim, make it flee while badly hurt and
 resume combat after healing (in a cleared arena so the path is deterministic),
 say a line, drop a dead target during acquisition, verify the closest and
@@ -168,7 +177,7 @@ wounded target sources pick the expected victim, fire the strong hivebot's
 ranged ability, make it melee at adjacency, charge with a pawn, verify a ranged
 hivebot retreats to its keep distance, smash surroundings as a hostile pawn,
 test the wait/blackboard-key leaves, verify a retaliator stays passive until its
-enemies list is filled, verify a destroyed pawn deletes its controller, and
-verify the migrated space bear and space carp attack adjacent humans. Keep the
-test leaves in `behavior_tree_test.dm` until real leaves and unit tests replace
-them.
+enemies list is filled, verify a destroyed pawn deletes its controller, verify
+the cow's idle tree wanders, and verify the migrated space bear and space carp
+attack adjacent humans. Keep the test leaves in `behavior_tree_test.dm` until
+real leaves and unit tests replace them.

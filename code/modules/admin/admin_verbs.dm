@@ -172,6 +172,7 @@ var/list/admin_verbs_server = list(
 	/client/proc/hub_panel,
 	)
 var/list/admin_verbs_debug = list(
+	/client/proc/view_behavior_tree,
 	/client/proc/gc_dump_hdl,
 	/client/proc/cmd_admin_list_open_jobs,
 	/proc/getbrokeninhands,
