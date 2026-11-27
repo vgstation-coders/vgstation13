@@ -534,3 +534,14 @@
 	maxbodytemp = 1000
 
 	corpse = /obj/effect/landmark/corpse/vox/ion/space
+
+// WIP: the vox families (prisoners, spaceraiders, crossbows, ions) run the
+// humanoid behavior tree. The spaceraider loot loop keeps working: spacecash is
+// a wanted object, so the tree targets it, and ranged_attack asks ranged_mode()
+// with the blackboard target so they run to loot instead of shooting it.
+/mob/living/simple_animal/hostile/humanoid/vox/New()
+	..()
+	use_humanoid_tree()
+
+/mob/living/simple_animal/hostile/humanoid/vox/FindTarget()
+	return null

@@ -11,7 +11,7 @@ blackboard keys), async actions, target lifecycle hooks and target sources
 (enemies, wounded, retaliate, prey, including wanted objects), an ability system
 with a ranged and a charge ability, a health decorator, the `.bt.json` compiler,
 the admin BT viewer, an example hostile consumer and twenty-seven existing mapped
-mob types plus the syndicate, mummy and jackal families compile and pass the
+mob types plus the syndicate, mummy, jackal and vox families compile and pass the
 auxtools scenario. The wider basic mob behavior set is still pending.
 
 ## Ported so far
@@ -123,6 +123,11 @@ auxtools scenario. The wider basic mob behavior set is still pending.
   because `ranged_attack` points the legacy `target` var at the shot target; the
   jackal embalmer targets dead bodies through the normal `CanAttack`/stat_attack
   rules.
+- `human/vox.dm`: the vox families (prisoners, spaceraiders, crossbows, ions) run
+  `use_humanoid_tree()`. Vox loot works because spacecash is a wanted object (the
+  tree targets it and `AttackingTarget()` pockets it) and `ranged_attack` asks
+  `ranged_mode()` with the blackboard target, so raiders run to the money instead
+  of shooting it.
 - `_ai_bt_viewer.dm` + `code/modules/admin/verbs/behavior_trees.dm`: admin
   "View Behavior Tree" verb rendering the tree, blackboard and live markers.
 - `living.dm`: `/mob/living/Destroy()` now deletes the attached
@@ -219,6 +224,8 @@ childless and it fails every tick.
 - **Ranged shots set the legacy target.** Some legacy `Shoot()` overrides ignore
   their arguments and read `src.target`; `ranged_attack` sets it before
   `OpenFire()`. The legacy `Life()`'s idle `GiveTarget(null)` clears it again.
+  `can_use()` also exposes the blackboard target while it asks `ranged_mode()`, so
+  overrides like the vox raider's can tell money from a real target.
 - **Dead bodies are not pre-filtered.** For simple animals the enemy source leaves
   the dead/alive decision to `CanAttack()` (which encodes `stat_attack` and
   `stat_exclusive`), so embalmers and nurse spiders can target corpses.
@@ -266,6 +273,7 @@ attacks a living victim, verify the pirate/russian melee batch attacks and the
 pirate gunner fires its ranged ability, exercise the async leaf state machine,
 verify the nurse spider has the async attack leaf and spins a web in idle work,
 verify the syndicate melee/gunner, mummy warrior/priest and jackal embalmer
-families behave, and verify the migrated space bear and space carp attack
-adjacent humans. Keep the test leaves in `behavior_tree_test.dm` until real
-leaves and unit tests replace them.
+families behave, verify the vox assassin fires and the base raider loots
+spacecash, and verify the migrated space bear and space carp attack adjacent
+humans. Keep the test leaves in `behavior_tree_test.dm` until real leaves and
+unit tests replace them.

@@ -40,6 +40,16 @@
 	// with a spell instead of firing a projectile.
 	if(!istype(hostile) || !hostile.ranged_mode())
 		return FALSE
+	// ranged_mode() overrides (vox raiders) read the legacy target to decide
+	// between shooting and running to loot; answer with the blackboard target.
+	var/atom/aim = controller.blackboard[BB_TARGET]
+	var/atom/old_target = hostile.target
+	if(aim)
+		hostile.target = aim
+	var/can_fire = hostile.ranged_mode()
+	hostile.target = old_target
+	if(!can_fire)
+		return FALSE
 	return hostile.ranged_cooldown <= 0
 
 /datum/ai_ability/ranged_attack/perform(datum/ai_controller/controller, atom/target)
