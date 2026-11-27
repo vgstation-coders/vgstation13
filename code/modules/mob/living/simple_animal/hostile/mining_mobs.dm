@@ -905,31 +905,31 @@
 	speed = 4
 	var/possessed_ore
 
-/mob/living/simple_animal/hostile/asteroid/rockernaut/Life()
-	.=..()
-	if(!.)
-		return 0
+/mob/living/simple_animal/hostile/asteroid/rockernaut/use_hostile_tree()
+	return ..(bt_idle_hostile_work_tree())
 
-	if(is_legacy_idle() && !client)
-		var/list/can_see = view(get_turf(src), vision_range/2)
+/mob/living/simple_animal/hostile/asteroid/rockernaut/ai_idle_work()
+	if(client)
+		return
+	var/list/can_see = view(get_turf(src), vision_range/2)
 
-		for(var/turf/unsimulated/mineral/M in can_see)
-			if(!M.mineral)
-				continue
-			if(M.rockernaut)
-				continue
-			if(Adjacent(M))
-				//Climb in
-				visible_message("<span class = 'warning'>\The [src] burrows itself into \the [M]!</span>")
-				M.rockernaut = istype(src, /mob/living/simple_animal/hostile/asteroid/rockernaut/boss) ? TURF_CONTAINS_BOSS : TURF_CONTAINS_ROCKERNAUT
-				qdel(src)
-				return
-			else
-				if(prob(30))
-					step_towards(src, M)//Step towards it
-					if(environment_smash_flags & SMASH_LIGHT_STRUCTURES)
-						EscapeConfinement()
-				break
+	for(var/turf/unsimulated/mineral/M in can_see)
+		if(!M.mineral)
+			continue
+		if(M.rockernaut)
+			continue
+		if(Adjacent(M))
+			//Climb in
+			visible_message("<span class = 'warning'>\The [src] burrows itself into \the [M]!</span>")
+			M.rockernaut = istype(src, /mob/living/simple_animal/hostile/asteroid/rockernaut/boss) ? TURF_CONTAINS_BOSS : TURF_CONTAINS_ROCKERNAUT
+			qdel(src)
+			return
+		else
+			if(prob(30))
+				step_towards(src, M)//Step towards it
+				if(environment_smash_flags & SMASH_LIGHT_STRUCTURES)
+					EscapeConfinement()
+			break
 
 
 /mob/living/simple_animal/hostile/asteroid/rockernaut/death()

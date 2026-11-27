@@ -107,6 +107,28 @@
 		),
 	)
 
+/// Hostile tree with an idle-work branch: fight first, then run the pawn's
+/// ai_idle_work() (evolving, burrowing, nest dragging, egg laying), then
+/// wander/rest. The work leaf is async and has its own cooldown. Ranged pawns
+/// keep their keep-distance combat tree.
+/proc/bt_idle_hostile_work_tree(target_source_type = /datum/target_source/enemies, work_cooldown = 5 SECONDS, ranged = FALSE, retreat_distance = 0)
+	var/list/combat_tree
+	if(ranged)
+		combat_tree = bt_ranged_hostile_tree(retreat_distance = retreat_distance)
+	else
+		combat_tree = bt_hostile_combat_tree(target_source_type)
+	return list(
+		BT_DESC_TYPE = /datum/bt_node/composite/selector,
+		BT_DESC_CHILDREN = list(
+			combat_tree,
+			list(
+				BT_DESC_TYPE = /datum/bt_node/ai_behavior/idle_work,
+				cooldown = work_cooldown,
+			),
+			bt_idle_tree(50, 5 SECONDS, 4 SECONDS, FALSE),
+		),
+	)
+
 /// Follows the pawn's leader when it wanders off, otherwise wanders/rests.
 /proc/bt_following_idle_tree(wander_chance = 50, wander_cooldown = 5 SECONDS, rest_time = 4 SECONDS)
 	return list(

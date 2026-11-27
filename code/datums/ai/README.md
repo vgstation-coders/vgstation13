@@ -192,6 +192,10 @@ vox, dracson, grue_egg) are player-controlled or have no autonomous movement AI.
   (stroll/vent, async because the vent slide sleeps). The existing
   `handle_target()` / `handle_idle()` procs stay as the action bodies and remain
   usable by the player-controlled `ClickOn`.
+- `_ai_behaviors_basic.dm` idle-work tree: `bt_idle_hostile_work_tree()` puts an
+  async `idle_work` leaf between combat and the idle wander layer. The alien nest
+  dragging, queen nest/egg laying, necro zombie evolution, leaper vent climbing
+  and rockernaut burrowing moved from `Life()` into `ai_idle_work()`.
 - `_ai_target_sources.dm`: added `food`, `pointer` and `wires` sources.
 - `mimic.dm`: mimics run the combat tree with `target_source/enemies/mimic`,
   which stays empty until `anger()`; losing the target calls `calm_down()` again
@@ -299,6 +303,12 @@ childless and it fails every tick.
   result through a token, but it cannot interrupt a `do_after` already in
   progress: the side effect may still land. Event logging (`EVLOG_*`) is still
   deferred; the viewer renders on demand and does not drain a per-tick log.
+- **Synchronous leaves are may-sleep.** `SelectBehaviors()`, `bt_node/tick()`,
+  `ai_behavior/perform()` and `ai_ability/perform()` are marked
+  `SHOULD_NOT_SLEEP(FALSE)` because legacy leaf actions can reach rare sleeping
+  overrides (`Move()`/`Crossed`, death, emotes, attacks). Anything that must
+  sleep belongs in `async_perform()`; the async path is the only one that
+  intentionally sleeps.
 - **Ranged shots set the legacy target.** Some legacy `Shoot()` overrides ignore
   their arguments and read `src.target`; `ranged_attack` sets it before
   `OpenFire()`. The legacy `Life()`'s idle `GiveTarget(null)` clears it again.
