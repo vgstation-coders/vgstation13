@@ -44,8 +44,8 @@
 	if (leader_selected)
 		var/datum/role/death_commando/D = new_commando.mind.GetRole(DEATHSQUADIE)
 		D.logo_state = "creed-logo"
-	else
 		leader_name = new_commando.real_name
+	else
 		concrete_outfit.is_leader = TRUE
 	concrete_outfit.equip(new_commando)
 
