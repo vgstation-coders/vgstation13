@@ -155,6 +155,38 @@
 	else
 		to_chat(src,"<span class='warning'>There are already some eggs on this tile, space them out.</span>")
 
+//Cocoons a mob. The enzyme digests flesh, not blood: what matters is whether
+//the mob has edible meat, not whether it bleeds.
+/mob/living/simple_animal/hostile/giant_spider/nurse/proc/can_digest(var/mob/living/M)
+	if(!M || istype(M, /mob/living/simple_animal/hostile/giant_spider))
+		return FALSE
+	if(issilicon(M) || isconstruct(M))
+		return FALSE
+	if(istype(M, /mob/living/simple_animal))
+		var/mob/living/simple_animal/A = M
+		return ispath(A.meat_type, /obj/item/weapon/reagent_containers/food/snacks/meat)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		return H.species && ispath(H.species.meat_type, /obj/item/weapon/reagent_containers/food/snacks/meat)
+	return TRUE
+
+/mob/living/simple_animal/hostile/giant_spider/nurse/proc/cocoon_mob(var/mob/living/M, var/obj/effect/spider/cocoon/C)
+	if(!M || !C)
+		return FALSE
+	for (var/atom/movable/AM in M.locked_atoms)
+		M.unlock_atom(AM)
+	if (M.locked_to)
+		M.locked_to.unlock_atom(M)
+	M.forceMove(C)
+	C.pixel_x = M.pixel_x
+	C.pixel_y = M.pixel_y
+	if(!can_digest(M))
+		return FALSE
+	fed++
+	visible_message("<span class='warning'>\The [src] sticks a proboscis into \the [M] and secretes a digestive enzyme.</span>")
+	M.adjustToxLoss(85)
+	return TRUE
+
 /mob/living/simple_animal/hostile/giant_spider/nurse/proc/spin_cocoon(var/atom/cocoon_target)
 	if (!cocoon_target)
 		return
@@ -171,17 +203,8 @@
 		for(var/mob/living/M in C.loc)
 			if(istype(M, /mob/living/simple_animal/hostile/giant_spider))
 				continue
-			for (var/atom/movable/AM in M.locked_atoms)
-				M.unlock_atom(AM)
-			if (M.locked_to)
-				M.locked_to.unlock_atom(M)
 			suffix = "_mob"
-			fed++
-			visible_message("<span class='warning'>\The [src] sticks a proboscis into \the [cocoon_target] and secretes a digestive enzyme.</span>")
-			M.adjustToxLoss(85)
-			M.forceMove(C)
-			C.pixel_x = M.pixel_x
-			C.pixel_y = M.pixel_y
+			cocoon_mob(M, C)
 		for(var/obj/item/I in C.loc)
 			I.forceMove(C)
 		for(var/obj/structure/S in C.loc)
