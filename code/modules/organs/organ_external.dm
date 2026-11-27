@@ -1127,7 +1127,11 @@ Note that amputating the affected organ does in fact remove the infection from t
 		//is cloned from the last body it was attached to, so a regraft would look
 		//native and lose the donor's colours.
 		src.native_enzymes = organ.native_enzymes
-		var/same_body = organ.native_enzymes && owner.dna && (organ.native_enzymes == owner.dna.unique_enzymes)
+		//Matching enzymes alone isn't enough: the body may have changed species
+		//since the limb came off, or the limb's species may have been replaced
+		//(viruses, dice, baleful mutate, skeletonize). Keep the snapshot then.
+		var/same_body = organ.native_enzymes && owner.dna && (organ.native_enzymes == owner.dna.unique_enzymes) \
+			&& organ.species && owner.species && (organ.species.type == owner.species.type)
 		if(same_body)
 			src.species = null
 		else
