@@ -295,8 +295,12 @@ childless and it fails every tick.
    level path caching and multi-step movement.
 3. **Tree tooling:** richer viewer (execution log, TGUI window) and a subtree
    override editor.
-4. **Migration:** move the remaining simple animal / NPC crew AI incrementally,
-   with the behavior tree as the decision layer.
+4. **Migration:** the hostile tree covers every `/hostile` simple animal and the
+   idle tree covers the simple non-hostiles. The remaining bespoke state machines
+   are the corgi (food/pointer fetching), the mouse (food/wire seeking and
+   disease), the parrot (perch/fly/steal) and the bee swarm (intent-based colony
+   AI). Each needs its own target sources/behaviors rather than the shared combat
+   leaves.
 
 ## Testing
 
