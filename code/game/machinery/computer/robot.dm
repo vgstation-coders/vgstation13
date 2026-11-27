@@ -167,7 +167,6 @@
 			if(halt ? !active : active)
 				// Stale UI: the killswitch is already in the state this button asked for.
 				to_chat(usr, "<span class='warning'>The self-destruct sequence is [active ? "already running" : "not running"].</span>")
-				SStgui.try_update_ui(ui.user, src, ui)
 				return TRUE
 			if(halt)
 				stop_sequence()
@@ -177,7 +176,6 @@
 				start_sequence()
 				message_admins("<span class='notice'>[key_name_admin(usr)] [formatJumpTo(usr)] has initiated the global cyborg killswitch!</span>")
 				log_game("<span class='notice'>[key_name(usr)] has initiated the global cyborg killswitch!</span>")
-			SStgui.try_update_ui(ui.user, src, ui)
 	return TRUE
 
 /obj/machinery/computer/robotics/proc/can_control(var/mob/living/silicon/robot/robot, var/mob/controller)
