@@ -128,8 +128,8 @@
 				if(!R.SetLockdown(!R.lockdown, TRUE))
 					return TRUE
 				if(R.connected_ai && usr != R.connected_ai)
-					message_admins("[key_name(usr)] [formatJumpTo(usr)] [!R.lockdown ? "locked down" : "released"] [key_name(R)] [formatJumpTo(R)] using a robotics console!")
-					log_game("[key_name(usr)] [!R.lockdown ? "locked down" : "released"] [key_name(R)] using a robotics console at [T.loc] (@[T.x],[T.y],[T.z])!")
+					message_admins("[key_name(usr)] [formatJumpTo(usr)] [R.lockdown ? "locked down" : "released"] [key_name(R)] [formatJumpTo(R)] using a robotics console!")
+					log_game("[key_name(usr)] [R.lockdown ? "locked down" : "released"] [key_name(R)] using a robotics console at [T.loc] (@[T.x],[T.y],[T.z])!")
 					if(R.lockdown)
 						to_chat(R.connected_ai, "<span style=\"font-family:Courier\"><b>\[<span class='danger'>ALERT</span>\] Slaved Cyborg [R.name] locked down. Signal traced to [get_area(src).name]</b></span>")
 						R.connected_ai << 'sound/machines/twobeep.ogg'
