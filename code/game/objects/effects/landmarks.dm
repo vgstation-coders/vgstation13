@@ -91,9 +91,6 @@
 		if("grinchstart")
 			grinchstart += loc
 
-		if("hobostart")
-			hobostart += loc
-
 		if("voxstart")
 			voxstart += loc
 
@@ -156,6 +153,14 @@
 
 /obj/effect/landmark/hobostart
 	name = "hobostart"
+	var/preset = /datum/hobo_preset
+
+/obj/effect/landmark/hobostart/New()
+	. = ..()
+	hobostart[loc] = preset
+
+/obj/effect/landmark/hobostart/grey
+	preset = /datum/hobo_preset/grey
 
 var/list/map_landmarks = list()
 

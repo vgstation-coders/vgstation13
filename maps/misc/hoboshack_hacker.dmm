@@ -288,9 +288,7 @@
 	name = "\improper mimegirl fumo";
 	desc = "Has been meticulously taken care of to an uncanny extent."
 	},
-/obj/effect/landmark/hobostart{
-	desc = "Reminder to tweak these eventually so they spawn more greys than normal humans. It's ok for this mapper comment to be here, nobody ever will see it ingame."
-	},
+/obj/effect/landmark/hobostart/grey,
 /turf/simulated/floor/carpet/shag{
 	color = "#AAAAFF"
 	},
@@ -639,9 +637,7 @@
 /obj/structure/bed/chair/office/dark{
 	dir = 8
 	},
-/obj/effect/landmark/hobostart{
-	desc = "Reminder to tweak these eventually so they spawn more greys than normal humans. It's ok for this mapper comment to be here, nobody ever will see it ingame."
-	},
+/obj/effect/landmark/hobostart/grey,
 /turf/simulated/floor/mineral/reticulite/fancy{
 	name = "gamer floor plating";
 	color = "#AAAAFF"
@@ -1014,9 +1010,7 @@
 	name = "gamer toilet";
 	dir = 4
 	},
-/obj/effect/landmark/hobostart{
-	desc = "Reminder to tweak these eventually so they spawn more greys than normal humans. It's ok for this mapper comment to be here, nobody ever will see it ingame."
-	},
+/obj/effect/landmark/hobostart/grey,
 /turf/simulated/floor/mineral/reticulite/fancy{
 	name = "gamer floor plating";
 	color = "#AAAAFF"
@@ -1051,9 +1045,7 @@
 	icon_state = "shuttleseat_GAMER";
 	name = "high quality gamer chair"
 	},
-/obj/effect/landmark/hobostart{
-	desc = "Reminder to tweak these eventually so they spawn more greys than normal humans. It's ok for this mapper comment to be here, nobody ever will see it ingame."
-	},
+/obj/effect/landmark/hobostart/grey,
 /turf/simulated/floor/carpet/shag{
 	color = "#AAAAFF"
 	},
@@ -1329,9 +1321,7 @@
 	dir = 8;
 	on = 1
 	},
-/obj/effect/landmark/hobostart{
-	desc = "Reminder to tweak these eventually so they spawn more greys than normal humans. It's ok for this mapper comment to be here, nobody ever will see it ingame."
-	},
+/obj/effect/landmark/hobostart/grey,
 /turf/simulated/floor/mineral/reticulite/fancy{
 	name = "gamer floor plating";
 	color = "#AAAAFF"
