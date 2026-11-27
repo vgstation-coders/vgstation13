@@ -111,16 +111,12 @@
 /mob/living/simple_animal/hostile/asteroid/basilisk/get_butchering_products()
 	return list(/datum/butchering_product/skin/basilisk)
 
-/mob/living/simple_animal/hostile/asteroid/basilisk/GiveTarget(var/new_target)
-	target = new_target
-	if(target != null)
-		Aggro()
-		stance = HOSTILE_STANCE_ATTACK
-		if(isliving(target))
-			var/mob/living/L = target
-			L.bodytemperature = max(L.bodytemperature-1,T0C+25)
-			L.apply_damage(5, BURN, null, used_weapon = "Excessive Cold")
-			visible_message("<span class='danger'>\The [src]'s stare chills \the [L] to the bone!</span>")
+/mob/living/simple_animal/hostile/asteroid/basilisk/ai_target_acquired(atom/target)
+	if(isliving(target))
+		var/mob/living/L = target
+		L.bodytemperature = max(L.bodytemperature-1,T0C+25)
+		L.apply_damage(5, BURN, null, used_weapon = "Excessive Cold")
+		visible_message("<span class='danger'>\The [src]'s stare chills \the [L] to the bone!</span>")
 
 /mob/living/simple_animal/hostile/asteroid/basilisk/ex_act(severity)
 	if(flags & INVULNERABLE)
@@ -204,20 +200,15 @@
 	var/ore_eaten = 1
 	var/chase_time = 100
 
-/mob/living/simple_animal/hostile/asteroid/goldgrub/GiveTarget(var/new_target)
-	target = new_target
-	if(target != null)
-		if(istype(target, /obj/item/stack/ore))
-			visible_message("<span class='notice'>\The [src] looks at \the [target] with hungry eyes.</span>")
-			stance = HOSTILE_STANCE_ATTACK
-			return
-		if(isliving(target))
-			Aggro()
-			stance = HOSTILE_STANCE_ATTACK
-			visible_message("<span class='danger'>\The [src] tries to flee from \the [target]!</span>")
-			retreat_distance = 10
-			minimum_distance = 10
-			Burrow()
+/mob/living/simple_animal/hostile/asteroid/goldgrub/ai_target_acquired(atom/target)
+	if(istype(target, /obj/item/stack/ore))
+		visible_message("<span class='notice'>\The [src] looks at \the [target] with hungry eyes.</span>")
+		return
+	if(isliving(target))
+		visible_message("<span class='danger'>\The [src] tries to flee from \the [target]!</span>")
+		retreat_distance = 10
+		minimum_distance = 10
+		Burrow()
 
 /mob/living/simple_animal/hostile/asteroid/goldgrub/AttackingTarget()
 	if(istype(target, /obj/item/stack/ore))
@@ -914,31 +905,31 @@
 	speed = 4
 	var/possessed_ore
 
-/mob/living/simple_animal/hostile/asteroid/rockernaut/Life()
-	.=..()
-	if(!.)
-		return 0
+/mob/living/simple_animal/hostile/asteroid/rockernaut/use_hostile_tree()
+	return ..(bt_idle_hostile_work_tree())
 
-	if(stance == HOSTILE_STANCE_IDLE && !client)
-		var/list/can_see = view(get_turf(src), vision_range/2)
+/mob/living/simple_animal/hostile/asteroid/rockernaut/ai_idle_work()
+	if(client)
+		return
+	var/list/can_see = view(get_turf(src), vision_range/2)
 
-		for(var/turf/unsimulated/mineral/M in can_see)
-			if(!M.mineral)
-				continue
-			if(M.rockernaut)
-				continue
-			if(Adjacent(M))
-				//Climb in
-				visible_message("<span class = 'warning'>\The [src] burrows itself into \the [M]!</span>")
-				M.rockernaut = istype(src, /mob/living/simple_animal/hostile/asteroid/rockernaut/boss) ? TURF_CONTAINS_BOSS : TURF_CONTAINS_ROCKERNAUT
-				qdel(src)
-				return
-			else
-				if(prob(30))
-					step_towards(src, M)//Step towards it
-					if(environment_smash_flags & SMASH_LIGHT_STRUCTURES)
-						EscapeConfinement()
-				break
+	for(var/turf/unsimulated/mineral/M in can_see)
+		if(!M.mineral)
+			continue
+		if(M.rockernaut)
+			continue
+		if(Adjacent(M))
+			//Climb in
+			visible_message("<span class = 'warning'>\The [src] burrows itself into \the [M]!</span>")
+			M.rockernaut = istype(src, /mob/living/simple_animal/hostile/asteroid/rockernaut/boss) ? TURF_CONTAINS_BOSS : TURF_CONTAINS_ROCKERNAUT
+			qdel(src)
+			return
+		else
+			if(prob(30))
+				step_towards(src, M)//Step towards it
+				if(environment_smash_flags & SMASH_LIGHT_STRUCTURES)
+					EscapeConfinement()
+			break
 
 
 /mob/living/simple_animal/hostile/asteroid/rockernaut/death()

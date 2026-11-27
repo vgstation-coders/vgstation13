@@ -79,10 +79,9 @@
 /mob/living/simple_animal/hostile/shade/Process_Spacemove(var/check_drift = 0)
 	return 1
 
-/mob/living/simple_animal/hostile/shade/FindTarget()
-	. = ..()
-	if(.)
-		emote("me",,"wails at [.]!")
+/mob/living/simple_animal/hostile/shade/ai_target_acquired(atom/target)
+	if(target)
+		emote("me",,"wails at [target]!")
 
 /mob/living/simple_animal/hostile/shade/cult/CanAttack(var/atom/the_target)
 	if(ismob(the_target))

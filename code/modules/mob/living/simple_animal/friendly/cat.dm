@@ -31,8 +31,6 @@
 	min_oxy = 16      // Require atleast 16kPA oxygen
 	minbodytemp = 223 // Below -50 Degrees Celcius
 	maxbodytemp = 323 // Above 50 Degrees Celcius
-	var/turns_since_scan = 0
-	var/mob/living/simple_animal/mouse/movement_target=null
 	var/kill_verbs = list("splats", "toys with", "worries")
 	var/growl_verbs = list("hisses and spits", "mrowls fiercely", "growls")
 
@@ -80,48 +78,32 @@
 	gender = NEUTER
 	size = SIZE_TINY
 
-/mob/living/simple_animal/cat/Life()
-	if(timestopped)
-		return 0 //under effects of time magick
-
-	if (!isUnconscious())
-		//MICE!
-		if(isturf(loc))
-			if(!stat && !resting && !locked_to)
-				for(var/mob/living/simple_animal/mouse/M in view(1,src))
-					if(!M.stat && Adjacent(M) && !(M.locked_to && istype(M.locked_to, /obj/item/critter_cage)))
-						M.splat()
-						visible_message("<span class='warning'>\The [name] [pick(kill_verbs)] \the [M]!</span>")
-						movement_target = null
-						stop_automated_movement = 0
-						break
-
+/mob/living/simple_animal/cat/New()
 	..()
+	stop_automated_movement = TRUE
+	wander = 0
+	var/datum/ai_controller/controller = new(src)
+	controller.behavior_nodes = list(bt_hunting_idle_tree(/mob/living/simple_animal/mouse))
+	controller.initialize_behavior_tree()
 
-	if (!isUnconscious())
+// Keep the legacy once-per-Life growl while a mouse is in view; the tree owns
+// the actual hunt, but this flavor was not part of the decision layer.
+/mob/living/simple_animal/cat/Life()
+	. = ..()
+	if(!isUnconscious() && !stat)
 		for(var/mob/living/simple_animal/mouse/snack in oview(src, 3))
 			if(prob(15) && !snack.stat)
 				emote("me",, pick("[pick(growl_verbs)] at [snack]!", "eyes [snack] hungrily."))
 			break
 
-		if(!stat && !resting && !locked_to)
-			turns_since_scan++
-			if(turns_since_scan > 5)
-				start_walk_to(0)
-				turns_since_scan = 0
-				if((movement_target) && !(isturf(movement_target.loc) || ishuman(movement_target.loc) ))
-					movement_target = null
-					stop_automated_movement = 0
-				if( !movement_target || !(movement_target.loc in oview(src, 3)) )
-					movement_target = null
-					stop_automated_movement = 0
-					for(var/mob/living/simple_animal/mouse/snack in oview(src,3))
-						if(isturf(snack.loc) && !snack.stat)
-							movement_target = snack
-							break
-				if(movement_target)
-					stop_automated_movement = 1
-					start_walk_to(movement_target,0,3)
+// The cat's kill is a splat, not a punch; the hunt leaf calls this hook.
+/mob/living/simple_animal/cat/ai_hunt_kill(atom/target)
+	if(istype(target, /mob/living/simple_animal/mouse))
+		var/mob/living/simple_animal/mouse/M = target
+		M.splat()
+		visible_message("<span class='warning'>\The [name] [pick(kill_verbs)] \the [M]!</span>")
+		return TRUE
+	return ..()
 
 /mob/living/simple_animal/cat/attack_hand(mob/living/carbon/human/M)
 	. = ..()

@@ -413,7 +413,7 @@
 
 /mob/living/simple_animal/hostile/old_vendotron/Life()
 	..()
-	if(stance == HOSTILE_STANCE_ATTACK || stance == HOSTILE_STANCE_ATTACKING)
+	if(is_legacy_engaged())
 		if(punishCommies())
 			lastPunish = world.time
 

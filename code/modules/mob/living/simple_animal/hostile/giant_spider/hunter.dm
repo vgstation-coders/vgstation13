@@ -24,3 +24,12 @@
 /mob/living/simple_animal/hostile/giant_spider/hunter/dead
 	iscorpse = 1
 	health = 0
+
+// WIP: the hunter uses the same combat tree as the other hostiles; its base
+// wander and object targeting (search_objects/wanted_objects) stay legacy.
+/mob/living/simple_animal/hostile/giant_spider/hunter/New()
+	..()
+	if(iscorpse)
+		return
+	use_hostile_tree()
+

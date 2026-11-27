@@ -50,22 +50,6 @@
 		master_spell.golems.Remove(src)
 		master_spell = null
 
-/mob/living/simple_animal/hostile/arcane_golem/MoveToTarget()
-	//This proc has been slightly modified to prevent the golem from chasing its targets
-	//It will follow the master, and attack enemies when the opportunity arises
-	stop_automated_movement = 1
-	if(!target || !CanAttack(target))
-		LoseTarget()
-		return
-
-	if(isturf(loc))
-		var/target_distance = get_dist(src,target)
-		if(ranged)//We ranged? Shoot at em
-			if(target_distance >= 2 && ranged_cooldown <= 0)//But make sure they're a tile away at least, and our range attack is off cooldown
-				OpenFire(target)
-		if(target.Adjacent(src))	//If they're next to us, attack
-			AttackingTarget()
-
 /mob/living/simple_animal/hostile/arcane_golem/Life()
 	..()
 
@@ -83,10 +67,16 @@
 			death()
 			return
 
-		//Alive - follow the master
-		if(!isDead())
-			if(canmove)
-				Goto(master, move_to_delay)
+// The tree follows the master through follow_leader and only attacks adjacent
+// enemies, matching the legacy MoveToTarget() override.
+/mob/living/simple_animal/hostile/arcane_golem/ai_get_follow_target()
+	if(!master_spell || !master_spell.holder)
+		return null
+	var/mob/master = master_spell.holder
+	return istype(master) ? master : null
+
+/mob/living/simple_animal/hostile/arcane_golem/use_hostile_tree()
+	return ..(bt_companion_hostile_tree())
 
 /mob/living/simple_animal/hostile/arcane_golem/death(var/gibbed = FALSE)
 	..(gibbed)

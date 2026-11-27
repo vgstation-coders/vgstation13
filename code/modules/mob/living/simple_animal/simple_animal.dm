@@ -188,6 +188,15 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			set_glide_size(DELAY2GLIDESIZE(0.5 SECONDS))
 		Move(dest)
 
+/// WIP: installs an idle/wander behavior tree on a non-hostile mob. Custom
+/// wander_move() overrides keep running from the tree's wander leaf.
+/mob/living/simple_animal/proc/use_idle_tree(tree_type)
+	wander = 0
+	var/datum/ai_controller/controller = new(src)
+	controller.behavior_nodes = list(tree_type ? tree_type : bt_idle_tree())
+	controller.initialize_behavior_tree()
+	return controller
+
 /mob/living/simple_animal/proc/check_environment_susceptibility()
 	return TRUE
 
@@ -255,8 +264,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(purge)
 		purge -= 1
 
-	//Movement
-	if((!client||deny_client_move) && !stop_automated_movement && wander && !anchored && (ckey == null) && !(flags & INVULNERABLE))
+	//Movement. A controller owns locomotion only while it has a target; idle
+	//pawns keep the legacy base wander.
+	if((!ai_controller || !ai_has_target()) && (!client||deny_client_move) && !stop_automated_movement && wander && !anchored && (ckey == null) && !(flags & INVULNERABLE))
 		if(isturf(src.loc) && canmove)		//This is so it only moves if it's not inside a closet, gentics machine, etc.
 			turns_since_move++
 			if(turns_since_move >= turns_per_move)

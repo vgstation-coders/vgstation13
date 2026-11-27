@@ -64,24 +64,32 @@ var/list/nest_locations = list()
 	if(acid < 200)
 		acid++
 
-	if(!client)
-		if(stance == HOSTILE_STANCE_IDLE)
-			var/new_dest = FindNest()
-			if(new_dest)
-				if(FindPrey())
-					MovetoPrey()
-					DragPrey(new_dest)
-			else
-				dragging = null
-				if(pulling)
-					stop_pulling()
-				walk(src, 0)
-				stop_automated_movement = 0
-				vision_range = idle_vision_range
-		else
-			dragging = null
-			if(pulling)
-				stop_pulling()
+/mob/living/simple_animal/hostile/alien/use_hostile_tree()
+	return ..(bt_idle_hostile_work_tree(work_cooldown = 2 SECONDS, ranged = ranged_mode(), retreat_distance = retreat_distance ? retreat_distance : 0))
+
+/// Nest dragging used to live in Life(); it now runs from the idle-work leaf.
+/mob/living/simple_animal/hostile/alien/ai_idle_work()
+	if(client)
+		return
+	var/new_dest = FindNest()
+	if(new_dest)
+		if(FindPrey())
+			MovetoPrey()
+			DragPrey(new_dest)
+	else
+		dragging = null
+		if(pulling)
+			stop_pulling()
+		walk(src, 0)
+		stop_automated_movement = 0
+		vision_range = idle_vision_range
+
+/// Drop any drag state as soon as the tree gives us a target.
+/mob/living/simple_animal/hostile/alien/ai_target_acquired(atom/target)
+	dragging = null
+	if(pulling)
+		stop_pulling()
+	walk(src, 0)
 
 /mob/living/simple_animal/hostile/alien/DestroySurroundings()
 	for(var/dir in cardinal)
@@ -252,9 +260,9 @@ var/list/nest_locations = list()
 	var/nest = 65
 	var/egg = 55
 
-/mob/living/simple_animal/hostile/alien/queen/Life()
-	. = ..()
-	if(!.)
+/mob/living/simple_animal/hostile/alien/queen/ai_idle_work()
+	..()
+	if(stat || client)
 		return
 
 	var/turf/T = get_turf(src)
@@ -262,7 +270,7 @@ var/list/nest_locations = list()
 		nest++
 		if(locate(/obj/effect/alien/weeds) in T)
 			nest += 4
-	else if(!stat && !client && !istype(locked_to, /obj/structure/cage))
+	else if(!istype(locked_to, /obj/structure/cage))
 		if(!(locate(/obj/effect/alien/weeds/node) in T) && !(locate(/obj/structure/bed/nest) in T) && !(locate(/obj/effect/alien/egg) in T) && isturf(src.loc) && !istype(T, /turf/space))
 			var/nearby_nests = 0
 			for(var/obj/structure/bed/nest/N in range(5,src))
@@ -276,7 +284,7 @@ var/list/nest_locations = list()
 		egg++
 		if(locate(/obj/effect/alien/weeds) in T)
 			egg += 4
-	else if(!stat && !client && !istype(locked_to, /obj/structure/cage))
+	else if(!istype(locked_to, /obj/structure/cage))
 		if(!(locate(/obj/effect/alien/weeds/node) in T) && !(locate(/obj/structure/bed/nest) in T) && !(locate(/obj/effect/alien/egg) in T) && isturf(src.loc) && !istype(T, /turf/space))
 			var/nearby_eggs = 0
 			for(var/obj/effect/alien/egg/E in range(3,src))

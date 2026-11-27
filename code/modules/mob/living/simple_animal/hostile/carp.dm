@@ -56,6 +56,12 @@
 	if(gender==FEMALE)
 		child_amount = rand(4,6) //Mother explodes on death, so letting it leave 5 child carps (that can't breed) behind is fair
 
+	// WIP: carp is the second existing mob migrated to the behavior tree
+	// controller. The legacy hostile AI no longer acquires targets.
+	var/datum/ai_controller/controller = new(src)
+	controller.behavior_nodes = list(bt_basic_hostile_tree())
+	controller.initialize_behavior_tree()
+
 /mob/living/simple_animal/hostile/carp/examine(mob/user)
 	..()
 	if(Adjacent(user))
@@ -83,10 +89,10 @@
 			return 0 //Carps who avoid pheromones don't target mobs with pheromones in their system. They just ignore them!
 	return ..(the_target)
 
-/mob/living/simple_animal/hostile/carp/FindTarget()
-	. = ..()
-	if(.)
-		emote("me",, "gnashes at [.]!")
+// Restores the legacy "gnashes at" emote now that the tree owns acquisition.
+/mob/living/simple_animal/hostile/carp/ai_target_acquired(atom/target)
+	if(target)
+		emote("me",, "gnashes at [target]!")
 
 /mob/living/simple_animal/hostile/carp/AttackingTarget()
 	if(!target)

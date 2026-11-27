@@ -381,34 +381,20 @@
 /mob/living/simple_animal/hostile/hex/Life()
 	if(timestopped)
 		return 0
-	if (mode != HEX_MODE_ROAMING)
-		stop_automated_movement = 1
 	. = ..()
 	if (!no_master)
 		if (!master || master.gcDestroyed || master.isDead())
 			adjustBruteLoss(20)//we shortly die out after our master's demise
 			mode = HEX_MODE_ROAMING
-	switch(mode)
-		if (HEX_MODE_GUARD)
-			if (stance == HOSTILE_STANCE_IDLE)
-				if (!guard_spot)
-					guard_spot = get_turf(src)
-				else
-					var/turf/T = get_turf(src)
-					if (T != guard_spot)
-						if ((T.z == guard_spot.z) && (get_dist(T,guard_spot) < 50))
-							Goto(guard_spot,move_to_delay,0)
-						else
-							guard_spot = get_turf(src)
-					else
-						dir = turn(dir, -90)
-		if (HEX_MODE_ESCORT)
-			escort_routine()
-		else
-			guard_spot = null
+	return .
 
-/mob/living/simple_animal/hostile/hex/proc/escort_routine()
-	guard_spot = null
+/// Turf this hex should trail behind its master on, matching the legacy
+/// escort_routine() satellite order. The tree moves towards it.
+/mob/living/simple_animal/hostile/hex/proc/get_escort_anchor()
+	if (mode != HEX_MODE_ESCORT || !master || master.gcDestroyed || master.isDead())
+		return null
+	if (!length(master.satellites))
+		return null
 	var/escorts = 0
 	var/spot = 0
 	for (var/mob/living/simple_animal/hostile/hex/H in master.minions)
@@ -416,14 +402,153 @@
 			escorts++
 		if (H == src)
 			spot = escorts
-	if (escorts == 1)
-		Goto(master.satellites[1],move_to_delay,0)//trailing behind
-		if (!target && (loc == get_turf(master.satellites[1])))
-			dir = master.dir
-	else
-		Goto(master.satellites[spot+1],move_to_delay,0)//trailing on each sides
-		if (!target && (loc == get_turf(master.satellites[spot+1])))
-			dir = master.dir
+	if (!spot)
+		return null
+	var/index = (escorts == 1) ? 1 : min(spot + 1, length(master.satellites))
+	return get_turf(master.satellites[index])
+
+/mob/living/simple_animal/hostile/hex/use_hostile_tree()
+	return ..(bt_hex_tree())
+
+/datum/bt_node/decorator/hex_mode
+	var/mode = HEX_MODE_ROAMING
+	/// The UI can change the mode while a guard/escort leaf is running; the
+	/// polling observer aborts the stale branch.
+	observer_abort = BT_ABORT_BOTH
+
+/datum/bt_node/decorator/hex_mode/check_condition(datum/ai_controller/controller)
+	var/mob/living/simple_animal/hostile/hex/hex = controller.pawn
+	return istype(hex) && hex.mode == mode
+
+/// Escort movement: stay on the master's trailing satellite, never chase.
+/datum/bt_node/ai_behavior/hex_escort_follow
+/datum/bt_node/ai_behavior/hex_escort_follow/setup(datum/ai_controller/controller)
+	var/mob/living/simple_animal/hostile/hex/hex = controller.pawn
+	if (!istype(hex) || !controller.ai_movement)
+		return FALSE
+	var/turf/anchor = hex.get_escort_anchor()
+	if (!anchor)
+		return FALSE
+	if (get_turf(hex) == anchor)
+		if (!hex.ai_has_target() && hex.master)
+			hex.dir = hex.master.dir
+		return FALSE
+	return TRUE
+
+/datum/bt_node/ai_behavior/hex_escort_follow/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/simple_animal/hostile/hex/hex = controller.pawn
+	if (!istype(hex) || !controller.ai_movement)
+		return AI_BEHAVIOR_FAILED
+	var/turf/anchor = hex.get_escort_anchor()
+	if (!anchor)
+		return AI_BEHAVIOR_FAILED
+	if (get_turf(hex) == anchor)
+		return AI_BEHAVIOR_SUCCEEDED
+	if (controller.ai_movement.needs_repath(controller, anchor) && !controller.ai_movement.start_moving_towards(controller, anchor, 50))
+		return AI_BEHAVIOR_FAILED
+	if (!controller.ai_movement.process(controller))
+		return AI_BEHAVIOR_FAILED
+	return AI_BEHAVIOR_DELAY
+
+/datum/bt_node/ai_behavior/hex_escort_follow/finish_action(datum/ai_controller/controller, succeeded)
+	if (controller?.ai_movement)
+		controller.ai_movement.stop_moving_towards(controller)
+	return ..()
+
+/// Guard movement: walk back to the spot the hex was placed on once it has no
+/// target again. Outside 50 tiles (or another z-level) it adopts its current
+/// turf as the new spot, like the legacy Life() guard branch.
+/datum/bt_node/ai_behavior/hex_guard_return
+/datum/bt_node/ai_behavior/hex_guard_return/setup(datum/ai_controller/controller)
+	var/mob/living/simple_animal/hostile/hex/hex = controller.pawn
+	if (!istype(hex) || hex.mode != HEX_MODE_GUARD || !controller.ai_movement)
+		return FALSE
+	if (hex.ai_has_target())
+		return FALSE
+	var/turf/T = get_turf(hex)
+	if (!T)
+		return FALSE
+	if (!hex.guard_spot)
+		hex.guard_spot = T
+		return FALSE
+	if (T == hex.guard_spot)
+		hex.dir = turn(hex.dir, -90)
+		return FALSE
+	return TRUE
+
+/datum/bt_node/ai_behavior/hex_guard_return/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/simple_animal/hostile/hex/hex = controller.pawn
+	if (!istype(hex) || !controller.ai_movement || !hex.guard_spot)
+		return AI_BEHAVIOR_FAILED
+	if (hex.z != hex.guard_spot.z || get_dist(hex, hex.guard_spot) >= 50)
+		hex.guard_spot = get_turf(hex)
+		return AI_BEHAVIOR_FAILED
+	if (controller.ai_movement.needs_repath(controller, hex.guard_spot) && !controller.ai_movement.start_moving_towards(controller, hex.guard_spot, 50))
+		return AI_BEHAVIOR_FAILED
+	if (!controller.ai_movement.process(controller))
+		return AI_BEHAVIOR_FAILED
+	return AI_BEHAVIOR_DELAY
+
+/datum/bt_node/ai_behavior/hex_guard_return/finish_action(datum/ai_controller/controller, succeeded)
+	if (controller?.ai_movement)
+		controller.ai_movement.stop_moving_towards(controller)
+	return ..()
+
+/proc/bt_hex_tree()
+	return list(
+		BT_DESC_TYPE = /datum/bt_node/composite/selector,
+		BT_DESC_CHILDREN = list(
+			// Escort: shoot and melee, but never chase; otherwise trail the master.
+			list(
+				BT_DESC_TYPE = /datum/bt_node/decorator/hex_mode,
+				mode = HEX_MODE_ESCORT,
+				BT_DESC_CHILDREN = list(
+					list(
+						BT_DESC_TYPE = /datum/bt_node/composite/selector,
+						BT_DESC_CHILDREN = list(
+							list(
+								BT_DESC_TYPE = /datum/bt_node/composite/sequence,
+								BT_DESC_CHILDREN = list(
+									list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/acquire_target),
+									list(
+										BT_DESC_TYPE = /datum/bt_node/composite/selector,
+										BT_DESC_CHILDREN = list(
+											list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/attack_target),
+											list(
+												BT_DESC_TYPE = /datum/bt_node/ai_behavior/use_ability,
+												min_distance = 2,
+												max_distance = 7,
+											),
+										),
+									),
+								),
+							),
+							list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/hex_escort_follow),
+							list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/idle),
+						),
+					),
+				),
+			),
+			// Guard: fight normally, then return to the guard spot.
+			list(
+				BT_DESC_TYPE = /datum/bt_node/decorator/hex_mode,
+				mode = HEX_MODE_GUARD,
+				BT_DESC_CHILDREN = list(
+					list(
+						BT_DESC_TYPE = /datum/bt_node/composite/selector,
+						BT_DESC_CHILDREN = list(
+							bt_ranged_hostile_tree(retreat_distance = 4),
+							list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/hex_guard_return),
+							list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/idle),
+						),
+					),
+				),
+			),
+			// Roaming: the usual ranged hostile behavior plus idle wandering.
+			bt_ranged_hostile_tree(retreat_distance = 4),
+			bt_idle_tree(50, 5 SECONDS, 4 SECONDS, FALSE),
+		),
+	)
 
 /mob/living/simple_animal/hostile/hex/Cross(var/atom/movable/mover, var/turf/target, var/height=1.5, var/air_group = 0)
 	if(istype(mover, /obj/item/projectile/bloodslash))//stop hitting yourself ffs!
@@ -435,13 +560,15 @@
 
 /mob/living/simple_animal/hostile/hex/Move(NewLoc,Dir=0,step_x=0,step_y=0,var/glide_size_override = 0)
 	. = ..()
-	if (target)
-		dir = get_dir(src, target)
+	var/atom/focus = ai_controller ? ai_controller.blackboard[BB_TARGET] : target
+	if (focus)
+		dir = get_dir(src, focus)
 
 /mob/living/simple_animal/hostile/hex/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
 	. = ..()
-	if (target)
-		dir = get_dir(src, target)
+	var/atom/focus = ai_controller ? ai_controller.blackboard[BB_TARGET] : target
+	if (focus)
+		dir = get_dir(src, focus)
 
 /mob/living/simple_animal/hostile/hex/death(var/gibbed = FALSE)
 	..(TRUE) //If they qdel, they gib regardless

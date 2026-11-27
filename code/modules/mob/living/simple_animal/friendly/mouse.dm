@@ -43,7 +43,7 @@
 	size = SIZE_TINY
 	holder_type = /obj/item/weapon/holder/animal/mouse
 	held_items = list()
-	var/obj/item/weapon/reagent_containers/food/snacks/food_target //What food we're walking towards
+	// What food we're walking towards was handled by the food target source.
 	var/is_fat = 0
 	var/can_chew_wires = 0
 	var/splat = 0
@@ -62,6 +62,45 @@
 	var/turf/T = get_turf(src)
 	if (!client && (T ? istype(T.loc,/area/maintenance) : FALSE) && prob(20))
 		MaintInfection()
+	// WIP: food and cable seeking are behavior tree branches.
+	use_idle_tree(bt_mouse_tree())
+
+/// Mice always chase a snack they can see.
+/mob/living/simple_animal/mouse/ai_wants_food()
+	return TRUE
+
+/// Food first, then the occasional cable chew, then ordinary idling.
+/proc/bt_mouse_tree()
+	return list(
+		BT_DESC_TYPE = /datum/bt_node/composite/selector,
+		BT_DESC_CHILDREN = list(
+			list(
+				BT_DESC_TYPE = /datum/bt_node/composite/sequence,
+				BT_DESC_CHILDREN = list(
+					list(
+						BT_DESC_TYPE = /datum/bt_node/ai_behavior/acquire_target,
+						target_source_type = /datum/target_source/food,
+						search_range = 5,
+					),
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/move_to_target, max_distance = 5),
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/fetch_food),
+				),
+			),
+			list(
+				BT_DESC_TYPE = /datum/bt_node/composite/sequence,
+				BT_DESC_CHILDREN = list(
+					list(
+						BT_DESC_TYPE = /datum/bt_node/ai_behavior/acquire_target,
+						target_source_type = /datum/target_source/wires,
+						search_range = 5,
+					),
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/move_to_target, max_distance = 5),
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/fetch_food),
+				),
+			),
+			bt_idle_tree(50, 5 SECONDS, 4 SECONDS, FALSE),
+		),
+	)
 
 /mob/living/simple_animal/mouse/can_be_infected()
 	return infectable
@@ -120,12 +159,8 @@
 		activate_diseases()//however cages don't prevent diseases from activating
 
 	if(!isUnconscious())
-		var/list/can_see = view(src, 5) //Decent radius, not too large so they're attracted across rooms, but large enough to attract them to mousetraps
-
-		var/caged = 0
 		if(locked_to && istype(locked_to,/obj/item/critter_cage))
 			var/obj/item/critter_cage/cage = locked_to
-			caged = 1
 			//if there's some reagent in the bottle, let's drink it at once
 			if(cage.reagents.total_volume)
 				dir = EAST
@@ -138,50 +173,6 @@
 			else if (prob(25))
 				dir = pick(cardinal - dir)
 
-		if(!food_target && !client) //Regular mice will be moved towards food, mice with a client won't be
-			for(var/obj/item/weapon/reagent_containers/food/snacks/C in can_see)
-				food_target = C
-				break
-		if(!(food_target in can_see) || (client && nutrition > MOUSEHUNGRY)) //lets the client regain control if the mouse at enough
-			food_target = null
-		if(food_target)
-			if (!locked_to)
-				step_towards(src, food_target)
-			else
-				dir = get_dir(src, food_target)
-			if(Adjacent(food_target))
-				if (caged && food_target.loc == loc)
-					dir = SOUTH
-				food_target.attack_animal(src)
-
-		if(prob(10))
-
-			if(!client)
-				if(can_chew_wires)
-					for(var/obj/structure/cable/C in can_see)
-						if(Adjacent(C))
-							C.attack_animal(src)
-							break
-						else
-							step_towards(src, C)
-							break
-				/*
-				if(virus2.len > 0)
-					for(var/mob/living/carbon/human/H in can_see)
-						if(Adjacent(H))
-							visible_message("[src] bites [H]")
-							H.attack_animal(src)
-							break
-						else
-							step_towards(src, H)
-							break
-				*/
-/*
-			if(virus2.len > 0)
-				for(var/mob/living/M in view(1,src))
-					//spread_disease_to(src,M, "Airborne") //Spreads it to humans, mice, and monkeys
-
-*/
 		nutrition = max(0, nutrition - (MOUSESTANDCOST * nutrition_loss_mod))
 
 

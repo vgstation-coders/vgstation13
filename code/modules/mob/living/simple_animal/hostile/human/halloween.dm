@@ -627,8 +627,9 @@
 				playsound(S, get_sfx("soulstone"), 50,1)
 				S.dust()
 
-			if(target && S.target != target)
-				S.GiveTarget(target)
+			var/atom/focus = ai_controller ? ai_controller.blackboard[BB_TARGET] : target
+			if(focus && S.target != focus)
+				S.GiveTarget(focus)
 
 /mob/living/simple_animal/hostile/humanoid/skellington/lich/Shoot(atom/a, params)
 	var/spell = rand(1,4)

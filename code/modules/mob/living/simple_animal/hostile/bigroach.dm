@@ -90,6 +90,13 @@
 	pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
 	pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
 
+	// WIP: roaches (and the queen) run the shared combat tree. The queen's
+	// egg-laying AttackingTarget override still runs through attack_target's
+	// legacy bridge.
+	var/datum/ai_controller/controller = new(src)
+	controller.behavior_nodes = list(bt_basic_hostile_tree())
+	controller.initialize_behavior_tree()
+
 /mob/living/simple_animal/hostile/bigroach/death(var/gibbed = FALSE)
 	..(gibbed)
 	playsound(src, pick('sound/effects/gib1.ogg','sound/effects/gib2.ogg','sound/effects/gib3.ogg'), 40, 1) //Splat

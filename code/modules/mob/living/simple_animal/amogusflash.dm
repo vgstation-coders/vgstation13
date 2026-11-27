@@ -21,6 +21,8 @@
 	..()
 	add_spell(new /spell/targeted/amogus_piercer)
 	add_spell(new /spell/targeted/amogus_flasher)
+	// WIP: the idle/wander decision layer is a behavior tree.
+	use_idle_tree()
 
 /mob/living/simple_animal/amogusflash/can_ventcrawl()
 	return TRUE

@@ -58,6 +58,9 @@
 	maxHealth = rand(1,6)
 	health = maxHealth
 
+	// WIP: the idle/wander decision layer is a behavior tree.
+	use_idle_tree()
+
 /mob/living/simple_animal/cricket/death(var/gore = 1)
 	global_cricket_population--
 	if(gore)

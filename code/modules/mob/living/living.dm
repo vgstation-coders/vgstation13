@@ -19,6 +19,11 @@
 	tolerated_chems = list()
 
 /mob/living/Destroy()
+	// A behavior tree controller owns behavior nodes and the movement adapter;
+	// drop it with the pawn instead of leaving an orphaned AI subsystem entry.
+	if(ai_controller)
+		QDEL_NULL(ai_controller)
+
 	if(butchering_drops)
 		for(var/datum/butchering_product/B in butchering_drops)
 			butchering_drops -= B

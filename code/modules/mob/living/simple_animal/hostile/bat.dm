@@ -56,10 +56,9 @@
 				return FALSE
 	return ..()
 
-/mob/living/simple_animal/hostile/scarybat/FindTarget()
-	. = ..()
-	if(.)
-		emote("me",, "flutters towards [.]!")
+/mob/living/simple_animal/hostile/scarybat/ai_target_acquired(atom/target)
+	if(target)
+		emote("me",, "flutters towards [target]!")
 
 /mob/living/simple_animal/hostile/scarybat/Found(var/atom/A) //This is here as a potential override to pick a specific target if available
 	if(!istype(A, /mob/living))
@@ -81,8 +80,6 @@
 
 /mob/living/simple_animal/hostile/scarybat/cult
 	faction = "cult"
-	var/shuttletarget = null
-	var/enroute = 0
 
 	supernatural = TRUE
 
@@ -106,48 +103,6 @@
 
 /mob/living/simple_animal/hostile/scarybat/cult/cultify()
 	return
-
-/mob/living/simple_animal/hostile/scarybat/cult/Life()
-	if(timestopped)
-		return 0 //under effects of time magick
-	..()
-	if(emergency_shuttle.location == 1)
-		if(!enroute && !target)	//The shuttle docked, all monsters rush for the escape hallway
-			if(!shuttletarget && escape_list.len) //Make sure we didn't already assign it a target, and that there are targets to pick
-				shuttletarget = pick(escape_list) //Pick a shuttle target
-			enroute = 1
-			stop_automated_movement = 1
-/*			spawn()
-				if(!src.stat)
-					horde()*/
-
-		if(get_dist(src, shuttletarget) <= 2)		//The monster reached the escape hallway
-			enroute = 0
-			stop_automated_movement = 0
-
-/mob/living/simple_animal/hostile/scarybat/cult/proc/horde()
-	var/turf/T = get_step_to(src, shuttletarget)
-	for(var/atom/A in T)
-		if(istype(A,/obj/machinery/door/airlock))
-			var/obj/machinery/door/airlock/D = A
-			if(D.density && !D.locked && !D.welded)
-				D.open()
-		else if(istype(A,/obj/machinery/door/mineral))
-			var/obj/machinery/door/D = A
-			if(D.density)
-				D.open()
-		else if(istype(A,/obj/structure/cult/pylon))
-			A.attack_animal(src)
-		else if(istype(A, /obj/structure/window) || istype(A, /obj/structure/closet) || istype(A, /obj/structure/table) || istype(A, /obj/structure/grille) || istype(A, /obj/structure/rack))
-			A.attack_animal(src)
-	Move(T)
-	var/new_target = FindTarget()
-	GiveTarget(new_target)
-	if(!target || enroute)
-		spawn(10)
-			if(!src.stat)
-				horde()
-
 
 
 /mob/living/simple_animal/hostile/scarybat/book

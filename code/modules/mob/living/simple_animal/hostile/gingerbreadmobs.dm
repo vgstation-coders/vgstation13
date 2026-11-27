@@ -40,6 +40,17 @@
 
 	blooded = FALSE
 
+// WIP: the ginger family (chef, knight, broodmother, ...) runs the shared combat
+// tree. The broodmother's AttackingTarget override works through attack_target's
+// legacy bridge.
+/mob/living/simple_animal/hostile/ginger/New()
+	..()
+	stop_automated_movement = TRUE
+	wander = 0
+	var/datum/ai_controller/controller = new(src)
+	controller.behavior_nodes = list(bt_basic_hostile_tree())
+	controller.initialize_behavior_tree()
+
 /mob/living/simple_animal/hostile/ginger/gingerchefman
 	name = "gingerchef man"
 	desc = "Prepare to meet your baker."

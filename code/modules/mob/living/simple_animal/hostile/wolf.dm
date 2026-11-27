@@ -237,6 +237,9 @@
 
 
 //For life, listen for any /obj/effect/decal/point objects in proximity. They have a reference to who pointed, and who's being pointed at.
+/mob/living/simple_animal/hostile/wolf/use_hostile_tree()
+	return ..(bt_hazard_hostile_tree(/obj/machinery/space_heater/campfire))
+
 /mob/living/simple_animal/hostile/wolf/Life()
 	..()
 	if(!isUnconscious())
@@ -244,12 +247,7 @@
 		handle_hunger() //Handle hunger
 		var/list/can_see = view(src, vision_range)
 
-		for(var/obj/machinery/space_heater/campfire/fire in can_see)
-			var/dist = get_dist(src, fire)
-			if(dist < fire.light_range*2)
-				walk_away(src,fire,(fire.light_range*2),move_to_delay)
-
-		if(stance == HOSTILE_STANCE_IDLE && !client)
+		if(is_legacy_idle() && !client)
 			//Check if the alpha is still alive
 			if(pack_alpha)
 				if(pack_alpha.isDead())

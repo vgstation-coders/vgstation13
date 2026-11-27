@@ -35,3 +35,9 @@
 
 	corpse = /obj/effect/landmark/corpse/pirate/ranged
 	items_to_drop = list(/obj/item/weapon/gun/energy/laser)
+
+// WIP: pirates run the humanoid behavior tree (melee or ranged gunner).
+/mob/living/simple_animal/hostile/humanoid/pirate/New()
+	..()
+	use_humanoid_tree()
+

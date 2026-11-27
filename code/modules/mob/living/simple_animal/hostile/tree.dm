@@ -42,10 +42,9 @@
 
 	blooded = FALSE
 
-/mob/living/simple_animal/hostile/tree/FindTarget()
-	. = ..()
-	if(.)
-		emote("me",, "growls at [.]!")
+/mob/living/simple_animal/hostile/tree/ai_target_acquired(atom/target)
+	if(target)
+		emote("me",, "growls at [target]!")
 
 /mob/living/simple_animal/hostile/tree/AttackingTarget()
 	. =..()

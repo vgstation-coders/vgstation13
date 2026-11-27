@@ -38,3 +38,11 @@
 	min_n2 = 0
 	max_n2 = 0
 	minbodytemp = 0
+
+// WIP: the warrior bug runs the shared combat tree.
+/mob/living/simple_animal/hostile/warriorbug/New()
+	..()
+	var/datum/ai_controller/controller = new(src)
+	controller.behavior_nodes = list(bt_basic_hostile_tree())
+	controller.initialize_behavior_tree()
+

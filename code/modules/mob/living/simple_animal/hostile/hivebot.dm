@@ -35,12 +35,26 @@
 
 	blooded = FALSE
 
+// WIP: installs a behavior tree controller on a hivebot combat variant. Kept as
+// a proc so the combat variants can pick their exact tree; the base hivebot and
+// the beacon are migrated by the generic hostile hook.
+/mob/living/simple_animal/hostile/hivebot/proc/use_behavior_tree(list/tree)
+	stop_automated_movement = TRUE
+	wander = 0
+	var/datum/ai_controller/controller = new(src)
+	controller.behavior_nodes = list(tree)
+	controller.initialize_behavior_tree()
+
 /mob/living/simple_animal/hostile/hivebot/range
 	name = "Ranged Hivebot"
 	desc = "A biggish robot. This one has a gun!"
 	ranged = 1
 	retreat_distance = 5
 	minimum_distance = 5
+
+/mob/living/simple_animal/hostile/hivebot/range/New()
+	..()
+	use_behavior_tree(bt_ranged_hostile_tree(retreat_distance = retreat_distance))
 
 /mob/living/simple_animal/hostile/hivebot/rapid
 	name = "Rapidfire Hivebot"
@@ -50,11 +64,22 @@
 	retreat_distance = 5
 	minimum_distance = 5
 
+/mob/living/simple_animal/hostile/hivebot/rapid/New()
+	..()
+	use_behavior_tree(bt_ranged_hostile_tree(retreat_distance = retreat_distance))
+
 /mob/living/simple_animal/hostile/hivebot/strong
 	name = "Strong Hivebot"
 	desc = "A robot, this one is armed and looks tough!"
 	health = 80
 	ranged = 1
+
+// WIP: the strong hivebot is the first ranged mob migrated to the behavior tree
+// controller. Its legacy ranged attack is triggered through use_ability, and the
+// legacy hostile AI no longer acquires targets.
+/mob/living/simple_animal/hostile/hivebot/strong/New()
+	..()
+	use_behavior_tree(bt_ranged_hostile_tree())
 
 /mob/living/simple_animal/hostile/hivebot/emp_act(severity)
 	if(flags & INVULNERABLE)

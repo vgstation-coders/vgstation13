@@ -39,7 +39,12 @@
 		udder = new(100)
 		udder.my_atom = src
 	..()
+	// WIP: the goat's decision layer is an idle + retaliating behavior tree.
+	// Legacy plant eating, milk, anger and calm stay in Life(); legacy random
+	// movement and target acquisition are disabled.
+	use_retaliating_tree()
 
+// The behavior tree owns target acquisition; keep the legacy hostile AI idle.
 /mob/living/simple_animal/hostile/retaliate/goat/Life()
 	if(timestopped)
 		return 0 //under effects of time magick
@@ -72,6 +77,9 @@
 /mob/living/simple_animal/hostile/retaliate/goat/proc/Calm()
 	enemies.Cut()
 	LoseTarget()
+	// The tree keeps its own target in the blackboard; drop it too.
+	if(ai_controller)
+		ai_controller.blackboard.Remove(BB_TARGET)
 	src.visible_message("<span class='notice'>[src] calms down.</span>")
 
 /mob/living/simple_animal/hostile/retaliate/goat/Retaliate()
@@ -149,6 +157,13 @@
 	..()
 	milkable_reagents = new(150)
 	milkable_reagents.my_atom = src
+	// WIP: the cow's decision layer is an idle/wander behavior tree; legacy
+	// automated movement is disabled so it does not double-step.
+	stop_automated_movement = TRUE
+	wander = 0
+	var/datum/ai_controller/controller = new(src)
+	controller.behavior_nodes = list(bt_idle_tree())
+	controller.initialize_behavior_tree()
 
 /mob/living/simple_animal/cow/Destroy()
 	QDEL_NULL(milkable_reagents)
@@ -319,6 +334,19 @@
 	pixel_y = rand(0, 10) * PIXEL_MULTIPLIER
 
 	init_butchering_list()
+
+	// WIP: the chicken's decision layer is a follow/idle behavior tree; legacy
+	// egg laying, feather regen and speech stay in Life(). Petting sets `master`,
+	// so a befriended chicken trails its new owner.
+	stop_automated_movement = TRUE
+	wander = 0
+	var/datum/ai_controller/controller = new(src)
+	controller.behavior_nodes = list(bt_following_idle_tree())
+	controller.initialize_behavior_tree()
+
+// Chickens follow the mob that befriended them.
+/mob/living/simple_animal/chicken/ai_get_follow_target()
+	return master
 
 /mob/living/simple_animal/chicken/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown/wheat)) //feedin' dem chickens
@@ -533,11 +561,8 @@
 	if(can_breed)
 		gender = pick(MALE, FEMALE)
 	..()
-
-/mob/living/simple_animal/rabbit/Life()
-	if(timestopped)
-		return FALSE
-	..()
+	// WIP: the idle/wander decision layer is a behavior tree.
+	use_idle_tree()
 
 /mob/living/simple_animal/rabbit/get_butchering_products()
 	return list(/datum/butchering_product/rabbit_ears, /datum/butchering_product/rabbit_foot)

@@ -46,6 +46,8 @@
 	var/animal_flags = 0
 	var/last_state = -1
 	var/ticks_this_state=0
+	/// life_tick of the last tree AI step; the tree runs once per Life tick.
+	var/last_ai_tick = -1
 	var/atom/target = null
 	var/turf/territory=null //turf location
 	environment_smash_flags = 0xFFFFFF
@@ -71,6 +73,7 @@
 	if(prob(50))
 		gender="male"
 	territory=locate(x,y,z) //store turf where we were born/created
+	use_idle_tree(bt_complex_tree())
 
 /mob/living/simple_animal/complex/Destroy()
 	territory=null
@@ -159,31 +162,9 @@
 	if(health<=0 && stat != DEAD)
 		death()
 		return 0
-	
-	escape()
 
-	interrupt_hunger() //prioritize eating over all other things
-	interrupt_territory() //next, prioritize defending our home
-	interrupt_fear() //then, prioritize saving our own ass.
+	// The decision layer is bt_complex_tree(); the AI runs once per Life tick.
 
-
-	if (behavior_state==ANIMAL_STATE_IDLE==last_state && (ticks_this_state % 3!=1) ) //throttle idle ticking
-		walk(src,0)
-		return 1
-
-	switch(behavior_state)
-		if(ANIMAL_STATE_IDLE)
-			tick_state_idle()
-		if(ANIMAL_STATE_HUNTING)
-			tick_state_hunting()
-		if(ANIMAL_STATE_DEFENDING)
-			tick_state_defending()
-		if(ANIMAL_STATE_ATTACKING)
-			tick_state_attacking()
-		if(ANIMAL_STATE_FLEEING)
-			tick_state_fleeing()
-		if(ANIMAL_STATE_SPECIAL)
-			tick_state_special()
 	return 1
 
 //runs independently of other states so we won't starve to death running away.
@@ -736,3 +717,171 @@
 		behavior_state = ANIMAL_STATE_ATTACKING
 		target = src
 	return TRUE
+
+/*
+ * Behavior tree leaves. The complex animal is a state machine; the tree maps
+ * the escape/interrupt order and each state to a leaf, and runs the same state
+ * ticks once per Life() tick (the controller ticks at 1 s, Life at 2 s).
+ */
+
+/datum/bt_node/ai_behavior/complex_action
+/datum/bt_node/ai_behavior/complex_action/proc/get_complex(datum/ai_controller/controller)
+	var/mob/living/simple_animal/complex/animal = controller.pawn
+	if(!istype(animal, /mob/living/simple_animal/complex) || QDELETED(animal))
+		return null
+	return animal
+
+/// Runs the AI only once per Life tick, matching the old state machine cadence.
+/datum/bt_node/ai_behavior/complex_action/complex_tick_gate
+/datum/bt_node/ai_behavior/complex_action/complex_tick_gate/setup(datum/ai_controller/controller)
+	var/mob/living/simple_animal/complex/animal = get_complex(controller)
+	if(!animal)
+		return FALSE
+	return animal.last_ai_tick != animal.life_tick
+
+/datum/bt_node/ai_behavior/complex_action/complex_tick_gate/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/simple_animal/complex/animal = get_complex(controller)
+	if(!animal)
+		return AI_BEHAVIOR_FAILED
+	animal.last_ai_tick = animal.life_tick
+	return AI_BEHAVIOR_SUCCEEDED
+
+/datum/bt_node/ai_behavior/complex_action/complex_escape
+/datum/bt_node/ai_behavior/complex_action/complex_escape/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/simple_animal/complex/animal = get_complex(controller)
+	if(animal)
+		animal.escape()
+	return AI_BEHAVIOR_SUCCEEDED
+
+/datum/bt_node/ai_behavior/complex_action/complex_interrupt_hunger
+/datum/bt_node/ai_behavior/complex_action/complex_interrupt_hunger/setup(datum/ai_controller/controller)
+	var/mob/living/simple_animal/complex/animal = get_complex(controller)
+	return animal ? animal.interrupt_hunger() : FALSE
+
+/datum/bt_node/ai_behavior/complex_action/complex_interrupt_hunger/perform(seconds_per_tick, datum/ai_controller/controller)
+	return AI_BEHAVIOR_SUCCEEDED
+
+/datum/bt_node/ai_behavior/complex_action/complex_interrupt_territory
+/datum/bt_node/ai_behavior/complex_action/complex_interrupt_territory/setup(datum/ai_controller/controller)
+	var/mob/living/simple_animal/complex/animal = get_complex(controller)
+	return animal ? animal.interrupt_territory() : FALSE
+
+/datum/bt_node/ai_behavior/complex_action/complex_interrupt_territory/perform(seconds_per_tick, datum/ai_controller/controller)
+	return AI_BEHAVIOR_SUCCEEDED
+
+/datum/bt_node/ai_behavior/complex_action/complex_interrupt_fear
+/datum/bt_node/ai_behavior/complex_action/complex_interrupt_fear/setup(datum/ai_controller/controller)
+	var/mob/living/simple_animal/complex/animal = get_complex(controller)
+	return animal ? animal.interrupt_fear() : FALSE
+
+/datum/bt_node/ai_behavior/complex_action/complex_interrupt_fear/perform(seconds_per_tick, datum/ai_controller/controller)
+	return AI_BEHAVIOR_SUCCEEDED
+
+/datum/bt_node/ai_behavior/complex_action/complex_noop
+/datum/bt_node/ai_behavior/complex_action/complex_noop/perform(seconds_per_tick, datum/ai_controller/controller)
+	return AI_BEHAVIOR_SUCCEEDED
+
+/datum/bt_node/ai_behavior/complex_action/complex_state_idle
+/datum/bt_node/ai_behavior/complex_action/complex_state_idle/setup(datum/ai_controller/controller)
+	var/mob/living/simple_animal/complex/animal = get_complex(controller)
+	return animal && animal.behavior_state == ANIMAL_STATE_IDLE
+
+/datum/bt_node/ai_behavior/complex_action/complex_state_idle/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/simple_animal/complex/animal = get_complex(controller)
+	if(!animal)
+		return AI_BEHAVIOR_FAILED
+	if(animal.ticks_this_state % 3 != 1) //throttle idle ticking
+		walk(animal, 0)
+		return AI_BEHAVIOR_SUCCEEDED
+	animal.tick_state_idle()
+	return AI_BEHAVIOR_SUCCEEDED
+
+/datum/bt_node/ai_behavior/complex_action/complex_state_hunting
+/datum/bt_node/ai_behavior/complex_action/complex_state_hunting/setup(datum/ai_controller/controller)
+	var/mob/living/simple_animal/complex/animal = get_complex(controller)
+	return animal && animal.behavior_state == ANIMAL_STATE_HUNTING
+
+/datum/bt_node/ai_behavior/complex_action/complex_state_hunting/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/simple_animal/complex/animal = get_complex(controller)
+	if(!animal)
+		return AI_BEHAVIOR_FAILED
+	animal.tick_state_hunting()
+	return AI_BEHAVIOR_SUCCEEDED
+
+/datum/bt_node/ai_behavior/complex_action/complex_state_defending
+/datum/bt_node/ai_behavior/complex_action/complex_state_defending/setup(datum/ai_controller/controller)
+	var/mob/living/simple_animal/complex/animal = get_complex(controller)
+	return animal && animal.behavior_state == ANIMAL_STATE_DEFENDING
+
+/datum/bt_node/ai_behavior/complex_action/complex_state_defending/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/simple_animal/complex/animal = get_complex(controller)
+	if(!animal)
+		return AI_BEHAVIOR_FAILED
+	animal.tick_state_defending()
+	return AI_BEHAVIOR_SUCCEEDED
+
+/datum/bt_node/ai_behavior/complex_action/complex_state_attacking
+/datum/bt_node/ai_behavior/complex_action/complex_state_attacking/setup(datum/ai_controller/controller)
+	var/mob/living/simple_animal/complex/animal = get_complex(controller)
+	return animal && animal.behavior_state == ANIMAL_STATE_ATTACKING
+
+/datum/bt_node/ai_behavior/complex_action/complex_state_attacking/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/simple_animal/complex/animal = get_complex(controller)
+	if(!animal)
+		return AI_BEHAVIOR_FAILED
+	animal.tick_state_attacking()
+	return AI_BEHAVIOR_SUCCEEDED
+
+/datum/bt_node/ai_behavior/complex_action/complex_state_fleeing
+/datum/bt_node/ai_behavior/complex_action/complex_state_fleeing/setup(datum/ai_controller/controller)
+	var/mob/living/simple_animal/complex/animal = get_complex(controller)
+	return animal && animal.behavior_state == ANIMAL_STATE_FLEEING
+
+/datum/bt_node/ai_behavior/complex_action/complex_state_fleeing/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/simple_animal/complex/animal = get_complex(controller)
+	if(!animal)
+		return AI_BEHAVIOR_FAILED
+	animal.tick_state_fleeing()
+	return AI_BEHAVIOR_SUCCEEDED
+
+/datum/bt_node/ai_behavior/complex_action/complex_state_special
+/datum/bt_node/ai_behavior/complex_action/complex_state_special/setup(datum/ai_controller/controller)
+	var/mob/living/simple_animal/complex/animal = get_complex(controller)
+	return animal && animal.behavior_state == ANIMAL_STATE_SPECIAL
+
+/datum/bt_node/ai_behavior/complex_action/complex_state_special/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/simple_animal/complex/animal = get_complex(controller)
+	if(!animal)
+		return AI_BEHAVIOR_FAILED
+	animal.tick_state_special()
+	return AI_BEHAVIOR_SUCCEEDED
+
+/// Escape, then the hunger/territory/fear interrupts, then the current state.
+/proc/bt_complex_tree()
+	return list(
+		BT_DESC_TYPE = /datum/bt_node/composite/sequence,
+		BT_DESC_CHILDREN = list(
+			list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/complex_action/complex_tick_gate),
+			list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/complex_action/complex_escape),
+			list(
+				BT_DESC_TYPE = /datum/bt_node/composite/selector,
+				BT_DESC_CHILDREN = list(
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/complex_action/complex_interrupt_hunger),
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/complex_action/complex_interrupt_territory),
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/complex_action/complex_interrupt_fear),
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/complex_action/complex_noop),
+				),
+			),
+			list(
+				BT_DESC_TYPE = /datum/bt_node/composite/selector,
+				BT_DESC_CHILDREN = list(
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/complex_action/complex_state_idle),
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/complex_action/complex_state_hunting),
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/complex_action/complex_state_defending),
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/complex_action/complex_state_attacking),
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/complex_action/complex_state_fleeing),
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/complex_action/complex_state_special),
+				),
+			),
+		),
+	)

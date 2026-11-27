@@ -244,12 +244,14 @@
 
 	return..()
 
-/mob/living/simple_animal/hostile/necro/zombie/Life()
-	if(!isUnconscious())
-		if(stance == HOSTILE_STANCE_IDLE && !client) //Not doing anything at the time
-			if(can_evolve) //Can we evolve, and have we fed
-				check_evolve()
-	..()
+/mob/living/simple_animal/hostile/necro/zombie/use_hostile_tree()
+	return ..(bt_idle_hostile_work_tree())
+
+/mob/living/simple_animal/hostile/necro/zombie/ai_idle_work()
+	if(isUnconscious() || client)
+		return
+	if(can_evolve)
+		check_evolve()
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/check_edibility(var/mob/living/carbon/human/target)
 	if(busy)
@@ -804,34 +806,39 @@
 
 /mob/living/simple_animal/hostile/necro/necromorph/leaper/Life()
 	update_climb()
-	if(!isUnconscious())
-		if(stance == HOSTILE_STANCE_IDLE && !client)
-			var/list/can_see = view(get_turf(src), vision_range/2) //Nothing too close for comfort
-			var/all_clear = 1
-			for(var/mob/living/L in can_see)
-				if(!istype(L, /mob/living/simple_animal/hostile/necro/necromorph) && !(L.isDead()))
-					all_clear = 0
-			if(!istype(loc, /obj/machinery/atmospherics/unary/vent_pump) && istype(loc, /turf) && all_clear)
-				stop_automated_movement = 0
-
-				for(var/obj/machinery/atmospherics/unary/vent_pump/vent in can_see)
-					if(Adjacent(vent))
-						//Climb in
-						visible_message("<span class = 'warning'>\The [src] starts climbing into \the [vent]!</span>")
-						forceMove(vent)
-						stop_automated_movement = 1
-						break
-					else
-						if(prob(30))
-							step_towards(src, vent)//Step towards it
-							if(environment_smash_flags & SMASH_LIGHT_STRUCTURES)
-								EscapeConfinement()
-						break
-
-			else if(istype(loc, /obj/machinery/atmospherics/unary/vent_pump) && !all_clear)
-				loc.visible_message("<span class = 'warning'>\The [src] clambers out of \the [loc]!</span>")
-				forceMove(get_turf(loc))
 	..()
+
+/mob/living/simple_animal/hostile/necro/necromorph/leaper/use_hostile_tree()
+	return ..(bt_idle_hostile_work_tree(work_cooldown = 2 SECONDS))
+
+/mob/living/simple_animal/hostile/necro/necromorph/leaper/ai_idle_work()
+	if(isUnconscious() || client)
+		return
+	var/list/can_see = view(get_turf(src), vision_range/2) //Nothing too close for comfort
+	var/all_clear = 1
+	for(var/mob/living/L in can_see)
+		if(!istype(L, /mob/living/simple_animal/hostile/necro/necromorph) && !(L.isDead()))
+			all_clear = 0
+	if(!istype(loc, /obj/machinery/atmospherics/unary/vent_pump) && istype(loc, /turf) && all_clear)
+		stop_automated_movement = 0
+
+		for(var/obj/machinery/atmospherics/unary/vent_pump/vent in can_see)
+			if(Adjacent(vent))
+				//Climb in
+				visible_message("<span class = 'warning'>\The [src] starts climbing into \the [vent]!</span>")
+				forceMove(vent)
+				stop_automated_movement = 1
+				break
+			else
+				if(prob(30))
+					step_towards(src, vent)//Step towards it
+					if(environment_smash_flags & SMASH_LIGHT_STRUCTURES)
+						EscapeConfinement()
+				break
+
+	else if(istype(loc, /obj/machinery/atmospherics/unary/vent_pump) && !all_clear)
+		loc.visible_message("<span class = 'warning'>\The [src] clambers out of \the [loc]!</span>")
+		forceMove(get_turf(loc))
 
 /mob/living/simple_animal/hostile/necro/necromorph/leaper/verb/ventcrawl()
 	set name = "Crawl through Vent"

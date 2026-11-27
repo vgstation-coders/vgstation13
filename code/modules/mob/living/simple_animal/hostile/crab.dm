@@ -25,3 +25,11 @@
 
 /mob/living/simple_animal/hostile/crab/get_butchering_products()
 	return list(/datum/butchering_product/claws/crab/megamad)
+
+// WIP: the megamadcrab runs the shared combat tree.
+/mob/living/simple_animal/hostile/crab/New()
+	..()
+	var/datum/ai_controller/controller = new(src)
+	controller.behavior_nodes = list(bt_basic_hostile_tree())
+	controller.initialize_behavior_tree()
+

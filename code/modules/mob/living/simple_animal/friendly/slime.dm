@@ -23,6 +23,11 @@
 	mob_push_flags = MONKEY|SLIME|SIMPLE_ANIMAL
 	held_items = list()
 
+/mob/living/simple_animal/slime/New()
+	..()
+	// WIP: the idle/wander decision layer is a behavior tree.
+	use_idle_tree()
+
 /mob/living/simple_animal/slime/attackby(var/obj/item/weapon/slimeparapotion/O as obj, var/mob/user as mob)
 	if(istype(O))
 		canmove = 0
@@ -85,11 +90,6 @@
 	desc = "An exotic chemical which paralyzes a slime, allowing it to be safely picked up and transported."
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle9"
-
-/mob/living/simple_animal/slime/Life()
-	if(timestopped)
-		return 0 //under effects of time magick
-	..()
 
 /mob/living/simple_animal/slime/handle_regular_hud_updates()
 	if(!..())

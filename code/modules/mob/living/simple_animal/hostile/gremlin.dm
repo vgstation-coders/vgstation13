@@ -31,7 +31,7 @@ var/list/bad_gremlin_items = list()
 	//Subtypes of these are calculated too
 	var/list/unwanted_objects = list(/obj/machinery/atmospherics/pipe)
 
-	//Amount of ticks spent pathing to the target. If it gets above a certain amount, assume that the target is unreachable and stop
+	//Amount of extra grace (in Life ticks) granted by tampering; stand_still() lowers it.
 	var/time_chasing_target = 0
 
 	//If you're going to make gremlins slower, increase this value - otherwise gremlins will abandon their targets too early
@@ -125,22 +125,16 @@ var/list/bad_gremlin_items = list()
 	return ..()
 
 /mob/living/simple_animal/hostile/gremlin/Life()
-	if(timestopped)
-		return 0 //under effects of time magick
-	//Don't try to path to one target for too long. If it takes longer than a certain amount of time, assume it can't be reached and find a new one
-	if(!target)
-		time_chasing_target = 0
-	else
-		if(++time_chasing_target > max_time_chasing_target)
-			LoseTarget()
-			time_chasing_target = 0
-
 	.=..()
 
 	if(.)
 		regular_hud_updates()
 
 		standard_damage_overlay_updates()
+
+/// The move_to_target leaf gives up after this long on one unreachable target.
+/mob/living/simple_animal/hostile/gremlin/ai_get_chase_timeout()
+	return max(0, (max_time_chasing_target - time_chasing_target) * 2 SECONDS)
 
 /mob/living/simple_animal/hostile/gremlin/EscapeConfinement()
 	if(istype(loc, /obj) && CanAttack(loc)) //If we're inside a machine, screw with it

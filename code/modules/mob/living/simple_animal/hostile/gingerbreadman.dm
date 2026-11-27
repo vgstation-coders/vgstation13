@@ -36,3 +36,11 @@
 	supernatural = TRUE
 
 	blooded = FALSE
+
+// WIP: the gingerbread man runs the shared combat tree.
+/mob/living/simple_animal/hostile/gingerbread/New()
+	..()
+	var/datum/ai_controller/controller = new(src)
+	controller.behavior_nodes = list(bt_basic_hostile_tree())
+	controller.initialize_behavior_tree()
+

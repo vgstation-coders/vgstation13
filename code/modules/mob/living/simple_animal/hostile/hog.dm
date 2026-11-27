@@ -61,7 +61,6 @@
 
 	nutrition = HOG_FED
 	var/food_search_radius = 7
-	var/food_target = null //A secondary target only used when we are not aggroing for a target we attack
 	var/mood = HOG_SKITTISH
 	var/panic = 0 //Ticks down, when positive cause aggro
 
@@ -111,16 +110,68 @@
 	..()
 	nutrition--
 
-	if(stance == HOSTILE_STANCE_IDLE && (!food_target || get_dist(food_target, src) > 7) && !ckey)
-		if(mood == HOG_CURIOUS)
-			var/odds_of_new_food_search = max(300 - nutrition, 0)
-			//every nutrition under HOG_FED increases odds of a new search by 1%
-			if(prob(odds_of_new_food_search))
-				mood = HOG_SKITTISH
-			return
-		food_target = idle_search()
-		if(!food_target)
-			set_mood(HOG_CURIOUS)
+/mob/living/simple_animal/hostile/spacehog/use_hostile_tree()
+	return ..(bt_hog_tree())
+
+/// Food source: keeps the hog's legacy idle_search priority list, while the
+/// tree owns the walk/eat. Low nutrition makes a curious hog commit to a search.
+/datum/target_source/hog_food
+/datum/target_source/hog_food/find_targets(datum/ai_controller/controller, mob/living/pawn, search_range)
+	var/mob/living/simple_animal/hostile/spacehog/hog = pawn
+	if(!istype(hog) || hog.ckey)
+		return list()
+	if(hog.mood == HOG_CURIOUS)
+		var/odds_of_new_food_search = max(300 - hog.nutrition, 0)
+		//every nutrition under HOG_FED increases odds of a new search by 1%
+		if(prob(odds_of_new_food_search))
+			hog.mood = HOG_SKITTISH
+		return list()
+	var/atom/food = hog.idle_search()
+	if(!food)
+		hog.set_mood(HOG_CURIOUS)
+		return list()
+	return list(food)
+
+/// Walks to the forage target and eats it through the hog's legacy eat().
+/datum/bt_node/ai_behavior/hog_forage
+	var/target_key = BB_TARGET
+
+/datum/bt_node/ai_behavior/hog_forage/setup(datum/ai_controller/controller)
+	var/mob/living/simple_animal/hostile/spacehog/hog = controller.pawn
+	var/atom/target = controller.blackboard[target_key]
+	if(!istype(hog) || !target || QDELETED(target))
+		return FALSE
+	return get_dist(hog, target) <= 1
+
+/datum/bt_node/ai_behavior/hog_forage/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/simple_animal/hostile/spacehog/hog = controller.pawn
+	var/atom/target = controller.blackboard[target_key]
+	if(!istype(hog) || !target || QDELETED(target) || get_dist(hog, target) > 1)
+		return AI_BEHAVIOR_FAILED
+	hog.eat(target)
+	controller.clear_blackboard_key(target_key)
+	return AI_BEHAVIOR_SUCCEEDED
+
+/proc/bt_hog_tree()
+	return list(
+		BT_DESC_TYPE = /datum/bt_node/composite/selector,
+		BT_DESC_CHILDREN = list(
+			bt_basic_hostile_tree(),
+			list(
+				BT_DESC_TYPE = /datum/bt_node/composite/sequence,
+				BT_DESC_CHILDREN = list(
+					list(
+						BT_DESC_TYPE = /datum/bt_node/ai_behavior/acquire_target,
+						target_source_type = /datum/target_source/hog_food,
+						search_range = 7,
+					),
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/move_to_target, max_distance = 7),
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/hog_forage),
+				),
+			),
+			bt_idle_tree(50, 5 SECONDS, 4 SECONDS, FALSE),
+		),
+	)
 
 /* Priorities:
 planted seeds with ligneous = FALSE
@@ -168,7 +219,6 @@ if ungreased adult: l containers
 		if(L.stat)
 			carrion = L
 		else
-			GiveTarget(L)
 			return L
 	if(carrion)
 		return carrion
@@ -222,7 +272,7 @@ if ungreased adult: l containers
 /mob/living/simple_animal/hostile/spacehog/adult/Life()
 	..()
 	panic--
-	if(stance == HOSTILE_STANCE_ATTACK) //If currently agitated by nearby humans, gain panic if piglets are nearby
+	if(is_legacy_engaged()) //If currently agitated by nearby humans, gain panic if piglets are nearby
 		for(var/mob/living/simple_animal/hostile/spacehog/piglet in view(7,src))
 			panic += 2
 	if(locked_to)
@@ -416,6 +466,8 @@ if ungreased adult: l containers
 	..()
 	homes += loc
 	CS = new(src) //The hog can already squeeze through any door, but this makes sure he knows it.
+	// WIP: the path-dash movement loop is a behavior tree leaf.
+	use_idle_tree(bt_rampage_hog_tree())
 
 /mob/living/simple_animal/rampagingspacehog/Destroy()
 	QDEL_NULL(CS)
@@ -449,15 +501,6 @@ if ungreased adult: l containers
 	path = get_path_to(src, target, max_distance=500, id = CS, diagonally = TRUE)
 	pathers += src
 
-/mob/living/simple_animal/rampagingspacehog/Life()
-	..()
-
-	for(var/i = 1 to dashspeed)
-		if(path.len>0)
-			process_path_step()
-		else
-			break
-
 /mob/living/simple_animal/rampagingspacehog/process_path_step()
 	if(gcDestroyed || stat == DEAD)
 		return FALSE
@@ -470,6 +513,23 @@ if ungreased adult: l containers
 		playsound(loc, snort_sound, 50, 0)
 		return FALSE
 	return TRUE
+
+/// Behavior tree leaf for the rampage hog's path dash. The path is built by
+/// adjustBruteLoss(); this leaf consumes up to dashspeed steps per tick.
+/datum/bt_node/ai_behavior/rampage_dash
+/datum/bt_node/ai_behavior/rampage_dash/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/simple_animal/rampagingspacehog/hog = controller.pawn
+	if(!istype(hog, /mob/living/simple_animal/rampagingspacehog) || QDELETED(hog))
+		return AI_BEHAVIOR_FAILED
+	for(var/i in 1 to hog.dashspeed)
+		if(hog.path && hog.path.len > 0)
+			hog.process_path_step()
+		else
+			break
+	return AI_BEHAVIOR_SUCCEEDED
+
+/proc/bt_rampage_hog_tree()
+	return list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/rampage_dash)
 
 //This is a new forme of your living nightmares
 /mob/living/simple_animal/rampagingspacehog/sleeperclown

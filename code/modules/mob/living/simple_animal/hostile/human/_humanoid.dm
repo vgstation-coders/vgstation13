@@ -51,6 +51,16 @@
 		new_img.plane = MOB_PLANE
 		overlays.Add(new_img)
 
+/// WIP: installs the behavior tree on a humanoid. Ranged humanoids get the
+/// ranged tree (retreat + fire + hold); melee ones get the shared combat tree.
+/mob/living/simple_animal/hostile/humanoid/proc/use_humanoid_tree()
+	var/datum/ai_controller/controller = new(src)
+	if(ranged_mode())
+		controller.behavior_nodes = list(bt_ranged_hostile_tree(retreat_distance = retreat_distance ? retreat_distance : 0))
+	else
+		controller.behavior_nodes = list(bt_basic_hostile_tree())
+	controller.initialize_behavior_tree()
+
 /mob/living/simple_animal/hostile/humanoid/getarmor(var/def_zone, var/type)
 	return armor[type]
 

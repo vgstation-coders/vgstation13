@@ -37,7 +37,9 @@ var/max_snails = 40
 
 /mob/living/simple_animal/snail/New()
 	snail_count++
-	return ..()
+	. = ..()
+	use_idle_tree()
+	return .
 
 /mob/living/simple_animal/snail/Destroy()
 	snail_count--
@@ -62,6 +64,9 @@ var/max_snails = 40
 		return 0
 	if (in_shell)
 		in_shell--
+		// Shelled snails do not wander; resume the tree when they come back out.
+		if (ai_controller)
+			ai_controller.set_ai_status(in_shell ? AI_STATUS_OFF : AI_STATUS_ON)
 		return
 	if (!in_shell)
 		icon_state = initial(icon_state)
@@ -73,6 +78,8 @@ var/max_snails = 40
 			loving_partner.being_romantic = 0
 			loving_partner.loving_partner = null
 			loving_partner = null
+			if (ai_controller)
+				ai_controller.set_ai_status(AI_STATUS_ON)
 		return
 	return ..()
 
@@ -95,6 +102,8 @@ var/max_snails = 40
 	icon_state = "snail_recoil"
 	visible_message("<span class = 'notice'>\The [src] stops whatever it was doing and recoils into its shell.</span>")
 	in_shell = 5 // Shy for some cycles
+	if (ai_controller)
+		ai_controller.set_ai_status(AI_STATUS_OFF)
 
 /mob/living/simple_animal/snail/wander_move(turf/dest)
 	..()
@@ -118,6 +127,10 @@ var/max_snails = 40
 		partner.being_romantic = 45
 		partner.loving_partner = src
 		visible_message("<span class='notice'>\The [src] begins to softly approach \the [partner]...</span>")
+		if (ai_controller)
+			ai_controller.set_ai_status(AI_STATUS_OFF)
+		if (partner.ai_controller)
+			partner.ai_controller.set_ai_status(AI_STATUS_OFF)
 
 /mob/living/simple_animal/snail/examine(var/mob/user)
 	. = ..()

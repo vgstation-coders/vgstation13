@@ -237,3 +237,10 @@
 			H.hallucination += 40
 
 	return 1
+
+// WIP: the mummy family runs the humanoid behavior tree; the priests' custom
+// Shoot() spells read the legacy target, which ranged_attack now sets per shot.
+/mob/living/simple_animal/hostile/humanoid/mummy/New()
+	..()
+	use_humanoid_tree()
+

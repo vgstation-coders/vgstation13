@@ -92,12 +92,8 @@
 		if(check_evolve())
 			return
 
-		var/list/can_see = view(src, vision_range)
-
-		for(var/obj/machinery/space_heater/campfire/fire in can_see)
-			var/dist = get_dist(src, fire)
-			if(dist < (fire.light_range*2))
-				walk_away(src,fire,(fire.light_range*2),move_to_delay)
+/mob/living/simple_animal/hostile/wendigo/use_hostile_tree()
+	return ..(bt_hazard_hostile_tree(/obj/machinery/space_heater/campfire))
 
 
 /mob/living/simple_animal/hostile/wendigo/GetVoice()

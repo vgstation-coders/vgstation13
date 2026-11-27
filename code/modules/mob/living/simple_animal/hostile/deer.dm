@@ -17,15 +17,39 @@
 	treadmill_speed = 2.5
 	minbodytemp = 200
 
-/mob/living/simple_animal/hostile/deer/GiveTarget(var/new_target)
-	if(isDead())
-		return //The deers problems are over now, try not to be too jealous
-	if(isliving(new_target))
-		if(is_spooked(new_target))
-			var/list/can_see = view(src, vision_range)
-			get_spooked(new_target)
-			for(var/mob/living/simple_animal/hostile/deer/D in can_see)
-				D.get_spooked(new_target)
+// WIP: the tree acquires targets; the spook hook replaces the legacy target
+// acquisition side of the deer behavior.
+/mob/living/simple_animal/hostile/deer/New()
+	..()
+	var/datum/ai_controller/controller = new(src)
+	controller.behavior_nodes = list(list(
+		BT_DESC_TYPE = /datum/bt_node/composite/selector,
+		BT_DESC_CHILDREN = list(
+			list(
+				BT_DESC_TYPE = /datum/bt_node/decorator/bb_key_exists,
+				key = BB_SPOOKED,
+				observer_abort = BT_ABORT_SELF,
+				BT_DESC_CHILDREN = list(list(
+					BT_DESC_TYPE = /datum/bt_node/ai_behavior/flee_target,
+					flee_distance = 25,
+					hold_while_target_alive = TRUE,
+				)),
+			),
+			bt_hostile_combat_tree(),
+		),
+	))
+	controller.initialize_behavior_tree()
+
+/mob/living/simple_animal/hostile/deer/ai_target_acquired(atom/target)
+	if(!isliving(target))
+		return
+	var/mob/living/living_target = target
+	if(!is_spooked(living_target))
+		return
+	var/list/can_see = view(src, vision_range)
+	get_spooked(living_target)
+	for(var/mob/living/simple_animal/hostile/deer/D in can_see)
+		D.get_spooked(living_target)
 
 /mob/living/simple_animal/hostile/deer/proc/is_spooked(var/mob/living/target)
 	for(var/datum/weakref/ref in friends)
@@ -60,8 +84,13 @@
 			return 1
 
 /mob/living/simple_animal/hostile/deer/proc/get_spooked(var/mob/living/T)
-	stance = HOSTILE_STANCE_ATTACK
+	// The tree does not drive stance; only set it for mobs still on the legacy AI.
+	if(!ai_controller)
+		stance = HOSTILE_STANCE_ATTACK
 	target = T
+	if(ai_controller)
+		ai_controller.blackboard[BB_SPOOKED] = TRUE
+		ai_controller.blackboard[BB_TARGET] = T
 	visible_message("<span class='danger'>\The [src] tries to flee from \the [target]!</span>")
 	retreat_distance = 25
 	minimum_distance = 25
@@ -73,15 +102,19 @@
 	..()
 	if(isDead())
 		return
+	if(!ai_controller || !ai_controller.blackboard[BB_SPOOKED])
+		return
 	var/list/can_see = view(src, vision_range)
-	if(stance == HOSTILE_STANCE_ATTACK)
-		spawn(15)
-			var/is_spooked = 0
-			for(var/mob/living/L in can_see)
-				if(is_spooked(L))
-					is_spooked = 1
-			if(!is_spooked)
-				calm_down()
+	spawn(15)
+		if(QDELETED(src) || !ai_controller)
+			return
+		var/someone_spooky = 0
+		for(var/mob/living/L in can_see)
+			if(is_spooked(L))
+				someone_spooky = 1
+				break
+		if(!someone_spooky)
+			calm_down()
 
 
 /mob/living/simple_animal/hostile/deer/proc/calm_down()
@@ -89,6 +122,9 @@
 	retreat_distance = 0
 	minimum_distance = 0
 	LoseTarget()
+	if(ai_controller)
+		ai_controller.blackboard.Remove(BB_SPOOKED)
+		ai_controller.blackboard.Remove(BB_TARGET)
 
 
 
