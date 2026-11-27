@@ -4,17 +4,17 @@ Source: [tgstation/tgstation](https://github.com/tgstation/tgstation) `master`,
 `code/datums/ai/_ai_bt_*.dm`, `code/datums/ai/_ai_behavior.dm`,
 `code/datums/ai/_ai_controller.dm` and `code/__DEFINES/ai/behavior_trees.dm`.
 
-**Status:** phase 18. The core, subsystem/possession path, sentience hooks,
+**Status:** phase 19. The core, subsystem/possession path, sentience hooks,
 z-level-gated subsystems, path-cached movement, starter behavior leaves (attack,
 flee, retreat, hold, smash, wait, wander, hunt, follow, speak, blackboard keys),
 target lifecycle hooks and target sources (enemies, wounded, retaliate, prey,
 including wanted objects), an ability system with a ranged and a charge ability, a
 health decorator, the `.bt.json` compiler, the admin BT viewer, an example hostile
-consumer and twenty-one existing mapped mob types (space bear, space carp,
+consumer and twenty-five existing mapped mob types (space bear, space carp,
 strong/ranged/rapid hivebot, viscerator, cow, goat, chicken, cat, crab, bigroach,
 gingerbread, ginger family, skeleton jack, warrior bug, retaliate
-clown/mime/tomato, puddi, spider hunter) compile and pass the auxtools scenario.
-The wider basic mob behavior set is still pending.
+clown/mime/tomato, puddi, spider hunter, pirate/gunner, russian/gunner) compile and
+pass the auxtools scenario. The wider basic mob behavior set is still pending.
 
 ## Ported so far
 
@@ -108,6 +108,10 @@ The wider basic mob behavior set is still pending.
   tree, keeps the base spider's poison bite through the `AttackingTarget()` bridge
   and still smashes wanted objects (lights/bots) because `enemies` now includes
   them while `search_objects` is set.
+- `human/pirate.dm` + `human/russian.dm`: twentieth and twenty-first migrations.
+  A shared `use_humanoid_tree()` picks the ranged tree when `ranged_mode()` is set
+  (gunner variants) and the melee combat tree otherwise; corpses/items on death
+  are untouched.
 - `_ai_bt_viewer.dm` + `code/modules/admin/verbs/behavior_trees.dm`: admin
   "View Behavior Tree" verb rendering the tree, blackboard and live markers.
 - `living.dm`: `/mob/living/Destroy()` now deletes the attached
@@ -169,6 +173,10 @@ childless and it fails every tick.
   leaf sets the legacy `target` var for the call, invokes `AttackingTarget()` and
   clears it, so mob overrides (queen roach eggs, flying skull animation) keep
   working. Non-hostile pawns fall back to `UnarmedAttack()`.
+- **Target acquisition calls `Aggro()`.** Acquiring a new target invokes the
+  legacy `Aggro()` hook (vision range, spider icon swap, russian taunt).
+  `LoseAggro()` is deliberately not called because it re-enables legacy automated
+  movement; mobs that need an idle state restore it themselves.
 - **Following uses a pawn hook.** `follow_leader` asks `ai_get_follow_target()`
   (default null; the chicken returns its `master`) and gives up when the leader is
   on another z level or farther than `max_distance`, falling back to idle.
@@ -232,6 +240,7 @@ tree, verify the queen roach lays an egg through the legacy `AttackingTarget()`
 bridge, verify the gingerbread/ginger/skeleton jack batch attacks through the
 combat tree, verify the warrior bug/clown/tomato batch attacks, verify puddi's
 idle tree wanders, verify the spider hunter targets a wanted object and then
-attacks a living victim, and verify the migrated space bear and space carp attack
-adjacent humans. Keep the test leaves in `behavior_tree_test.dm` until real
-leaves and unit tests replace them.
+attacks a living victim, verify the pirate/russian melee batch attacks and the
+pirate gunner fires its ranged ability, and verify the migrated space bear and
+space carp attack adjacent humans. Keep the test leaves in `behavior_tree_test.dm`
+until real leaves and unit tests replace them.

@@ -35,3 +35,12 @@
 	projectiletype = /obj/item/projectile/bullet/midbullet2
 	projectilesound = 'sound/weapons/nagant.ogg'
 	casingtype = /obj/item/ammo_casing/c762x38r
+
+// WIP: russians run the humanoid behavior tree; the melee one keeps its Aggro()
+// taunt because acquire_target calls Aggro() on a new target.
+/mob/living/simple_animal/hostile/humanoid/russian/New()
+	..()
+	use_humanoid_tree()
+
+/mob/living/simple_animal/hostile/humanoid/russian/FindTarget()
+	return null

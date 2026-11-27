@@ -241,6 +241,11 @@
 
 	controller.blackboard[target_key] = picked
 	pawn.ai_target_acquired(picked)
+	// Fidelity: legacy GiveTarget() called Aggro(), which resets vision range and
+	// drives mob overrides (spider icon swap, russian taunt). Only on a new target.
+	if(istype(pawn, /mob/living/simple_animal/hostile))
+		var/mob/living/simple_animal/hostile/hostile_pawn = pawn
+		hostile_pawn.Aggro()
 	return AI_BEHAVIOR_SUCCEEDED
 
 /// Walks the pawn towards the blackboard target using the controller's movement adapter.
