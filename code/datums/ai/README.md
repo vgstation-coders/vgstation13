@@ -4,15 +4,15 @@ Source: [tgstation/tgstation](https://github.com/tgstation/tgstation) `master`,
 `code/datums/ai/_ai_bt_*.dm`, `code/datums/ai/_ai_behavior.dm`,
 `code/datums/ai/_ai_controller.dm` and `code/__DEFINES/ai/behavior_trees.dm`.
 
-**Status:** phase 11. The core, subsystem/possession path, sentience hooks,
+**Status:** phase 12. The core, subsystem/possession path, sentience hooks,
 z-level-gated subsystems, path-cached movement, starter behavior leaves (attack,
 flee, retreat, hold, smash, wait, wander, speak, blackboard keys), target
 lifecycle hooks and target sources (including retaliation), an ability system
 with a ranged and a charge ability, a health decorator, the `.bt.json` compiler,
-the admin BT viewer, an example hostile consumer and seven existing mapped mob
-types (space bear, space carp, strong/ranged/rapid hivebot, viscerator, cow)
-compile and pass the auxtools scenario. The wider basic mob behavior set is still
-pending.
+the admin BT viewer, an example hostile consumer and ten existing mapped mob
+types (space bear, space carp, strong/ranged/rapid hivebot, viscerator, cow,
+goat, chicken) compile and pass the auxtools scenario. The wider basic mob
+behavior set is still pending.
 
 ## Ported so far
 
@@ -74,6 +74,12 @@ pending.
 - `cow.dm`: fifth migration and the first non-hostile consumer. Cows run
   `bt_idle_tree()` (wander/rest); legacy automated movement is disabled and
   legacy speech/milking stay untouched.
+- `goat.dm`: sixth migration and the first production retaliator. Goats run
+  `bt_idle_hostile_tree(retaliate)`: passive wander/rest until something fills
+  the legacy `enemies` list (anger or damage), then fight. `Calm()` clears the
+  tree's blackboard target as well as the legacy one.
+- `chicken.dm`: seventh migration. Chickens run `bt_idle_tree()`; egg laying,
+  feather regen and speech stay in `Life()`.
 - `_ai_bt_viewer.dm` + `code/modules/admin/verbs/behavior_trees.dm`: admin
   "View Behavior Tree" verb rendering the tree, blackboard and live markers.
 - `living.dm`: `/mob/living/Destroy()` now deletes the attached
@@ -122,9 +128,11 @@ childless and it fails every tick.
   `DestroySurroundings()` on a 2 second cooldown, only after the chase branch
   failed to move. It does not replace the legacy `EscapeConfinement()` loop.
 - **Retaliation reads the legacy enemies list.** `target_source/enemies/retaliate`
-  filters to `pawn.enemies`, which the `/hostile/retaliate` base fills on damage.
-  A tree-driven retaliator therefore reacts on its next controller tick instead
-  of instantly inside `adjustBruteLoss()`.
+  filters to `pawn.enemies`, which the `/hostile/retaliate` base fills on damage
+  (and the goat fills on anger). A tree-driven retaliator therefore reacts on its
+  next controller tick instead of instantly inside `adjustBruteLoss()`. Mob code
+  that clears the legacy target (`goat/Calm()`) must also clear `BB_TARGET`; the
+  goat does.
 - **Target sources are polled, not event driven.** `acquire_target` asks its
   `target_source` for candidates on every run, so sources are cheap filters
   instead of signal subscriptions.
@@ -163,7 +171,7 @@ childless and it fails every tick.
 
 ## Testing
 
-The phase-11 scenario lives outside the repository (local auxtools harness):
+The phase-12 scenario lives outside the repository (local auxtools harness):
 build a sequence/selector/decorator/subtree, tick it across RUNNING/SUCCESS/
 FAILURE, exercise the descriptor builder, cancel a running leaf, possess a mob,
 verify sentience login/logout and high/low subsystem routing (per-z buckets),
@@ -178,6 +186,7 @@ ranged ability, make it melee at adjacency, charge with a pawn, verify a ranged
 hivebot retreats to its keep distance, smash surroundings as a hostile pawn,
 test the wait/blackboard-key leaves, verify a retaliator stays passive until its
 enemies list is filled, verify a destroyed pawn deletes its controller, verify
-the cow's idle tree wanders, and verify the migrated space bear and space carp
-attack adjacent humans. Keep the test leaves in `behavior_tree_test.dm` until
-real leaves and unit tests replace them.
+the cow and chicken idle trees wander, verify the goat fights its enemies and
+`Calm()` clears the tree target, and verify the migrated space bear and space
+carp attack adjacent humans. Keep the test leaves in `behavior_tree_test.dm`
+until real leaves and unit tests replace them.

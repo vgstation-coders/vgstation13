@@ -39,6 +39,18 @@
 		udder = new(100)
 		udder.my_atom = src
 	..()
+	// WIP: the goat's decision layer is an idle + retaliating behavior tree.
+	// Legacy plant eating, milk, anger and calm stay in Life(); legacy random
+	// movement and target acquisition are disabled.
+	stop_automated_movement = TRUE
+	wander = 0
+	var/datum/ai_controller/controller = new(src)
+	controller.behavior_nodes = list(bt_idle_hostile_tree(/datum/target_source/enemies/retaliate))
+	controller.initialize_behavior_tree()
+
+// The behavior tree owns target acquisition; keep the legacy hostile AI idle.
+/mob/living/simple_animal/hostile/retaliate/goat/FindTarget()
+	return null
 
 /mob/living/simple_animal/hostile/retaliate/goat/Life()
 	if(timestopped)
@@ -72,6 +84,9 @@
 /mob/living/simple_animal/hostile/retaliate/goat/proc/Calm()
 	enemies.Cut()
 	LoseTarget()
+	// The tree keeps its own target in the blackboard; drop it too.
+	if(ai_controller)
+		ai_controller.blackboard.Remove(BB_TARGET)
 	src.visible_message("<span class='notice'>[src] calms down.</span>")
 
 /mob/living/simple_animal/hostile/retaliate/goat/Retaliate()
@@ -326,6 +341,14 @@
 	pixel_y = rand(0, 10) * PIXEL_MULTIPLIER
 
 	init_butchering_list()
+
+	// WIP: the chicken's decision layer is an idle/wander behavior tree; legacy
+	// egg laying, feather regen and speech stay in Life().
+	stop_automated_movement = TRUE
+	wander = 0
+	var/datum/ai_controller/controller = new(src)
+	controller.behavior_nodes = list(bt_idle_tree())
+	controller.initialize_behavior_tree()
 
 /mob/living/simple_animal/chicken/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown/wheat)) //feedin' dem chickens
