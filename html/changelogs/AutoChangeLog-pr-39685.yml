@@ -1,0 +1,5 @@
+author: jknpj
+delete-after: true
+changes:
+- bugfix: The robotics console killswitch now shows its confirmation and can be halted
+    reliably.
