@@ -1,0 +1,5 @@
+author: jknpj
+delete-after: true
+changes:
+- bugfix: Detached heads and limbs keep their species' appearance after the donor
+    body is deleted.
