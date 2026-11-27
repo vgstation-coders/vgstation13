@@ -465,6 +465,8 @@
 			return 0
 
 	else if(isobj(AM))
+		if(istype(AM, /obj/effect) && !istype(AM, /obj/effect/dummy/chameleon))
+			return 0
 		if(AM.density || AM.anchored || istype(AM,/obj/structure/closet))
 			return 0
 		else if(locked_to == AM)

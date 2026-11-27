@@ -117,7 +117,7 @@
 				var/max_chains = length-1
 				for(var/i = 1; i < max_chains; i++)		//first we create tether links on every turf that has one of the projectile's chain parts.
 					var/obj/effect/overlay/hookchain/HC = hookshot.links["[i]"]
-					if(!HC.loc || (HC.loc == hookshot))
+					if(!isturf(HC.loc))	//still in the hookshot, or stuffed inside something
 						max_chains = i
 						break
 					var/obj/effect/overlay/chain/C = new chain_overlay_path(HC.loc)
