@@ -345,3 +345,10 @@
 
 /mob/living/proc/ai_target_lost(atom/target)
 	return
+
+/// Called by the hunt leaf when the pawn reaches its prey. Defaults to a normal
+/// attack; mobs with a special kill (the cat's splat) override it.
+/mob/living/proc/ai_hunt_kill(atom/target)
+	if(target)
+		UnarmedAttack(target)
+	return TRUE

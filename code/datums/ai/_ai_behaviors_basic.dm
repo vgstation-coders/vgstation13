@@ -83,6 +83,27 @@
 		),
 	)
 
+/// Hunts a specific prey type with the hunt leaf; otherwise wanders/rests.
+/proc/bt_hunting_idle_tree(prey_type)
+	return list(
+		BT_DESC_TYPE = /datum/bt_node/composite/selector,
+		BT_DESC_CHILDREN = list(
+			list(
+				BT_DESC_TYPE = /datum/bt_node/composite/sequence,
+				BT_DESC_CHILDREN = list(
+					list(
+						BT_DESC_TYPE = /datum/bt_node/ai_behavior/acquire_target,
+						target_source_type = /datum/target_source/prey,
+						target_source_config = list("prey_type" = prey_type),
+						search_range = 4,
+					),
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/hunt_target),
+				),
+			),
+			bt_idle_tree(),
+		),
+	)
+
 /// Default combat tree used by migrated mobs. Kept as a named entry point so
 /// call sites do not depend on the composition details.
 /proc/bt_basic_hostile_tree()
@@ -153,6 +174,8 @@
 	var/search_range = 7
 	/// Target source that decides which candidates exist and which one wins.
 	var/target_source_type = /datum/target_source/enemies
+	/// Optional config list applied to the target source instance.
+	var/list/target_source_config = null
 	/// Lazily built instance of target_source_type.
 	var/datum/target_source/target_source = null
 
@@ -165,9 +188,12 @@
 		QDEL_NULL(target_source)
 		if(ispath(target_source_type, /datum/target_source))
 			target_source = new target_source_type
+			if(target_source_config)
+				target_source.configure(target_source_config)
 	return target_source
 
-/// Returns TRUE while the stored target is still worth chasing.
+/// Returns TRUE while the stored target is still worth chasing. The target
+/// source owns the "would I still attack this" rule.
 /datum/bt_node/ai_behavior/acquire_target/proc/is_still_valid(datum/ai_controller/controller, atom/existing)
 	if(!existing || QDELETED(existing))
 		return FALSE
@@ -175,11 +201,10 @@
 		var/mob/living/living_target = existing
 		if(living_target.stat == DEAD)
 			return FALSE
-	if(istype(controller.pawn, /mob/living/simple_animal))
-		var/mob/living/simple_animal/animal = controller.pawn
-		if(!animal.CanAttack(existing))
-			return FALSE
-	return TRUE
+	var/datum/target_source/source = get_target_source()
+	if(!source)
+		return TRUE
+	return source.is_valid_target(controller, controller.pawn, existing)
 
 /datum/bt_node/ai_behavior/acquire_target/perform(seconds_per_tick, datum/ai_controller/controller)
 
@@ -515,3 +540,45 @@
 	if(!destination || !pawn.Move(destination))
 		return AI_BEHAVIOR_FAILED
 	return AI_BEHAVIOR_SUCCEEDED
+
+/// Moves to the blackboard target and lets the pawn kill it through
+/// ai_hunt_kill(). Unlike attack_target this works for non-hostile pawns and
+/// respects a custom kill hook (the cat's splat).
+/datum/bt_node/ai_behavior/hunt_target
+	var/target_key = BB_TARGET
+	var/max_distance = 10
+
+/datum/bt_node/ai_behavior/hunt_target/setup(datum/ai_controller/controller)
+	var/atom/target = controller.blackboard[target_key]
+	var/mob/living/pawn = controller.pawn
+	if(!target || QDELETED(target) || !pawn || QDELETED(pawn) || !controller.ai_movement)
+		return FALSE
+	// Held, restrained or unconscious pawns do not hunt.
+	if(pawn.stat || pawn.locked_to)
+		return FALSE
+	return get_dist(pawn, target) <= max_distance
+
+/datum/bt_node/ai_behavior/hunt_target/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/atom/target = controller.blackboard[target_key]
+	var/mob/living/pawn = controller.pawn
+	if(!target || QDELETED(target) || !pawn || QDELETED(pawn))
+		return AI_BEHAVIOR_FAILED
+
+	if(get_dist(pawn, target) <= 1)
+		pawn.ai_hunt_kill(target)
+		if(controller.ai_movement)
+			controller.ai_movement.stop_moving_towards(controller)
+		return AI_BEHAVIOR_SUCCEEDED
+
+	if(!controller.ai_movement)
+		return AI_BEHAVIOR_FAILED
+	if(controller.ai_movement.needs_repath(controller, target) && !controller.ai_movement.start_moving_towards(controller, target, max_distance))
+		return AI_BEHAVIOR_FAILED
+	if(!controller.ai_movement.process(controller))
+		return AI_BEHAVIOR_FAILED
+	return AI_BEHAVIOR_DELAY
+
+/datum/bt_node/ai_behavior/hunt_target/finish_action(datum/ai_controller/controller, succeeded)
+	if(controller?.ai_movement)
+		controller.ai_movement.stop_moving_towards(controller)
+	return ..()

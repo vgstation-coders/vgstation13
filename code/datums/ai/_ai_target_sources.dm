@@ -15,10 +15,25 @@
 	return list()
 
 /// Picks one candidate from find_targets(); null means "nothing worth chasing".
+/// Defaults to the closest candidate.
 /datum/target_source/proc/pick_target(datum/ai_controller/controller, mob/living/pawn, list/candidates)
-	if(!length(candidates))
-		return null
-	return candidates[1]
+	var/atom/best = null
+	var/best_distance = INFINITY
+	for(var/atom/candidate in candidates)
+		var/distance = get_dist(pawn, candidate)
+		if(distance < best_distance)
+			best_distance = distance
+			best = candidate
+	return best
+
+/// Applies descriptor config to the source (same convention as bt_node).
+/datum/target_source/proc/configure(list/config)
+	for(var/key in config)
+		vars[key] = config[key]
+
+/// Returns TRUE while this source still considers the stored target valid.
+/datum/target_source/proc/is_valid_target(datum/ai_controller/controller, mob/living/pawn, atom/existing)
+	return TRUE
 
 /// Living mobs the pawn is able to attack. Picks the closest one, matching the
 /// distance rule of the legacy hostile target selection.
@@ -40,15 +55,11 @@
 		candidates += candidate
 	return candidates
 
-/datum/target_source/enemies/pick_target(datum/ai_controller/controller, mob/living/pawn, list/candidates)
-	var/atom/best = null
-	var/best_distance = INFINITY
-	for(var/atom/candidate in candidates)
-		var/distance = get_dist(pawn, candidate)
-		if(distance < best_distance)
-			best_distance = distance
-			best = candidate
-	return best
+/datum/target_source/enemies/is_valid_target(datum/ai_controller/controller, mob/living/pawn, atom/existing)
+	if(istype(pawn, /mob/living/simple_animal))
+		var/mob/living/simple_animal/animal = pawn
+		return animal.CanAttack(existing)
+	return TRUE
 
 /// Like enemies, but prefers the candidate with the lowest health fraction so
 /// pack hunters finish wounded prey instead of scattering damage.
@@ -86,3 +97,29 @@
 		if(!(candidate in retaliator.enemies))
 			candidates -= candidate
 	return candidates
+
+/// Hunts a specific mob type (the cat's mice, future falconry, etc). Deliberately
+/// does not use CanAttack(): a friendly mob still needs prey it is not allowed to
+/// "attack". Only mobs standing on a turf are considered, so caged or held prey
+/// is ignored like the legacy cat did.
+/datum/target_source/prey
+	name = "prey"
+	/// Typepath every candidate must match.
+	var/prey_type = null
+
+/datum/target_source/prey/find_targets(datum/ai_controller/controller, mob/living/pawn, search_range)
+	var/list/candidates = list()
+	for(var/mob/living/candidate in oview(search_range, pawn))
+		if(candidate == pawn || candidate.stat == DEAD)
+			continue
+		if(!isturf(candidate.loc))
+			continue
+		if(prey_type && !istype(candidate, prey_type))
+			continue
+		candidates += candidate
+	return candidates
+
+/datum/target_source/prey/is_valid_target(datum/ai_controller/controller, mob/living/pawn, atom/existing)
+	if(prey_type && !istype(existing, prey_type))
+		return FALSE
+	return TRUE

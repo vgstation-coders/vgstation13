@@ -4,15 +4,15 @@ Source: [tgstation/tgstation](https://github.com/tgstation/tgstation) `master`,
 `code/datums/ai/_ai_bt_*.dm`, `code/datums/ai/_ai_behavior.dm`,
 `code/datums/ai/_ai_controller.dm` and `code/__DEFINES/ai/behavior_trees.dm`.
 
-**Status:** phase 12. The core, subsystem/possession path, sentience hooks,
+**Status:** phase 13. The core, subsystem/possession path, sentience hooks,
 z-level-gated subsystems, path-cached movement, starter behavior leaves (attack,
-flee, retreat, hold, smash, wait, wander, speak, blackboard keys), target
-lifecycle hooks and target sources (including retaliation), an ability system
-with a ranged and a charge ability, a health decorator, the `.bt.json` compiler,
-the admin BT viewer, an example hostile consumer and ten existing mapped mob
-types (space bear, space carp, strong/ranged/rapid hivebot, viscerator, cow,
-goat, chicken) compile and pass the auxtools scenario. The wider basic mob
-behavior set is still pending.
+flee, retreat, hold, smash, wait, wander, hunt, speak, blackboard keys), target
+lifecycle hooks and target sources (enemies, wounded, retaliate, prey), an
+ability system with a ranged and a charge ability, a health decorator, the
+`.bt.json` compiler, the admin BT viewer, an example hostile consumer and eleven
+existing mapped mob types (space bear, space carp, strong/ranged/rapid hivebot,
+viscerator, cow, goat, chicken, cat) compile and pass the auxtools scenario. The
+wider basic mob behavior set is still pending.
 
 ## Ported so far
 
@@ -39,11 +39,12 @@ behavior set is still pending.
   while the pathfinder subsystem is not ready or has no route. Caches the path
   per controller/target and repaths after `repath_after` steps or a target change.
 - `_ai_target_sources.dm`: `target_source` base plus `enemies` (closest pick,
-  legacy distance rule), `enemies/wounded` (weakest pick) and
-  `enemies/retaliate` (only mobs already in the pawn's legacy `enemies` list)
-  sources. The `enemies` filter uses the pawn's `CanAttack()`, so only mobs that
-  override it (hostile mobs) see healthy prey; the base simple_animal version
-  only allows targets already in crit.
+  legacy distance rule), `enemies/wounded` (weakest pick), `enemies/retaliate`
+  (only mobs already in the pawn's legacy `enemies` list) and `prey` (a specific
+  mob type, ignoring `CanAttack` so friendly hunters work) sources. The `enemies`
+  filter uses the pawn's `CanAttack()`, so only mobs that override it (hostile
+  mobs) see healthy prey; the base simple_animal version only allows targets
+  already in crit.
 - `_ai_abilities.dm`: `ai_ability` base with cooldowns, plus `ranged_attack`
   (wraps the legacy `OpenFire`/`ranged_cooldown`) and `charge` (closes two tiles).
 - `_ai_behaviors_basic.dm`: `acquire_target` (target sources, dead/invalid target
@@ -53,7 +54,8 @@ behavior set is still pending.
   `clear_blackboard_key` and `wander`, plus the `bt_hostile_combat_tree()` /
   `bt_basic_hostile_tree()` / `bt_fleeing_hostile_tree()` /
   `bt_ranged_hostile_tree()` / `bt_retaliating_hostile_tree()` /
-  `bt_idle_tree()` / `bt_idle_hostile_tree()` descriptors.
+  `bt_idle_tree()` / `bt_idle_hostile_tree()` / `bt_hunting_idle_tree()`
+  descriptors and the `hunt_target` leaf.
 - `bt_guard.dm`: example first consumer, a hostile simple animal whose decision
   layer is a behavior tree controller (not mapped; admin/spawn use). It composes
   a fleeing combat tree in parallel with ambient chatter.
@@ -80,6 +82,11 @@ behavior set is still pending.
   tree's blackboard target as well as the legacy one.
 - `chicken.dm`: seventh migration. Chickens run `bt_idle_tree()`; egg laying,
   feather regen and speech stay in `Life()`.
+- `cat.dm`: eighth migration and the first hunter. Cats run
+  `bt_hunting_idle_tree(/mob/living/simple_animal/mouse)`: the `prey` source finds
+  mice, `hunt_target` walks over and calls `ai_hunt_kill()`, which the cat
+  overrides to splat the mouse with its legacy kill verbs. The legacy Life hunt
+  loop was removed; the growl moved to `ai_target_acquired()`.
 - `_ai_bt_viewer.dm` + `code/modules/admin/verbs/behavior_trees.dm`: admin
   "View Behavior Tree" verb rendering the tree, blackboard and live markers.
 - `living.dm`: `/mob/living/Destroy()` now deletes the attached
@@ -133,6 +140,10 @@ childless and it fails every tick.
   next controller tick instead of instantly inside `adjustBruteLoss()`. Mob code
   that clears the legacy target (`goat/Calm()`) must also clear `BB_TARGET`; the
   goat does.
+- **Prey sources bypass CanAttack.** `target_source/prey` matches its configured
+  `prey_type` on a turf instead, so a friendly hunter (the cat) can target mice it
+  is not allowed to "attack". The kill goes through the `ai_hunt_kill()` pawn
+  hook, which defaults to `UnarmedAttack()` and is overridden for special kills.
 - **Target sources are polled, not event driven.** `acquire_target` asks its
   `target_source` for candidates on every run, so sources are cheap filters
   instead of signal subscriptions.
@@ -187,6 +198,7 @@ hivebot retreats to its keep distance, smash surroundings as a hostile pawn,
 test the wait/blackboard-key leaves, verify a retaliator stays passive until its
 enemies list is filled, verify a destroyed pawn deletes its controller, verify
 the cow and chicken idle trees wander, verify the goat fights its enemies and
-`Calm()` clears the tree target, and verify the migrated space bear and space
-carp attack adjacent humans. Keep the test leaves in `behavior_tree_test.dm`
-until real leaves and unit tests replace them.
+`Calm()` clears the tree target, verify the cat hunts and kills a mouse, and
+verify the migrated space bear and space carp attack adjacent humans. Keep the
+test leaves in `behavior_tree_test.dm` until real leaves and unit tests replace
+them.
