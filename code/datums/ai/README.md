@@ -13,9 +13,9 @@ with a ranged and a charge ability, a health decorator, the `.bt.json` compiler,
 the admin BT viewer, an example hostile consumer and the full hostile simple
 animal tree (every hostile mob gets a controller, either explicitly or lazily on
 its first `Life()` tick) plus a set of non-hostile idle mobs compile and pass the
-auxtools scenario. Every simple animal AI now runs through the controller;
-player-controlled/special mobs (borer, shade, spiderbot, space_worm, scp_173,
-constructs) have no legacy movement AI to migrate.
+auxtools scenario. Every simple animal with decision AI now runs through the
+controller; the remaining mobs (borer, shade, spiderbot, space_worm, constructs,
+vox, dracson, grue_egg) are player-controlled or have no autonomous movement AI.
 
 ## Ported so far
 
@@ -185,6 +185,13 @@ constructs) have no legacy movement AI to migrate.
   an intent selector (`bee_combat`, `bee_pollinate`, `bee_go_home`, `bee_roam`,
   `bee_build`) and `bee_finish` (icon refresh). The swarm still tracks its legacy
   `intent` and bee datums; the leaves gate on them.
+- `scp_173.dm`: the statue's `Life()` is gone. `bt_scp_tree()` is a sequence of
+  `scp_active_gate` (not player-controlled, not hibernating) and `scp_los_gate`
+  (nobody observing, darkness counts as unobserved), then a selector of
+  `scp_snap_adjacent`, `scp_chase` (nearest conscious human) and `scp_idle`
+  (stroll/vent, async because the vent slide sleeps). The existing
+  `handle_target()` / `handle_idle()` procs stay as the action bodies and remain
+  usable by the player-controlled `ClickOn`.
 - `_ai_target_sources.dm`: added `food`, `pointer` and `wires` sources.
 - `mimic.dm`: mimics run the combat tree with `target_source/enemies/mimic`,
   which stays empty until `anger()`; losing the target calls `calm_down()` again
@@ -317,11 +324,11 @@ childless and it fails every tick.
    level path caching and multi-step movement.
 3. **Tree tooling:** richer viewer (execution log, TGUI window) and a subtree
    override editor.
-4. **Migration:** complete for simple animal AI. The hostile tree covers every
-   `/hostile` simple animal, the idle tree covers the simple non-hostiles, and the
-   corgi, mouse, parrot and bee are real trees. Player-controlled/special mobs
-   (borer, shade, spiderbot, space_worm, scp_173, constructs) have no legacy
-   movement AI to migrate.
+4. **Migration:** complete for simple animal decision AI. The hostile tree covers
+   every `/hostile` simple animal, the idle tree covers the simple non-hostiles,
+   and the corgi, mouse, parrot, bee and SCP-173 are real trees.
+   Player-controlled/no-AI mobs (borer, shade, spiderbot, space_worm, constructs,
+   vox, dracson, grue_egg) are out of scope.
 
 ## Testing
 

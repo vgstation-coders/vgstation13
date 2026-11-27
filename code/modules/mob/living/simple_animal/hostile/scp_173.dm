@@ -33,43 +33,8 @@
 
 /mob/living/simple_animal/scp_173/New()
 	. = ..()
-
-/mob/living/simple_animal/scp_173/Life()
-	if(timestopped)
-		return 0 //Under effects of time magick
-
-	if(mind || client || key || ckey) // not if player controlled
-		return
-
-	//If we are hibernating, just don't do anything
-	if(hibernate)
-		return
-
-	if(!check_los())
-		return
-
-	//See if we're able to strangle anyone
-	for(var/mob/living/carbon/human/M in get_turf(src))
-		if(M.stat == CONSCIOUS && check_los())
-			snap_neck(M)
-			break
-
-	//Find out what mobs we can see for targetting purposes
-	var/list/conscious = list()
-	for(var/mob/living/carbon/human/H in view(7, src))
-		if(H.stat == CONSCIOUS) //He's up and running
-			conscious.Add(H)
-
-	//Pick the nearest valid conscious target
-	var/mob/living/carbon/human/target
-	for(var/mob/living/carbon/human/H in conscious)
-		if(!target || get_dist(src, H) < get_dist(src, target))
-			target = H
-
-	if(target)
-		handle_target(target)
-	else
-		handle_idle()
+	// WIP: the behavior tree controller drives the SCP-173 AI.
+	use_idle_tree(bt_scp_tree())
 
 /mob/living/simple_animal/scp_173/death(var/gibbed = FALSE)
 	if(!gibbed)
@@ -113,6 +78,109 @@
 	if(observed && !in_darkness) //Is someone looking at us, given that they can see us ?
 		return 0 //Try again when we get a chance
 	return 1 //Success, let's move
+
+/// Nearest conscious human SCP-173 can see, or null.
+/mob/living/simple_animal/scp_173/proc/find_nearest_conscious_human()
+	var/mob/living/carbon/human/best = null
+	for(var/mob/living/carbon/human/H in view(7, src))
+		if(H.stat != CONSCIOUS)
+			continue
+		if(!best || get_dist(src, H) < get_dist(src, best))
+			best = H
+	return best
+
+/*
+ * Behavior tree leaves. Life() used to do the player/hibernate/LoS gates and
+ * then pick target vs idle; the tree now owns that decision and calls the same
+ * action procs (handle_target/handle_idle).
+ */
+
+/datum/bt_node/ai_behavior/scp_action
+	proc/get_scp(datum/ai_controller/controller)
+		var/mob/living/simple_animal/scp_173/scp = controller.pawn
+		if(!istype(scp, /mob/living/simple_animal/scp_173) || QDELETED(scp))
+			return null
+		return scp
+
+/// Fails while a player controls SCP-173 or it is hibernating.
+/datum/bt_node/ai_behavior/scp_action/scp_active_gate
+/datum/bt_node/ai_behavior/scp_action/scp_active_gate/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/simple_animal/scp_173/scp = get_scp(controller)
+	if(!scp)
+		return AI_BEHAVIOR_FAILED
+	if(scp.mind || scp.client || scp.key || scp.ckey)
+		return AI_BEHAVIOR_FAILED
+	if(scp.hibernate)
+		return AI_BEHAVIOR_FAILED
+	return AI_BEHAVIOR_SUCCEEDED
+
+/// Fails while a human can see SCP-173 (darkness still counts as unobserved).
+/datum/bt_node/ai_behavior/scp_action/scp_los_gate
+/datum/bt_node/ai_behavior/scp_action/scp_los_gate/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/simple_animal/scp_173/scp = get_scp(controller)
+	if(!scp || !scp.check_los())
+		return AI_BEHAVIOR_FAILED
+	return AI_BEHAVIOR_SUCCEEDED
+
+/// Snaps the neck of a conscious human sharing SCP-173's turf.
+/datum/bt_node/ai_behavior/scp_action/scp_snap_adjacent
+/datum/bt_node/ai_behavior/scp_action/scp_snap_adjacent/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/simple_animal/scp_173/scp = get_scp(controller)
+	if(!scp)
+		return AI_BEHAVIOR_FAILED
+	for(var/mob/living/carbon/human/M in get_turf(scp))
+		if(M.stat == CONSCIOUS && scp.check_los())
+			scp.snap_neck(M)
+			return AI_BEHAVIOR_SUCCEEDED
+	return AI_BEHAVIOR_FAILED
+
+/// Dashes to the nearest conscious human.
+/datum/bt_node/ai_behavior/scp_action/scp_chase
+/datum/bt_node/ai_behavior/scp_action/scp_chase/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/simple_animal/scp_173/scp = get_scp(controller)
+	if(!scp)
+		return AI_BEHAVIOR_FAILED
+	var/mob/living/carbon/human/target = scp.find_nearest_conscious_human()
+	if(!target)
+		return AI_BEHAVIOR_FAILED
+	scp.handle_target(target)
+	return AI_BEHAVIOR_SUCCEEDED
+
+/// When nobody is around: random stroll or vent travel. handle_idle() may sleep
+/// while sliding into a vent, so it runs in the async action context.
+/datum/bt_node/ai_behavior/scp_action/scp_idle
+/datum/bt_node/ai_behavior/scp_action/scp_idle/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/simple_animal/scp_173/scp = get_scp(controller)
+	if(!scp)
+		return AI_BEHAVIOR_FAILED
+	if(scp.find_nearest_conscious_human())
+		return AI_BEHAVIOR_FAILED
+	return AI_BEHAVIOR_ASYNC
+
+/datum/bt_node/ai_behavior/scp_action/scp_idle/async_perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/simple_animal/scp_173/scp = get_scp(controller)
+	if(!scp)
+		return AI_BEHAVIOR_FAILED
+	scp.handle_idle()
+	return AI_BEHAVIOR_SUCCEEDED
+
+/// Player gate, sight gate, then snap -> chase -> idle.
+/proc/bt_scp_tree()
+	return list(
+		BT_DESC_TYPE = /datum/bt_node/composite/sequence,
+		BT_DESC_CHILDREN = list(
+			list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/scp_action/scp_active_gate),
+			list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/scp_action/scp_los_gate),
+			list(
+				BT_DESC_TYPE = /datum/bt_node/composite/selector,
+				BT_DESC_CHILDREN = list(
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/scp_action/scp_snap_adjacent),
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/scp_action/scp_chase),
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/scp_action/scp_idle),
+				),
+			),
+		),
+	)
 
 /mob/living/simple_animal/scp_173/proc/handle_target(var/atom/target)
 
