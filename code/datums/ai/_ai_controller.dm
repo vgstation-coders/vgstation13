@@ -356,3 +356,8 @@
 /// Returns the mob this pawn follows (pets and chickens with a master).
 /mob/living/proc/ai_get_follow_target()
 	return null
+
+/// Runs one unit of idle work (nurse spiders spin webs and lay eggs). Called
+/// from the idle_work leaf in a background context, so it may sleep.
+/mob/living/proc/ai_idle_work()
+	return

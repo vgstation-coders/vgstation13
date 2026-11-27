@@ -5,7 +5,7 @@
 // Shared starter trees for hostile consumers. These are building blocks: a mob
 // can use bt_basic_hostile_tree() directly or compose it with extra branches.
 // Try to attack an adjacent target, otherwise acquire and walk to it, then attack.
-/proc/bt_hostile_combat_tree(target_source_type = /datum/target_source/enemies)
+/proc/bt_hostile_combat_tree(target_source_type = /datum/target_source/enemies, attack_leaf_type = /datum/bt_node/ai_behavior/attack_target)
 	return list(
 		BT_DESC_TYPE = /datum/bt_node/composite/selector,
 		BT_DESC_CHILDREN = list(
@@ -16,7 +16,7 @@
 						BT_DESC_TYPE = /datum/bt_node/ai_behavior/acquire_target,
 						target_source_type = target_source_type,
 					),
-					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/attack_target),
+					list(BT_DESC_TYPE = attack_leaf_type),
 				),
 			),
 			list(
@@ -31,7 +31,7 @@
 						BT_DESC_TYPE = /datum/bt_node/ai_behavior/acquire_target,
 						target_source_type = target_source_type,
 					),
-					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/attack_target),
+					list(BT_DESC_TYPE = attack_leaf_type),
 				),
 			),
 			// Last resort when the chase branch could not move: break what is in
@@ -300,15 +300,15 @@
 		return FALSE
 	return get_dist(controller.pawn, target) <= 1
 
-/datum/bt_node/ai_behavior/attack_target/perform(seconds_per_tick, datum/ai_controller/controller)
+/// Returns TRUE when the blackboard target is still adjacent and attackable.
+/datum/bt_node/ai_behavior/attack_target/proc/can_attack(datum/ai_controller/controller, atom/target)
+	if(!target || QDELETED(target) || !controller.pawn || QDELETED(controller.pawn))
+		return FALSE
+	return get_dist(controller.pawn, target) <= 1
 
-	var/atom/target = controller.blackboard[target_key]
+/// Runs the attack (or the mob's legacy AttackingTarget override) once.
+/datum/bt_node/ai_behavior/attack_target/proc/do_attack(datum/ai_controller/controller, atom/target)
 	var/mob/living/pawn = controller.pawn
-	if(!target || QDELETED(target) || !pawn || QDELETED(pawn))
-		return AI_BEHAVIOR_FAILED
-	if(get_dist(pawn, target) > 1)
-		return AI_BEHAVIOR_FAILED
-
 	// Bridge to the legacy combat hook so mob overrides keep working: the queen
 	// roach lays eggs, the flying skull plays its bite animation, and so on.
 	// The legacy hook reads src.target, so point it at the blackboard target for
@@ -321,6 +321,27 @@
 	else
 		pawn.UnarmedAttack(target)
 	return AI_BEHAVIOR_SUCCEEDED
+
+/datum/bt_node/ai_behavior/attack_target/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/atom/target = controller.blackboard[target_key]
+	if(!can_attack(controller, target))
+		return AI_BEHAVIOR_FAILED
+	return do_attack(controller, target)
+
+/// Attack variant for mobs whose attack sleeps (nurse spider cocooning with
+/// do_after). perform() hands off to async_perform() so the tick never blocks.
+/datum/bt_node/ai_behavior/attack_target/async
+/datum/bt_node/ai_behavior/attack_target/async/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/atom/target = controller.blackboard[target_key]
+	if(!can_attack(controller, target))
+		return AI_BEHAVIOR_FAILED
+	return AI_BEHAVIOR_ASYNC
+
+/datum/bt_node/ai_behavior/attack_target/async/async_perform(seconds_per_tick, datum/ai_controller/controller)
+	var/atom/target = controller.blackboard[target_key]
+	if(!can_attack(controller, target))
+		return AI_BEHAVIOR_FAILED
+	return do_attack(controller, target)
 
 /// Runs away from the blackboard target until it is farther than flee_distance.
 /// With hold_while_target_alive the leaf stays RUNNING once safe, so a
@@ -651,3 +672,28 @@
 	if(controller?.ai_movement)
 		controller.ai_movement.stop_moving_towards(controller)
 	return ..()
+
+/// Runs the pawn's idle work (web spinning, egg laying, ...) in a background
+/// action so do_after() cannot stall the controller tick.
+/datum/bt_node/ai_behavior/idle_work
+	/// Cooldown between idle work attempts.
+	var/cooldown = 5 SECONDS
+	/// world.time before which the leaf reports failure.
+	var/next_work_time = 0
+
+/datum/bt_node/ai_behavior/idle_work/setup(datum/ai_controller/controller)
+	var/mob/living/pawn = controller.pawn
+	if(!pawn || QDELETED(pawn))
+		return FALSE
+	return world.time >= next_work_time
+
+/datum/bt_node/ai_behavior/idle_work/perform(seconds_per_tick, datum/ai_controller/controller)
+	next_work_time = world.time + cooldown
+	return AI_BEHAVIOR_ASYNC
+
+/datum/bt_node/ai_behavior/idle_work/async_perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/pawn = controller.pawn
+	if(!pawn || QDELETED(pawn))
+		return AI_BEHAVIOR_FAILED
+	pawn.ai_idle_work()
+	return AI_BEHAVIOR_SUCCEEDED

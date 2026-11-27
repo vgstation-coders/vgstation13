@@ -36,6 +36,19 @@
 		return AI_BEHAVIOR_INSTANT
 	return AI_BEHAVIOR_SUCCEEDED
 
+/// Test leaf for the async path: perform() hands off, async_perform() completes.
+/datum/bt_node/ai_behavior/test/async_action
+	var/completed = FALSE
+	var/async_calls = 0
+
+/datum/bt_node/ai_behavior/test/async_action/perform(seconds_per_tick, datum/ai_controller/controller)
+	return AI_BEHAVIOR_ASYNC
+
+/datum/bt_node/ai_behavior/test/async_action/async_perform(seconds_per_tick, datum/ai_controller/controller)
+	async_calls++
+	completed = TRUE
+	return AI_BEHAVIOR_SUCCEEDED
+
 /datum/bt_node/decorator/test_condition
 	var/condition_result = TRUE
 

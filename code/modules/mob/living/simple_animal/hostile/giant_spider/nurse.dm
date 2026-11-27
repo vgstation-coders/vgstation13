@@ -27,6 +27,34 @@
 	add_spell(new /spell/spider_eggs, "spider_spell_ready", /obj/abstract/screen/movable/spell_master/spider)
 	recent_cocoon_targets = list()
 
+	// WIP: the nurse (and queen) run a cocooning behavior tree: the ranged web
+	// ability for the queen, async attacks (do_after cocoons), async idle work
+	// (webs/eggs) and finally wander/rest.
+	stop_automated_movement = TRUE
+	wander = 0
+	var/list/tree_children = list()
+	if(ranged_mode())
+		tree_children += list(list(
+			BT_DESC_TYPE = /datum/bt_node/ai_behavior/use_ability,
+			ability_type = /datum/ai_ability/ranged_attack,
+			min_distance = 2,
+			max_distance = 7,
+		))
+	tree_children += list(
+		bt_hostile_combat_tree(/datum/target_source/enemies, /datum/bt_node/ai_behavior/attack_target/async),
+		list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/idle_work),
+		bt_idle_tree(),
+	)
+	var/datum/ai_controller/controller = new(src)
+	controller.behavior_nodes = list(list(
+		BT_DESC_TYPE = /datum/bt_node/composite/selector,
+		BT_DESC_CHILDREN = tree_children,
+	))
+	controller.initialize_behavior_tree()
+
+/mob/living/simple_animal/hostile/giant_spider/nurse/FindTarget()
+	return null
+
 /mob/living/simple_animal/hostile/giant_spider/nurse/initialize_rules()
 	target_rules.Add(new /datum/fuzzy_ruling/is_mob)
 	target_rules.Add(new /datum/fuzzy_ruling/is_obj{weighting = 0.01})
@@ -59,13 +87,17 @@
 	..()
 	if (!(life_tick%5))
 		recent_cocoon_targets.len=0
-	if(client && !deny_client_move)
-		return 0
-	if(!stat && stance == HOSTILE_STANCE_IDLE)
-		if(check_evolve())
-			return
-		if(spin_web(get_turf(src)) && fed > 0)
-			lay_eggs()
+
+// WIP: the nurse's idle work (web spinning, egg laying and evolution) moved to
+// the behavior tree's async idle_work leaf; this hook may sleep (lay_eggs).
+/mob/living/simple_animal/hostile/giant_spider/nurse/ai_idle_work()
+	if(check_evolve())
+		return
+	if(QDELETED(src))
+		return
+	spin_web(get_turf(src))
+	if(fed > 0)
+		lay_eggs()
 
 /mob/living/simple_animal/hostile/giant_spider/nurse/regular_hud_updates()
 	..()

@@ -73,6 +73,9 @@
 #define AI_BEHAVIOR_FAILED (1<<2)
 /// Performed to completion without returning a terminal flag.
 #define AI_BEHAVIOR_INSTANT 0
+/// perform() handed off to a background action (async_perform); the leaf keeps
+/// returning RUNNING until the background action reports back.
+#define AI_BEHAVIOR_ASYNC (1<<3)
 
 // AI controller status. Controllers in AI_STATUS_OFF are not ticked.
 #define AI_STATUS_ON "ai_on"

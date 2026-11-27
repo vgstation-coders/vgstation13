@@ -13,6 +13,12 @@
 	var/next_perform_time = 0
 	/// TRUE when the last perform() failed and we are waiting out next_perform_time to say we failed.
 	var/failed_last_perform = FALSE
+	/// TRUE while an async_perform() background action is running.
+	var/async_running = FALSE
+	/// BT_SUCCESS/BT_FAILURE reported by the finished background action.
+	var/async_result = null
+	/// Bumped on start/cancel so a stale background action is ignored.
+	var/async_token = 0
 
 /datum/bt_node/ai_behavior/has_active_descendants()
 	return running
@@ -45,8 +51,27 @@
 			return BT_FAILURE
 		running = TRUE
 
+	// A background action finished between ticks: consume its result.
+	if(!isnull(async_result))
+		var/final_result = async_result
+		async_result = null
+		finish_action(controller, final_result == BT_SUCCESS)
+		controller.ticking_execution_index = previous_execution_index
+		return final_result
+	if(async_running)
+		if(!controller.cancelled_during_tick)
+			controller.active_execution_index = execution_index
+		controller.ticking_execution_index = previous_execution_index
+		return BT_RUNNING
+
 	var/process_flags = perform(seconds_per_tick, controller)
 
+	if(process_flags & AI_BEHAVIOR_ASYNC)
+		start_async(controller, seconds_per_tick)
+		if(!controller.cancelled_during_tick)
+			controller.active_execution_index = execution_index
+		controller.ticking_execution_index = previous_execution_index
+		return BT_RUNNING
 	if(process_flags & AI_BEHAVIOR_DELAY)
 		next_perform_time = world.time + get_cooldown(controller)
 	if(process_flags & AI_BEHAVIOR_SUCCEEDED)
@@ -82,6 +107,34 @@
 /datum/bt_node/ai_behavior/proc/finish_action(datum/ai_controller/controller, succeeded)
 	SHOULD_CALL_PARENT(TRUE)
 	running = FALSE
+	// Invalidate any in-flight background action; its result must not leak into
+	// the next activation of this leaf.
+	async_token++
+	async_running = FALSE
+	async_result = null
+
+/// Override for actions that may sleep (do_after and friends). Runs in its own
+/// background context; return AI_BEHAVIOR_SUCCEEDED/FAILED at the end.
+/datum/bt_node/ai_behavior/proc/async_perform(seconds_per_tick, datum/ai_controller/controller)
+	SHOULD_NOT_SLEEP(FALSE)
+	return AI_BEHAVIOR_SUCCEEDED
+
+/// Starts the background action for a leaf whose perform() returned
+/// AI_BEHAVIOR_ASYNC.
+/datum/bt_node/ai_behavior/proc/start_async(datum/ai_controller/controller, seconds_per_tick)
+	async_running = TRUE
+	async_result = null
+	async_token++
+	var/token = async_token
+	spawn(0)
+		run_async(controller, seconds_per_tick, token)
+
+/datum/bt_node/ai_behavior/proc/run_async(datum/ai_controller/controller, seconds_per_tick, token)
+	var/result = async_perform(seconds_per_tick, controller)
+	if(QDELETED(src) || token != async_token)
+		return
+	async_running = FALSE
+	async_result = (result & AI_BEHAVIOR_SUCCEEDED) ? BT_SUCCESS : BT_FAILURE
 
 /datum/bt_node/ai_behavior/reset_tick_state()
 	if(running)

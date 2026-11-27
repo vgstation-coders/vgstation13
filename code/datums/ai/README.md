@@ -4,17 +4,18 @@ Source: [tgstation/tgstation](https://github.com/tgstation/tgstation) `master`,
 `code/datums/ai/_ai_bt_*.dm`, `code/datums/ai/_ai_behavior.dm`,
 `code/datums/ai/_ai_controller.dm` and `code/__DEFINES/ai/behavior_trees.dm`.
 
-**Status:** phase 19. The core, subsystem/possession path, sentience hooks,
+**Status:** phase 20. The core, subsystem/possession path, sentience hooks,
 z-level-gated subsystems, path-cached movement, starter behavior leaves (attack,
-flee, retreat, hold, smash, wait, wander, hunt, follow, speak, blackboard keys),
-target lifecycle hooks and target sources (enemies, wounded, retaliate, prey,
-including wanted objects), an ability system with a ranged and a charge ability, a
-health decorator, the `.bt.json` compiler, the admin BT viewer, an example hostile
-consumer and twenty-five existing mapped mob types (space bear, space carp,
-strong/ranged/rapid hivebot, viscerator, cow, goat, chicken, cat, crab, bigroach,
-gingerbread, ginger family, skeleton jack, warrior bug, retaliate
-clown/mime/tomato, puddi, spider hunter, pirate/gunner, russian/gunner) compile and
-pass the auxtools scenario. The wider basic mob behavior set is still pending.
+flee, retreat, hold, smash, wait, wander, hunt, follow, idle work, speak,
+blackboard keys), async actions, target lifecycle hooks and target sources
+(enemies, wounded, retaliate, prey, including wanted objects), an ability system
+with a ranged and a charge ability, a health decorator, the `.bt.json` compiler,
+the admin BT viewer, an example hostile consumer and twenty-seven existing mapped
+mob types (space bear, space carp, strong/ranged/rapid hivebot, viscerator, cow,
+goat, chicken, cat, crab, bigroach, gingerbread, ginger family, skeleton jack,
+warrior bug, retaliate clown/mime/tomato, puddi, spider hunter, pirate/gunner,
+russian/gunner, spider nurse/queen) compile and pass the auxtools scenario. The
+wider basic mob behavior set is still pending.
 
 ## Ported so far
 
@@ -31,7 +32,10 @@ pass the auxtools scenario. The wider basic mob behavior set is still pending.
 - `_ai_bt_decorators.dm`: condition gate, blackboard key conditions, polling
   observer aborts, override slot gate, `pawn_health_below` health gate.
 - `_ai_bt_subtree.dm`: named reusable subtree and runtime override slots.
-- `_ai_behavior.dm`: behavior leaf base (setup/perform/finish/cooldown).
+- `_ai_behavior.dm`: behavior leaf base (setup/perform/finish/cooldown) with the
+  async path: `perform()` may return `AI_BEHAVIOR_ASYNC`, which starts
+  `async_perform()` in a background context; a token invalidates results from
+  cancelled actions.
 - `_ai_controller.dm`: blackboard, descriptor/typepath tree construction,
   `SelectBehaviors()`, cancellation, tick-state reset, AI status, possession,
   sentience (`/event/living_login`, `/event/logout`), subsystem routing, movement
@@ -112,6 +116,10 @@ pass the auxtools scenario. The wider basic mob behavior set is still pending.
   A shared `use_humanoid_tree()` picks the ranged tree when `ranged_mode()` is set
   (gunner variants) and the melee combat tree otherwise; corpses/items on death
   are untouched.
+- `giant_spider/nurse.dm`: twenty-second and twenty-third migrations (nurse and
+  queen). They run a cocooning tree with async attacks (do_after cocoons no longer
+  stall the tick), async idle work (web spinning, egg laying, evolution checks)
+  and the queen's web projectile through the ranged ability.
 - `_ai_bt_viewer.dm` + `code/modules/admin/verbs/behavior_trees.dm`: admin
   "View Behavior Tree" verb rendering the tree, blackboard and live markers.
 - `living.dm`: `/mob/living/Destroy()` now deletes the attached
@@ -200,9 +208,11 @@ childless and it fails every tick.
   `code/datums/ai/compiled/*.compiled.json` (committed). `--check` fails when the
   output is stale. Subtree references are expanded inline, so override slots are
   not reachable through JSON yet.
-- **No async perform and no event logging.** The async leaf path and `EVLOG_*`
-  calls are deferred with the controller/subsystem port. The viewer renders
-  on demand and does not drain a per-tick execution log yet.
+- **Async actions run in a background context.** `async_perform()` may sleep (the
+  nurse's `do_after` cocoons use this). Cancellation invalidates the action's
+  result through a token, but it cannot interrupt a `do_after` already in
+  progress: the side effect may still land. Event logging (`EVLOG_*`) is still
+  deferred; the viewer renders on demand and does not drain a per-tick log.
 
 ## Next phases
 
@@ -218,7 +228,7 @@ childless and it fails every tick.
 
 ## Testing
 
-The phase-12 scenario lives outside the repository (local auxtools harness):
+The phase-20 scenario lives outside the repository (local auxtools harness):
 build a sequence/selector/decorator/subtree, tick it across RUNNING/SUCCESS/
 FAILURE, exercise the descriptor builder, cancel a running leaf, possess a mob,
 verify sentience login/logout and high/low subsystem routing (per-z buckets),
@@ -241,6 +251,8 @@ bridge, verify the gingerbread/ginger/skeleton jack batch attacks through the
 combat tree, verify the warrior bug/clown/tomato batch attacks, verify puddi's
 idle tree wanders, verify the spider hunter targets a wanted object and then
 attacks a living victim, verify the pirate/russian melee batch attacks and the
-pirate gunner fires its ranged ability, and verify the migrated space bear and
-space carp attack adjacent humans. Keep the test leaves in `behavior_tree_test.dm`
-until real leaves and unit tests replace them.
+pirate gunner fires its ranged ability, exercise the async leaf state machine,
+verify the nurse spider has the async attack leaf and spins a web in idle work,
+and verify the migrated space bear and space carp attack adjacent humans. Keep
+the test leaves in `behavior_tree_test.dm` until real leaves and unit tests
+replace them.
