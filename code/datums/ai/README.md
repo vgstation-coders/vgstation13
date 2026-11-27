@@ -4,16 +4,16 @@ Source: [tgstation/tgstation](https://github.com/tgstation/tgstation) `master`,
 `code/datums/ai/_ai_bt_*.dm`, `code/datums/ai/_ai_behavior.dm`,
 `code/datums/ai/_ai_controller.dm` and `code/__DEFINES/ai/behavior_trees.dm`.
 
-**Status:** phase 16. The core, subsystem/possession path, sentience hooks,
+**Status:** phase 17. The core, subsystem/possession path, sentience hooks,
 z-level-gated subsystems, path-cached movement, starter behavior leaves (attack,
 flee, retreat, hold, smash, wait, wander, hunt, follow, speak, blackboard keys),
 target lifecycle hooks and target sources (enemies, wounded, retaliate, prey), an
 ability system with a ranged and a charge ability, a health decorator, the
-`.bt.json` compiler, the admin BT viewer, an example hostile consumer and fifteen
+`.bt.json` compiler, the admin BT viewer, an example hostile consumer and twenty
 existing mapped mob types (space bear, space carp, strong/ranged/rapid hivebot,
 viscerator, cow, goat, chicken, cat, crab, bigroach, gingerbread, ginger family,
-skeleton jack) compile and pass the auxtools scenario. The wider basic mob
-behavior set is still pending.
+skeleton jack, warrior bug, retaliate clown/mime/tomato, puddi) compile and pass
+the auxtools scenario. The wider basic mob behavior set is still pending.
 
 ## Ported so far
 
@@ -98,6 +98,11 @@ behavior set is still pending.
   thirteenth migrations. The gingerbread man, the whole ginger family (chef,
   knight, broodmother, ...) and skeleton jack run the shared combat tree; the
   broodmother's special attack and skeleton jack's candybucket drop are untouched.
+- `warriorbug.dm`, `retaliate/clown.dm`, `retaliate/mime.dm`,
+  `retaliate/tomato.dm` + `puddi.dm`: fourteenth to eighteenth migrations. The
+  warrior bug fights with the shared combat tree; clown, mime and tomato use
+  `use_retaliating_tree()` (added on the retaliate base, now shared with the
+  goat); puddi is a friendly idle/wander pet.
 - `_ai_bt_viewer.dm` + `code/modules/admin/verbs/behavior_trees.dm`: admin
   "View Behavior Tree" verb rendering the tree, blackboard and live markers.
 - `living.dm`: `/mob/living/Destroy()` now deletes the attached
@@ -220,6 +225,7 @@ the cow and chicken idle trees wander, verify the goat fights its enemies and
 befriended chicken follows its master, verify the crab attacks through the combat
 tree, verify the queen roach lays an egg through the legacy `AttackingTarget()`
 bridge, verify the gingerbread/ginger/skeleton jack batch attacks through the
-combat tree, and verify the migrated space bear and space carp attack adjacent
-humans. Keep the test leaves in `behavior_tree_test.dm` until real leaves and
-unit tests replace them.
+combat tree, verify the warrior bug/clown/tomato batch attacks, verify puddi's
+idle tree wanders, and verify the migrated space bear and space carp attack
+adjacent humans. Keep the test leaves in `behavior_tree_test.dm` until real
+leaves and unit tests replace them.

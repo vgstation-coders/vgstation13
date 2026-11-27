@@ -32,3 +32,12 @@
 	speak = list("PUDDI!")
 	response_harm   = "stomps"
 	turns_per_move = 2
+
+// WIP: puddi is a friendly idle/wander pet now.
+/mob/living/simple_animal/puddi/New()
+	..()
+	stop_automated_movement = TRUE
+	wander = 0
+	var/datum/ai_controller/controller = new(src)
+	controller.behavior_nodes = list(bt_idle_tree())
+	controller.initialize_behavior_tree()

@@ -29,3 +29,11 @@
 	switch(id)
 		if(PLANTBGONE)
 			death(FALSE)
+
+// WIP: the killer tomato runs the idle retaliating tree.
+/mob/living/simple_animal/hostile/retaliate/tomato/New()
+	..()
+	use_retaliating_tree()
+
+/mob/living/simple_animal/hostile/retaliate/tomato/FindTarget()
+	return null

@@ -42,11 +42,7 @@
 	// WIP: the goat's decision layer is an idle + retaliating behavior tree.
 	// Legacy plant eating, milk, anger and calm stay in Life(); legacy random
 	// movement and target acquisition are disabled.
-	stop_automated_movement = TRUE
-	wander = 0
-	var/datum/ai_controller/controller = new(src)
-	controller.behavior_nodes = list(bt_idle_hostile_tree(/datum/target_source/enemies/retaliate))
-	controller.initialize_behavior_tree()
+	use_retaliating_tree()
 
 // The behavior tree owns target acquisition; keep the legacy hostile AI idle.
 /mob/living/simple_animal/hostile/retaliate/goat/FindTarget()
