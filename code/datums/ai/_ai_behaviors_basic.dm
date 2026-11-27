@@ -111,3 +111,69 @@
 
 	pawn.UnarmedAttack(target)
 	return AI_BEHAVIOR_SUCCEEDED
+
+/// Runs away from the blackboard target until it is farther than flee_distance.
+/datum/bt_node/ai_behavior/flee_target
+	var/target_key = BB_TARGET
+	var/flee_distance = 5
+	var/max_distance = 30
+
+/datum/bt_node/ai_behavior/flee_target/setup(datum/ai_controller/controller)
+	var/atom/threat = controller.blackboard[target_key]
+	if(!threat || QDELETED(threat) || !controller.pawn || !controller.ai_movement)
+		return FALSE
+	var/away_dir = get_dir(threat, controller.pawn)
+	if(!away_dir)
+		return FALSE
+	var/turf/flee_turf = get_edge_target_turf(controller.pawn, away_dir)
+	if(!flee_turf)
+		return FALSE
+	return controller.ai_movement.start_moving_towards(controller, flee_turf, max_distance)
+
+/datum/bt_node/ai_behavior/flee_target/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/atom/threat = controller.blackboard[target_key]
+	var/mob/living/pawn = controller.pawn
+	if(!threat || QDELETED(threat) || !pawn || QDELETED(pawn))
+		return AI_BEHAVIOR_FAILED
+
+	if(get_dist(pawn, threat) > flee_distance)
+		if(controller.ai_movement)
+			controller.ai_movement.stop_moving_towards(controller)
+		return AI_BEHAVIOR_SUCCEEDED
+
+	if(!controller.ai_movement || !controller.ai_movement.process(controller))
+		return AI_BEHAVIOR_FAILED
+
+	return AI_BEHAVIOR_DELAY
+
+/datum/bt_node/ai_behavior/flee_target/finish_action(datum/ai_controller/controller, succeeded)
+	if(controller?.ai_movement)
+		controller.ai_movement.stop_moving_towards(controller)
+	return ..()
+
+/// Says one of the provided lines (or the pawn's speak list) on a cooldown.
+/datum/bt_node/ai_behavior/speak_line
+	var/list/lines = null
+	/// Percent chance to say something on a perform tick.
+	var/speak_chance = 100
+	/// Cooldown between speak attempts.
+	var/cooldown = 5 SECONDS
+
+/datum/bt_node/ai_behavior/speak_line/get_cooldown(datum/ai_controller/controller)
+	return cooldown
+
+/datum/bt_node/ai_behavior/speak_line/perform(seconds_per_tick, datum/ai_controller/controller)
+	var/mob/living/pawn = controller.pawn
+	if(!pawn || QDELETED(pawn))
+		return AI_BEHAVIOR_FAILED
+
+	if(prob(speak_chance))
+		var/list/choices = lines
+		if(!choices || !length(choices))
+			if(istype(pawn, /mob/living/simple_animal))
+				var/mob/living/simple_animal/animal = pawn
+				choices = animal.speak
+		if(choices && length(choices))
+			pawn.say(pick(choices))
+
+	return AI_BEHAVIOR_DELAY

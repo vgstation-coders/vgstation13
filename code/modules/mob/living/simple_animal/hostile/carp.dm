@@ -56,6 +56,14 @@
 	if(gender==FEMALE)
 		child_amount = rand(4,6) //Mother explodes on death, so letting it leave 5 child carps (that can't breed) behind is fair
 
+	// WIP: carp is the second existing mob migrated to the behavior tree
+	// controller. The legacy hostile AI no longer acquires targets.
+	stop_automated_movement = TRUE
+	wander = 0
+	var/datum/ai_controller/controller = new(src)
+	controller.behavior_nodes = list(bt_basic_hostile_tree())
+	controller.initialize_behavior_tree()
+
 /mob/living/simple_animal/hostile/carp/examine(mob/user)
 	..()
 	if(Adjacent(user))
@@ -84,9 +92,7 @@
 	return ..(the_target)
 
 /mob/living/simple_animal/hostile/carp/FindTarget()
-	. = ..()
-	if(.)
-		emote("me",, "gnashes at [.]!")
+	return null
 
 /mob/living/simple_animal/hostile/carp/AttackingTarget()
 	if(!target)

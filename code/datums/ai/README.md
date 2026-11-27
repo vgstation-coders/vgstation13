@@ -4,10 +4,10 @@ Source: [tgstation/tgstation](https://github.com/tgstation/tgstation) `master`,
 `code/datums/ai/_ai_bt_*.dm`, `code/datums/ai/_ai_behavior.dm`,
 `code/datums/ai/_ai_controller.dm` and `code/__DEFINES/ai/behavior_trees.dm`.
 
-**Status:** phase 5. The core, subsystem/possession path, pathfinding movement
-adapter, starter behavior leaves, an example hostile consumer and the first
-existing mapped mob (space bear) compile and pass the auxtools scenario. The wider
-basic mob behavior set is still pending.
+**Status:** phase 6. The core, subsystem/possession path, pathfinding movement
+adapter, starter behavior leaves (including flee and speak), an example hostile
+consumer and two existing mapped mobs (space bear and space carp) compile and
+pass the auxtools scenario. The wider basic mob behavior set is still pending.
 
 ## Ported so far
 
@@ -24,13 +24,16 @@ basic mob behavior set is still pending.
   movement adapter and pawn death handling.
 - `_ai_movement.dm`: basic `get_path_to()` walker with a greedy step fallback
   while the pathfinder subsystem is not ready or has no route.
-- `_ai_behaviors_basic.dm`: `acquire_target`, `move_to_target`, `attack_target`
-  and the shared `bt_basic_hostile_tree()` descriptor.
+- `_ai_behaviors_basic.dm`: `acquire_target`, `move_to_target`, `attack_target`,
+  `flee_target`, `speak_line` and the shared `bt_basic_hostile_tree()` descriptor.
 - `bt_guard.dm`: example first consumer, a hostile simple animal whose decision
   layer is a behavior tree controller (not mapped; admin/spawn use).
 - `bear.dm`: first existing mapped mob migration. Space bears (and their
   subtypes) now run the shared starter tree; the legacy hostile target
   acquisition is disabled.
+- `carp.dm`: second existing mapped mob migration. Space carp (and their
+  subtypes) now run the shared starter tree; their legacy target acquisition and
+  emote are disabled.
 - `code/controllers/subsystem/ai_controllers.dm`: `SSai_controllers` tick path
   for `AI_STATUS_ON` / `AI_STATUS_ON_LOW`.
 - `behavior_tree_test.dm`: test leaves used by the auxtools scenario.
@@ -46,9 +49,10 @@ basic mob behavior set is still pending.
 - **Simplified movement.** `ai_movement/basic` uses `get_path_to()` and has no
   cell grid or path caching yet. If `SSpathfinder.mobs` is not initialized or
   returns no route, it falls back to one greedy step instead of runtiming.
-- **Starter hostile behavior only.** The shared tree has acquire/move/attack; it
-  does not yet cover flee, speech, abilities, environment smashing or the legacy
-  bear-specific burger behavior.
+- **Starter hostile behavior only.** The shared tree has acquire/move/attack;
+  `flee_target` and `speak_line` exist but are not yet wired into the shared
+  tree. Abilities, target sources and environment smashing are still missing, as
+  is the legacy bear-specific burger behavior.
 - **Migrations disable the legacy target acquisition** with a `FindTarget()`
   override. The legacy `Life()` still runs health/speech; only target
   acquisition, movement and attack are owned by the tree.
@@ -63,8 +67,9 @@ basic mob behavior set is still pending.
 
 ## Next phases
 
-1. **Behaviors:** port the remaining basic mob leaves (flee, speech, abilities,
-   target sources, environment smashing) and migrate more existing mobs.
+1. **Behaviors:** port the remaining basic mob leaves (abilities, target
+   sources, environment smashing) and wire `flee_target`/`speak_line` into the
+   shared trees; migrate more existing mobs.
 2. **Controller integration:** client login/logout sentience hooks, the
    high/low priority subsystem split, z-level lists and path caching.
 3. **Tree tooling:** `.bt.json` compiler and loader; BT viewer.
@@ -73,10 +78,10 @@ basic mob behavior set is still pending.
 
 ## Testing
 
-The phase-5 scenario lives outside the repository (local auxtools harness):
+The phase-6 scenario lives outside the repository (local auxtools harness):
 build a sequence/selector/decorator/subtree, tick it across RUNNING/SUCCESS/
 FAILURE, exercise the descriptor builder, cancel a running leaf, possess a mob,
 trigger its death event, move it towards a blackboard target, drive the example
-`bt_guard` against an adjacent victim, and verify the migrated space bear attacks
-an adjacent human. Keep the test leaves in `behavior_tree_test.dm` until real
-leaves and unit tests replace them.
+`bt_guard` against an adjacent victim, flee from a threat, say a line, and verify
+the migrated space bear and space carp attack adjacent humans. Keep the test
+leaves in `behavior_tree_test.dm` until real leaves and unit tests replace them.
