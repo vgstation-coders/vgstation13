@@ -566,18 +566,33 @@
 	if(response != "Yeah!" || !src.key)
 		return  //Hit the wrong key...again.
 
-	var/mob/living/carbon/human/hobo = new(pick(hobostart))
-	hobo.key = src.key
-	hobo.set_species(pick(200;"Human",50;"Vox",50;"Insectoid",25;"Diona",25;"Grey",1;"Tajaran",10;"Unathi"))
+	var/turf/spawn_turf = pick(hobostart)
+	var/preset_type = hobostart[spawn_turf]
+	var/datum/hobo_preset/preset = new preset_type
+	var/mob/living/carbon/human/hobo = preset.create_hobo(spawn_turf, src.key)
+	log_admin("([hobo.ckey]/[hobo]) became a space hobo as a ghost.")
+	hoboamount++
+
+//What a hobo spawning at a hobostart landmark looks like. hobostart maps each spawn turf to one of these types
+/datum/hobo_preset
+	var/list/species_weights = list("Human" = 200, "Vox" = 50, "Insectoid" = 50, "Diona" = 25, "Grey" = 25, "Tajaran" = 1, "Unathi" = 10)
+
+/datum/hobo_preset/proc/create_hobo(turf/spawn_turf, key)
+	var/mob/living/carbon/human/hobo = new(spawn_turf)
+	hobo.key = key
+	hobo.set_species(pickweight(species_weights))
 	hobo.generate_name()
 	var/datum/outfit/special/with_id/hobo/hobo_outfit = new
 	hobo_outfit.equip(hobo)
-	log_admin("([hobo.ckey]/[hobo]) became a space hobo as a ghost.")
 	to_chat(hobo, "<B>You are a Space Hobo.</B>")
 	// somewhat taken from CEV eris
 	to_chat(hobo, "<b>The ID you wear is likely not even your own. At least as far as you can remember. But this chunk of plastic still can be a rare oddity that can change your character. Find a way to stay out of trouble, and survive. Though this does not mean you have no home, as the asteroid is your home. Whatever planet you may have come from is now a distant memory.</b>")
 	to_chat(hobo, "<b>Despite not being a member of the crew, by default you are <u>not</u> an antagonist. Cooperating with antagonists is allowed - within reason. Ask admins via adminhelp if you're not sure.</b>")
-	hoboamount++
+	return hobo
+
+//Hacker shack
+/datum/hobo_preset/grey
+	species_weights = list("Human" = 200, "Vox" = 50, "Insectoid" = 50, "Diona" = 25, "Grey" = 400, "Tajaran" = 1, "Unathi" = 10)
 
 /mob/dead/observer/verb/pai_signup()
 	set name = "Sign up as pAI"
