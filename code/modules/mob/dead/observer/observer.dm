@@ -54,16 +54,6 @@ var/creating_arena = FALSE
 	see_in_dark = 100
 	verbs += /mob/dead/observer/proc/dead_tele
 
-	// Our new boo spell.
-	add_spell(new /spell/aoe_turf/boo, "grey_spell_ready")
-	add_spell(new /spell/targeted/ghost/toggle_medHUD)
-	add_spell(new /spell/targeted/ghost/toggle_darkness)
-	add_spell(new /spell/targeted/ghost/become_mouse)
-	add_spell(new /spell/targeted/ghost/hide_ghosts)
-	add_spell(new /spell/targeted/ghost/haunt)
-	add_spell(new /spell/targeted/ghost/reenter_corpse)
-	//add_spell(new /spell/ghost_show_map, "grey_spell_ready")
-
 	can_reenter_corpse = flags & GHOST_CAN_REENTER
 	started_as_observer = flags & GHOST_IS_OBSERVER
 
@@ -114,6 +104,16 @@ var/creating_arena = FALSE
 					name = capitalize(pick(first_names_female)) + " " + capitalize(pick(last_names))
 
 		mind = body.mind	//we don't transfer the mind but we keep a reference to it.
+
+	// Added once the mind is known: Boo! reads its cooldown from it.
+	add_spell(new /spell/aoe_turf/boo, "grey_spell_ready")
+	add_spell(new /spell/targeted/ghost/toggle_medHUD)
+	add_spell(new /spell/targeted/ghost/toggle_darkness)
+	add_spell(new /spell/targeted/ghost/become_mouse)
+	add_spell(new /spell/targeted/ghost/hide_ghosts)
+	add_spell(new /spell/targeted/ghost/haunt)
+	add_spell(new /spell/targeted/ghost/reenter_corpse)
+	//add_spell(new /spell/ghost_show_map, "grey_spell_ready")
 
 	if(!T)
 		T = pick(latejoin)			//Safety in case we cannot find the body's position
