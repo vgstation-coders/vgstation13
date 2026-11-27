@@ -23,6 +23,7 @@ var/list/static/list_of_animal_types = typesof(/mob/living/simple_animal)
 
 	var/universal_translate = 0 // set to 1 if it can translate nonhuman speech
 
+	var/scanningrange = 25
 	circuit = "/obj/item/weapon/circuitboard/comm_server"
 
 	req_access = list(access_tcomsat)
@@ -179,7 +180,7 @@ var/list/static/list_of_animal_types = typesof(/mob/living/simple_animal)
 					temp = "<font color = #D70B00>- FAILED: CANNOT PROBE WHEN BUFFER FULL -</font color>"
 
 				else
-					for(var/obj/machinery/telecomms/server/T in range(25, src))
+					for(var/obj/machinery/telecomms/server/T in range(scanningrange, src))
 						if(T.network == network)
 							servers.Add(T)
 
@@ -236,3 +237,7 @@ var/list/static/list_of_animal_types = typesof(/mob/living/simple_animal)
 		if(user)
 			to_chat(user, "<span class='notice'>You disable the security protocols</span>")
 		return 1
+
+/obj/machinery/computer/telecomms/server/hackershack //this one should be able to connect to the stationside one via the mining outpost relay
+	desc = "This one seems to have been upgraded with extremely fragile custom-built subspace amplifiers and hyperwave filters."
+	scanningrange = 999
