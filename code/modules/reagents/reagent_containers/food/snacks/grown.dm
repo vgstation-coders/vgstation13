@@ -33,14 +33,14 @@ var/list/special_fruits = list()
 	..()
 	if(custom_plantname)
 		plantname = custom_plantname
-	if(ticker)
+	if(ticker && ticker.current_state >= GAME_STATE_PLAYING)
 		initialize(harvester)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/initialize(mob/harvester)
 
 	//Handle some post-spawn var stuff.
 	//Fill the object up with the appropriate reagents.
-	if(!isnull(plantname))
+	if(!isnull(plantname) && SSplant && !isnull(SSplant.seeds))
 		seed = SSplant.seeds[plantname]
 		if(!seed)
 			return

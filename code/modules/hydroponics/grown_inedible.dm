@@ -21,7 +21,7 @@
 		plantname = custom_plantname
 
 	// Fill the object up with the appropriate reagents.
-	if(!isnull(plantname))
+	if(!isnull(plantname) && SSplant && !isnull(SSplant.seeds))
 		var/datum/seed/S = SSplant.seeds[plantname]
 		if(!S || !S.chems)
 			return
