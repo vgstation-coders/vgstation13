@@ -22,6 +22,7 @@
 #include "__DEFINES\atmos_automation.dm"
 #include "__DEFINES\atom_locking_and_control.dm"
 #include "__DEFINES\atoms.dm"
+#include "__DEFINES\behavior_trees.dm"
 #include "__DEFINES\blob.dm"
 #include "__DEFINES\bots.dm"
 #include "__DEFINES\breakable_defines.dm"
@@ -3141,4 +3142,13 @@
 #include "maps\ruins\urban_ruin.dm"
 #include "maps\ruins\xeno_ruin.dm"
 #include "maps\wheelstation\areas.dm"
+
+// AI behavior trees (WIP port from tgstation)
+#include "code\datums\ai\_ai_bt_node.dm"
+#include "code\datums\ai\_ai_bt_composites.dm"
+#include "code\datums\ai\_ai_bt_decorators.dm"
+#include "code\datums\ai\_ai_bt_subtree.dm"
+#include "code\datums\ai\_ai_behavior.dm"
+#include "code\datums\ai\_ai_controller.dm"
+#include "code\datums\ai\behavior_tree_test.dm"
 // END_INCLUDE
