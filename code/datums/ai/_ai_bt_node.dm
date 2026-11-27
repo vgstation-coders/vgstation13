@@ -11,10 +11,9 @@
 
 /// Ticked by the ai_controller. Returns BT_SUCCESS, BT_FAILURE, or BT_RUNNING.
 /// Leaves may call legacy procs whose rare overrides sleep (Move/Crossed, death,
-/// attacks), so this is explicitly marked as may-sleep; sleeping actions belong
-/// in async_perform().
+/// attacks); sleeping actions belong in async_perform(), so this path carries no
+/// SHOULD_NOT_SLEEP annotation.
 /datum/bt_node/proc/tick(datum/ai_controller/controller, seconds_per_tick)
-	SHOULD_NOT_SLEEP(FALSE)
 	return BT_FAILURE
 
 /// Resets per-tick state for this node instance. Override in subtypes that hold tick state.

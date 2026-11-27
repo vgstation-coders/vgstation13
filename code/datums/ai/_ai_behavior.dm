@@ -95,10 +95,8 @@
 
 /// Called each tick while the behavior is running. Returns AI_BEHAVIOR_* flags.
 /// Legacy leaf actions (movement, attacks, emotes) can reach overrides that
-/// sleep, so the synchronous path is explicitly may-sleep; put anything that
-/// must sleep in async_perform().
+/// sleep; anything that must sleep belongs in async_perform().
 /datum/bt_node/ai_behavior/proc/perform(seconds_per_tick, datum/ai_controller/controller)
-	SHOULD_NOT_SLEEP(FALSE)
 	return AI_BEHAVIOR_INSTANT
 
 /// Called when the behavior finishes (succeeded or failed). Subtypes should call ..().
@@ -114,7 +112,6 @@
 /// Override for actions that may sleep (do_after and friends). Runs in its own
 /// background context; return AI_BEHAVIOR_SUCCEEDED/FAILED at the end.
 /datum/bt_node/ai_behavior/proc/async_perform(seconds_per_tick, datum/ai_controller/controller)
-	SHOULD_NOT_SLEEP(FALSE)
 	return AI_BEHAVIOR_SUCCEEDED
 
 /// Starts the background action for a leaf whose perform() returned

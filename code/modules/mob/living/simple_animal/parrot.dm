@@ -422,9 +422,9 @@
  */
 
 /datum/bt_node/ai_behavior/parrot_action
-	proc/get_parrot(datum/ai_controller/controller)
-		var/mob/living/simple_animal/parrot/parrot = controller.pawn
-		return istype(parrot, /mob/living/simple_animal/parrot) ? parrot : null
+/datum/bt_node/ai_behavior/parrot_action/proc/get_parrot(datum/ai_controller/controller)
+	var/mob/living/simple_animal/parrot/parrot = controller.pawn
+	return istype(parrot, /mob/living/simple_animal/parrot) ? parrot : null
 
 /datum/bt_node/ai_behavior/parrot_action/proc/stop_flying(mob/living/simple_animal/parrot/parrot)
 	walk(parrot, 0)

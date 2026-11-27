@@ -96,11 +96,11 @@
  */
 
 /datum/bt_node/ai_behavior/scp_action
-	proc/get_scp(datum/ai_controller/controller)
-		var/mob/living/simple_animal/scp_173/scp = controller.pawn
-		if(!istype(scp, /mob/living/simple_animal/scp_173) || QDELETED(scp))
-			return null
-		return scp
+/datum/bt_node/ai_behavior/scp_action/proc/get_scp(datum/ai_controller/controller)
+	var/mob/living/simple_animal/scp_173/scp = controller.pawn
+	if(!istype(scp, /mob/living/simple_animal/scp_173) || QDELETED(scp))
+		return null
+	return scp
 
 /// Fails while a player controls SCP-173 or it is hibernating.
 /datum/bt_node/ai_behavior/scp_action/scp_active_gate

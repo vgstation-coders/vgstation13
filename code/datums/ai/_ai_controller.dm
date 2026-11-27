@@ -179,7 +179,6 @@
 /datum/ai_controller/proc/SelectBehaviors(seconds_per_tick)
 	// Leaves call legacy procs whose rare overrides can sleep; the async action
 	// path is where sleeping actions belong.
-	SHOULD_NOT_SLEEP(FALSE)
 	// Safety net for death overrides that skip ..() and never fire /event/death.
 	if(pawn && pawn.stat == DEAD)
 		set_ai_status(AI_STATUS_OFF)

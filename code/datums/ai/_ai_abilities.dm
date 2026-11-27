@@ -16,10 +16,9 @@
 	return world.time >= next_use_time
 
 /// Runs the ability against target. Returns AI_BEHAVIOR_* flags.
-/// Abilities wrap legacy shots/charges whose overrides may sleep, so the
-/// synchronous ability path is explicitly may-sleep.
+/// Abilities wrap legacy shots/charges whose overrides may sleep; no
+/// SHOULD_NOT_SLEEP annotation is applied here.
 /datum/ai_ability/proc/perform(datum/ai_controller/controller, atom/target)
-	SHOULD_NOT_SLEEP(FALSE)
 	return AI_BEHAVIOR_FAILED
 
 /// Starts the ability cooldown; called by the leaf on success.

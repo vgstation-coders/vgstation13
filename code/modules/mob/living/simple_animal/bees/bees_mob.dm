@@ -254,11 +254,11 @@ var/list/bee_calmers = list(
  */
 
 /datum/bt_node/ai_behavior/bee_action
-	proc/get_bee(datum/ai_controller/controller)
-		var/mob/living/simple_animal/bee/bee = controller.pawn
-		if(!istype(bee, /mob/living/simple_animal/bee) || QDELETED(bee))
-			return null
-		return bee
+/datum/bt_node/ai_behavior/bee_action/proc/get_bee(datum/ai_controller/controller)
+	var/mob/living/simple_animal/bee/bee = controller.pawn
+	if(!istype(bee, /mob/living/simple_animal/bee) || QDELETED(bee))
+		return null
+	return bee
 
 /// Shared swarm upkeep: poison, calming, merging/splitting, noise and intent.
 /datum/bt_node/ai_behavior/bee_action/bee_upkeep
