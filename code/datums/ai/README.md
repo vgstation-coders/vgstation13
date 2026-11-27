@@ -13,8 +13,8 @@ with a ranged and a charge ability, a health decorator, the `.bt.json` compiler,
 the admin BT viewer, an example hostile consumer and the full hostile simple
 animal tree (every hostile mob gets a controller, either explicitly or lazily on
 its first `Life()` tick) plus a set of non-hostile idle mobs compile and pass the
-auxtools scenario. The parrot and bee state machines are controller-driven through
-the transitional `pawn_tick` bridge; splitting them into leaves is still pending.
+auxtools scenario. The bee swarm is controller-driven through the transitional
+`pawn_tick` bridge; splitting it into leaves is still pending.
 
 ## Ported so far
 
@@ -174,11 +174,14 @@ the transitional `pawn_tick` bridge; splitting them into leaves is still pending
 - `friendly/mouse.dm`: mice run `bt_mouse_tree()`: snacks first, then an
   occasional cable chew (`target_source/wires`, 10% poll gate), then idle. The
   disease, cage and nutrition code stays in `Life()`.
-- `parrot.dm` + `bees/bees_mob.dm`: these two state machines are too entwined to
-  split into leaves in this pass, so they run through the `pawn_tick` bridge: the
-  controller calls `ai_tick()` every tick and the parrot perch/steal/flee and the
-  bee swarm intents stay intact. `Life()` no longer drives their AI. This is a
-  transitional wrapper, not a full leaf decomposition.
+- `parrot.dm`: the perch/steal/return/flee state machine became
+  `bt_parrot_tree()` leaves (`parrot_flee`, `parrot_attack`, `parrot_steal`,
+  `parrot_return`, `parrot_perch`, `parrot_wander`). The damage/attack handlers
+  still set the legacy `parrot_state` bits and `parrot_interest`, which the leaves
+  consume; the headset speech cycling moved to `parrot_cycle_radio_speech()`.
+- `bees/bees_mob.dm`: the bee swarm is still too entwined to split, so it runs
+  through the `pawn_tick` bridge: the controller calls `ai_tick()` every tick and
+  the swarm intents stay intact. This is the last transitional wrapper.
 - `_ai_target_sources.dm`: added `food`, `pointer` and `wires` sources.
 - `mimic.dm`: mimics run the combat tree with `target_source/enemies/mimic`,
   which stays empty until `anger()`; losing the target calls `calm_down()` again
@@ -311,12 +314,10 @@ childless and it fails every tick.
    level path caching and multi-step movement.
 3. **Tree tooling:** richer viewer (execution log, TGUI window) and a subtree
    override editor.
-4. **Migration:** the hostile tree covers every `/hostile` simple animal and the
-   idle tree covers the simple non-hostiles; the corgi, mouse, parrot and bee
-   have controllers too (the parrot and bee through the transitional
-   `pawn_tick` bridge). The remaining work is decomposing those two state
-   machines into real leaves (perch/steal/flee; swarm intents) and any
-   player-controlled/special mobs.
+4. **Migration:** the hostile tree covers every `/hostile` simple animal, the
+   idle tree covers the simple non-hostiles, and the corgi, mouse and parrot are
+   real trees. The bee swarm still runs through the transitional `pawn_tick`
+   bridge; splitting its intents into leaves is the last AI migration step.
 
 ## Testing
 
