@@ -1,5 +1,0 @@
-author: jknpj
-delete-after: true
-changes:
-- bugfix: Languages granted by universal speak/understand can now be selected as your
-    default language and show up in the Known Languages list.
