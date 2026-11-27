@@ -351,11 +351,27 @@
 	desc = "A cockroach that hitched a ride in one of the pizza boxes. Someone put a tiny paper fez over its head. It seems to like it."
 	minbodytemp = 1.15
 	stop_automated_movement_when_pulled = 1
+	status_flags = CANPUSH|GODMODE|BUDDHAMODE //No damage, no gibbing
 
 /mob/living/simple_animal/cockroach/turkish/lime/New()
 	..() //cockroach/New() rolls a random maxHealth, override it afterwards
-	maxHealth = 99999999999
+	maxHealth = 0xFFFFFF - 1
 	health = maxHealth
 
 /mob/living/simple_animal/cockroach/turkish/lime/lay_eggs()
 	last_laid_eggs = world.time //No breeding
+
+//Cockroaches get killed by calling death() directly (stomping, insecticide), so GODMODE alone doesn't cover it
+/mob/living/simple_animal/cockroach/turkish/lime/death(var/gore = 1)
+	return
+
+/mob/living/simple_animal/cockroach/turkish/lime/adjustBruteLoss(damage)
+	return ..(0) //simple_animal/adjustBruteLoss ignores GODMODE. Still gets startled into flying
+
+/mob/living/simple_animal/cockroach/turkish/lime/bite_act(mob/living/carbon/human/H)
+	to_chat(H, "<span class='notice'>\The [src] scurries out of your mouth's way.</span>")
+
+/mob/living/simple_animal/cockroach/turkish/lime/reagent_act(id, method, volume)
+	if(id == MUTAGEN)
+		return //Would turn it into a big roach
+	return ..()
