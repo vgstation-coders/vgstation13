@@ -162,14 +162,14 @@
 				else
 					to_chat(usr, "You are already hacking a cyborg.")
 		if("sequence")
-			if(cyborg_detonation_time == 0 || cyborg_detonation_time < world.time)
-				start_sequence()
-				message_admins("<span class='notice'>[key_name_admin(usr)] [formatJumpTo(usr)] has initiated the global cyborg killswitch!</span>")
-				log_game("<span class='notice'>[key_name(usr)] has initiated the global cyborg killswitch!</span>")
-			else
+			if(text2num(params["halt"]))
 				stop_sequence()
 				message_admins("<span class='notice'>[key_name_admin(usr)] [formatJumpTo(usr)] has halted the global cyborg killswitch!</span>")
 				log_game("<span class='notice'>[key_name(usr)] has halted the global cyborg killswitch!</span>")
+			else
+				start_sequence()
+				message_admins("<span class='notice'>[key_name_admin(usr)] [formatJumpTo(usr)] has initiated the global cyborg killswitch!</span>")
+				log_game("<span class='notice'>[key_name(usr)] has initiated the global cyborg killswitch!</span>")
 			SStgui.try_update_ui(ui.user, src, ui)
 	return TRUE
 
