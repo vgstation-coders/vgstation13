@@ -227,10 +227,11 @@
 		show_station_time()
 		show_emergency_shuttle_eta()
 		show_system_integrity()
-		for(var/datum/faction/F in ticker.mode.factions)
-			var/F_stat = F.get_statpanel_addition()
-			if(F_stat)
-				stat(null, "[F_stat]")
+		if(ticker?.mode)
+			for(var/datum/faction/F in ticker.mode.factions)
+				var/F_stat = F.get_statpanel_addition()
+				if(F_stat)
+					stat(null, "[F_stat]")
 
 // this function displays the stations manifest in a separate window
 /mob/living/silicon/proc/show_station_manifest()
