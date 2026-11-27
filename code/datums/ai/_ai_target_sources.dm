@@ -42,17 +42,27 @@
 
 /datum/target_source/enemies/find_targets(datum/ai_controller/controller, mob/living/pawn, search_range)
 	var/list/candidates = list()
-	for(var/mob/living/candidate in oview(search_range, pawn))
-		if(candidate == pawn || candidate.stat == DEAD)
+	var/mob/living/simple_animal/hostile/hostile_pawn = istype(pawn, /mob/living/simple_animal/hostile) ? pawn : null
+	for(var/atom/candidate in oview(search_range, pawn))
+		if(candidate == pawn)
 			continue
-		if(istype(pawn, /mob/living/simple_animal))
-			var/mob/living/simple_animal/animal = pawn
+		if(isliving(candidate))
+			var/mob/living/living_candidate = candidate
+			if(living_candidate.stat == DEAD)
+				continue
 			// CanAttack() is vg's "would I attack this" contract: hostile mobs
 			// override it with faction rules, while the base simple_animal
 			// version only allows targets already in crit.
-			if(!animal.CanAttack(candidate))
-				continue
-		candidates += candidate
+			if(istype(pawn, /mob/living/simple_animal))
+				var/mob/living/simple_animal/animal = pawn
+				if(!animal.CanAttack(candidate))
+					continue
+			candidates += candidate
+			continue
+		// Objects (lights, bots, mechas) only while the pawn still searches for
+		// them; hostile/adjustBruteLoss drops search_objects when a mob fights back.
+		if(hostile_pawn && hostile_pawn.search_objects && hostile_pawn.CanAttack(candidate))
+			candidates += candidate
 	return candidates
 
 /datum/target_source/enemies/is_valid_target(datum/ai_controller/controller, mob/living/pawn, atom/existing)

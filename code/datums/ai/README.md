@@ -4,16 +4,17 @@ Source: [tgstation/tgstation](https://github.com/tgstation/tgstation) `master`,
 `code/datums/ai/_ai_bt_*.dm`, `code/datums/ai/_ai_behavior.dm`,
 `code/datums/ai/_ai_controller.dm` and `code/__DEFINES/ai/behavior_trees.dm`.
 
-**Status:** phase 17. The core, subsystem/possession path, sentience hooks,
+**Status:** phase 18. The core, subsystem/possession path, sentience hooks,
 z-level-gated subsystems, path-cached movement, starter behavior leaves (attack,
 flee, retreat, hold, smash, wait, wander, hunt, follow, speak, blackboard keys),
-target lifecycle hooks and target sources (enemies, wounded, retaliate, prey), an
-ability system with a ranged and a charge ability, a health decorator, the
-`.bt.json` compiler, the admin BT viewer, an example hostile consumer and twenty
-existing mapped mob types (space bear, space carp, strong/ranged/rapid hivebot,
-viscerator, cow, goat, chicken, cat, crab, bigroach, gingerbread, ginger family,
-skeleton jack, warrior bug, retaliate clown/mime/tomato, puddi) compile and pass
-the auxtools scenario. The wider basic mob behavior set is still pending.
+target lifecycle hooks and target sources (enemies, wounded, retaliate, prey,
+including wanted objects), an ability system with a ranged and a charge ability, a
+health decorator, the `.bt.json` compiler, the admin BT viewer, an example hostile
+consumer and twenty-one existing mapped mob types (space bear, space carp,
+strong/ranged/rapid hivebot, viscerator, cow, goat, chicken, cat, crab, bigroach,
+gingerbread, ginger family, skeleton jack, warrior bug, retaliate
+clown/mime/tomato, puddi, spider hunter) compile and pass the auxtools scenario.
+The wider basic mob behavior set is still pending.
 
 ## Ported so far
 
@@ -40,12 +41,12 @@ the auxtools scenario. The wider basic mob behavior set is still pending.
   while the pathfinder subsystem is not ready or has no route. Caches the path
   per controller/target and repaths after `repath_after` steps or a target change.
 - `_ai_target_sources.dm`: `target_source` base plus `enemies` (closest pick,
-  legacy distance rule), `enemies/wounded` (weakest pick), `enemies/retaliate`
-  (only mobs already in the pawn's legacy `enemies` list) and `prey` (a specific
-  mob type, ignoring `CanAttack` so friendly hunters work) sources. The `enemies`
-  filter uses the pawn's `CanAttack()`, so only mobs that override it (hostile
-  mobs) see healthy prey; the base simple_animal version only allows targets
-  already in crit.
+  legacy distance rule, plus wanted objects while the pawn still searches for
+  them), `enemies/wounded` (weakest pick), `enemies/retaliate` (only mobs already
+  in the pawn's legacy `enemies` list) and `prey` (a specific mob type, ignoring
+  `CanAttack` so friendly hunters work) sources. The `enemies` filter uses the
+  pawn's `CanAttack()`, so only mobs that override it (hostile mobs) see healthy
+  prey; the base simple_animal version only allows targets already in crit.
 - `_ai_abilities.dm`: `ai_ability` base with cooldowns, plus `ranged_attack`
   (wraps the legacy `OpenFire`/`ranged_cooldown`) and `charge` (closes two tiles).
 - `_ai_behaviors_basic.dm`: `acquire_target` (target sources, dead/invalid target
@@ -103,6 +104,10 @@ the auxtools scenario. The wider basic mob behavior set is still pending.
   warrior bug fights with the shared combat tree; clown, mime and tomato use
   `use_retaliating_tree()` (added on the retaliate base, now shared with the
   goat); puddi is a friendly idle/wander pet.
+- `giant_spider/hunter.dm`: nineteenth migration. The hunter runs the idle combat
+  tree, keeps the base spider's poison bite through the `AttackingTarget()` bridge
+  and still smashes wanted objects (lights/bots) because `enemies` now includes
+  them while `search_objects` is set.
 - `_ai_bt_viewer.dm` + `code/modules/admin/verbs/behavior_trees.dm`: admin
   "View Behavior Tree" verb rendering the tree, blackboard and live markers.
 - `living.dm`: `/mob/living/Destroy()` now deletes the attached
@@ -226,6 +231,7 @@ befriended chicken follows its master, verify the crab attacks through the comba
 tree, verify the queen roach lays an egg through the legacy `AttackingTarget()`
 bridge, verify the gingerbread/ginger/skeleton jack batch attacks through the
 combat tree, verify the warrior bug/clown/tomato batch attacks, verify puddi's
-idle tree wanders, and verify the migrated space bear and space carp attack
+idle tree wanders, verify the spider hunter targets a wanted object and then
+attacks a living victim, and verify the migrated space bear and space carp attack
 adjacent humans. Keep the test leaves in `behavior_tree_test.dm` until real
 leaves and unit tests replace them.

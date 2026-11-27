@@ -24,3 +24,19 @@
 /mob/living/simple_animal/hostile/giant_spider/hunter/dead
 	iscorpse = 1
 	health = 0
+
+// WIP: the hunter runs the idle combat tree. It keeps the base spider's poison
+// bite (through attack_target's legacy bridge) and its object targeting
+// (search_objects/wanted_objects now feed target_source/enemies).
+/mob/living/simple_animal/hostile/giant_spider/hunter/New()
+	..()
+	if(iscorpse)
+		return
+	stop_automated_movement = TRUE
+	wander = 0
+	var/datum/ai_controller/controller = new(src)
+	controller.behavior_nodes = list(bt_idle_hostile_tree())
+	controller.initialize_behavior_tree()
+
+/mob/living/simple_animal/hostile/giant_spider/hunter/FindTarget()
+	return null
