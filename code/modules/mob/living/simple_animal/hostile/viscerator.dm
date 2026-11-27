@@ -48,6 +48,20 @@
 			return 0
 	return ..(the_target)
 
+// WIP: the viscerator runs the shared combat tree. It is the first migrated mob
+// that deletes itself on death, which exercises controller cleanup in
+// /mob/living/Destroy().
+/mob/living/simple_animal/hostile/viscerator/New()
+	..()
+	stop_automated_movement = TRUE
+	wander = 0
+	var/datum/ai_controller/controller = new(src)
+	controller.behavior_nodes = list(bt_basic_hostile_tree())
+	controller.initialize_behavior_tree()
+
+/mob/living/simple_animal/hostile/viscerator/FindTarget()
+	return null
+
 /mob/living/simple_animal/hostile/viscerator/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 	if(air_group || (height == 0))
 		return 1

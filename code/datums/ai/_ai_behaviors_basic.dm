@@ -5,23 +5,32 @@
 // Shared starter trees for hostile consumers. These are building blocks: a mob
 // can use bt_basic_hostile_tree() directly or compose it with extra branches.
 // Try to attack an adjacent target, otherwise acquire and walk to it, then attack.
-/proc/bt_hostile_combat_tree()
+/proc/bt_hostile_combat_tree(target_source_type = /datum/target_source/enemies)
 	return list(
 		BT_DESC_TYPE = /datum/bt_node/composite/selector,
 		BT_DESC_CHILDREN = list(
 			list(
 				BT_DESC_TYPE = /datum/bt_node/composite/sequence,
 				BT_DESC_CHILDREN = list(
-					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/acquire_target),
+					list(
+						BT_DESC_TYPE = /datum/bt_node/ai_behavior/acquire_target,
+						target_source_type = target_source_type,
+					),
 					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/attack_target),
 				),
 			),
 			list(
 				BT_DESC_TYPE = /datum/bt_node/composite/sequence,
 				BT_DESC_CHILDREN = list(
-					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/acquire_target),
+					list(
+						BT_DESC_TYPE = /datum/bt_node/ai_behavior/acquire_target,
+						target_source_type = target_source_type,
+					),
 					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/move_to_target),
-					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/acquire_target),
+					list(
+						BT_DESC_TYPE = /datum/bt_node/ai_behavior/acquire_target,
+						target_source_type = target_source_type,
+					),
 					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/attack_target),
 				),
 			),
@@ -30,12 +39,20 @@
 			list(
 				BT_DESC_TYPE = /datum/bt_node/composite/sequence,
 				BT_DESC_CHILDREN = list(
-					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/acquire_target),
+					list(
+						BT_DESC_TYPE = /datum/bt_node/ai_behavior/acquire_target,
+						target_source_type = target_source_type,
+					),
 					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/smash_surroundings),
 				),
 			),
 		),
 	)
+
+/// Retaliating tree: only fights mobs the pawn already considers enemies (the
+/// legacy /hostile/retaliate enemies list); otherwise it does nothing.
+/proc/bt_retaliating_hostile_tree()
+	return bt_hostile_combat_tree(/datum/target_source/enemies/retaliate)
 
 /// Default combat tree used by migrated mobs. Kept as a named entry point so
 /// call sites do not depend on the composition details.
@@ -405,4 +422,41 @@
 		return AI_BEHAVIOR_FAILED
 	next_smash_time = world.time + cooldown
 	hostile.DestroySurroundings()
+	return AI_BEHAVIOR_SUCCEEDED
+
+/// Idles for wait_time, then succeeds. Useful as the last branch of a tree so an
+/// idle pawn stops re-running target acquisition every controller tick.
+/datum/bt_node/ai_behavior/wait
+	var/wait_time = 2 SECONDS
+	/// world.time when the wait is over; set on setup().
+	var/end_time = 0
+
+/datum/bt_node/ai_behavior/wait/setup(datum/ai_controller/controller)
+	end_time = world.time + max(0, wait_time)
+	return TRUE
+
+/datum/bt_node/ai_behavior/wait/perform(seconds_per_tick, datum/ai_controller/controller)
+	if(world.time >= end_time)
+		return AI_BEHAVIOR_SUCCEEDED
+	return AI_BEHAVIOR_DELAY
+
+/// Writes a value to the blackboard. Fails without a key.
+/datum/bt_node/ai_behavior/set_blackboard_key
+	var/key = null
+	var/value = null
+
+/datum/bt_node/ai_behavior/set_blackboard_key/perform(seconds_per_tick, datum/ai_controller/controller)
+	if(isnull(key))
+		return AI_BEHAVIOR_FAILED
+	controller.blackboard[key] = value
+	return AI_BEHAVIOR_SUCCEEDED
+
+/// Removes a blackboard key. Fails without a key.
+/datum/bt_node/ai_behavior/clear_blackboard_key
+	var/key = null
+
+/datum/bt_node/ai_behavior/clear_blackboard_key/perform(seconds_per_tick, datum/ai_controller/controller)
+	if(isnull(key))
+		return AI_BEHAVIOR_FAILED
+	controller.blackboard.Remove(key)
 	return AI_BEHAVIOR_SUCCEEDED

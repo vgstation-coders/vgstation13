@@ -4,13 +4,14 @@ Source: [tgstation/tgstation](https://github.com/tgstation/tgstation) `master`,
 `code/datums/ai/_ai_bt_*.dm`, `code/datums/ai/_ai_behavior.dm`,
 `code/datums/ai/_ai_controller.dm` and `code/__DEFINES/ai/behavior_trees.dm`.
 
-**Status:** phase 9.5 (tree tooling). The core, subsystem/possession path,
-sentience hooks, path-cached movement, starter behavior leaves (attack, flee,
-retreat, hold, smash, speak), target lifecycle hooks and target sources, an
-ability system with a ranged and a charge ability, a health decorator, the
-`.bt.json` compiler, an example hostile consumer and five existing mapped mob
-types (space bear, space carp, strong/ranged/rapid hivebot) compile and pass the
-auxtools scenario. The wider basic mob behavior set is still pending.
+**Status:** phase 10. The core, subsystem/possession path, sentience hooks,
+path-cached movement, starter behavior leaves (attack, flee, retreat, hold,
+smash, wait, speak, blackboard keys), target lifecycle hooks and target sources
+(including retaliation), an ability system with a ranged and a charge ability, a
+health decorator, the `.bt.json` compiler, an example hostile consumer and six
+existing mapped mob types (space bear, space carp, strong/ranged/rapid hivebot,
+viscerator) compile and pass the auxtools scenario. The wider basic mob behavior
+set is still pending.
 
 ## Ported so far
 
@@ -37,18 +38,20 @@ auxtools scenario. The wider basic mob behavior set is still pending.
   while the pathfinder subsystem is not ready or has no route. Caches the path
   per controller/target and repaths after `repath_after` steps or a target change.
 - `_ai_target_sources.dm`: `target_source` base plus `enemies` (closest pick,
-  legacy distance rule) and `enemies/wounded` (weakest pick) sources. The
-  `enemies` filter uses the pawn's `CanAttack()`, so only mobs that override it
-  (hostile mobs) see healthy prey; the base simple_animal version only allows
-  targets already in crit.
+  legacy distance rule), `enemies/wounded` (weakest pick) and
+  `enemies/retaliate` (only mobs already in the pawn's legacy `enemies` list)
+  sources. The `enemies` filter uses the pawn's `CanAttack()`, so only mobs that
+  override it (hostile mobs) see healthy prey; the base simple_animal version
+  only allows targets already in crit.
 - `_ai_abilities.dm`: `ai_ability` base with cooldowns, plus `ranged_attack`
   (wraps the legacy `OpenFire`/`ranged_cooldown`) and `charge` (closes two tiles).
 - `_ai_behaviors_basic.dm`: `acquire_target` (target sources, dead/invalid target
   cleanup), `move_to_target`, `attack_target`, `flee_target` (also the
   `retreat_from_target` keep-distance stance), `speak_line`, `use_ability`,
-  `hold_position` and `smash_surroundings`, plus the `bt_hostile_combat_tree()` /
+  `hold_position`, `smash_surroundings`, `wait`, `set_blackboard_key` and
+  `clear_blackboard_key`, plus the `bt_hostile_combat_tree()` /
   `bt_basic_hostile_tree()` / `bt_fleeing_hostile_tree()` /
-  `bt_ranged_hostile_tree()` descriptors.
+  `bt_ranged_hostile_tree()` / `bt_retaliating_hostile_tree()` descriptors.
 - `bt_guard.dm`: example first consumer, a hostile simple animal whose decision
   layer is a behavior tree controller (not mapped; admin/spawn use). It composes
   a fleeing combat tree in parallel with ambient chatter.
@@ -63,6 +66,12 @@ auxtools scenario. The wider basic mob behavior set is still pending.
   adjacent, back off to `retreat_distance`, fire at range, hold while the gun
   cools down, chase otherwise. The beacon-spawned base `hivebot` and the `tele`
   beacon itself stay on the legacy AI on purpose.
+- `viscerator.dm`: fourth migration. The viscerator runs the plain combat tree
+  and is the first migrated mob that deletes itself on death, so it exercises
+  controller cleanup (see below).
+- `living.dm`: `/mob/living/Destroy()` now deletes the attached
+  `ai_controller`, so a qdeleted pawn cannot leave an orphaned entry in the AI
+  subsystem.
 - `code/controllers/subsystem/ai_controllers.dm`: two subsystems —
   `SSai_controllers` for `AI_STATUS_ON` and `SSai_controllers_low` for
   `AI_STATUS_ON_LOW` at half rate. Controllers created before the subsystems
@@ -105,6 +114,10 @@ childless and it fails every tick.
 - **Environment smashing is a fallback branch.** It calls the legacy
   `DestroySurroundings()` on a 2 second cooldown, only after the chase branch
   failed to move. It does not replace the legacy `EscapeConfinement()` loop.
+- **Retaliation reads the legacy enemies list.** `target_source/enemies/retaliate`
+  filters to `pawn.enemies`, which the `/hostile/retaliate` base fills on damage.
+  A tree-driven retaliator therefore reacts on its next controller tick instead
+  of instantly inside `adjustBruteLoss()`.
 - **Target sources are polled, not event driven.** `acquire_target` asks its
   `target_source` for candidates on every run, so sources are cheap filters
   instead of signal subscriptions.
@@ -132,7 +145,8 @@ childless and it fails every tick.
 ## Next phases
 
 1. **Behaviors:** port the remaining basic mob leaves (speech variants, more
-   target sources, mob-specific specials) and keep migrating existing mobs.
+   target sources, mob-specific specials, idle/wander) and keep migrating
+   existing mobs.
 2. **Controller integration:** z-level lists if AI becomes a hotspot; higher
    level path caching and multi-step movement.
 3. **Tree tooling:** the BT viewer (the compiler and loader are in place).
@@ -141,7 +155,7 @@ childless and it fails every tick.
 
 ## Testing
 
-The phase-9.5 scenario lives outside the repository (local auxtools harness):
+The phase-10 scenario lives outside the repository (local auxtools harness):
 build a sequence/selector/decorator/subtree, tick it across RUNNING/SUCCESS/
 FAILURE, exercise the descriptor builder, cancel a running leaf, possess a mob,
 verify sentience login/logout and high/low subsystem routing, trigger its death
@@ -153,6 +167,8 @@ say a line, drop a dead target during acquisition, verify the closest and
 wounded target sources pick the expected victim, fire the strong hivebot's
 ranged ability, make it melee at adjacency, charge with a pawn, verify a ranged
 hivebot retreats to its keep distance, smash surroundings as a hostile pawn,
-and verify the migrated space bear and space carp attack adjacent humans. Keep
-the test leaves in `behavior_tree_test.dm` until real leaves and unit tests
-replace them.
+test the wait/blackboard-key leaves, verify a retaliator stays passive until its
+enemies list is filled, verify a destroyed pawn deletes its controller, and
+verify the migrated space bear and space carp attack adjacent humans. Keep the
+test leaves in `behavior_tree_test.dm` until real leaves and unit tests replace
+them.

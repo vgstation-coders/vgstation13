@@ -54,7 +54,6 @@
 /// pack hunters finish wounded prey instead of scattering damage.
 /datum/target_source/enemies/wounded
 	name = "wounded enemies"
-
 /datum/target_source/enemies/wounded/pick_target(datum/ai_controller/controller, mob/living/pawn, list/candidates)
 	var/mob/living/best = null
 	var/best_fraction = INFINITY
@@ -64,3 +63,26 @@
 			best_fraction = fraction
 			best = candidate
 	return best
+
+/// Only fights mobs the pawn already considers enemies. The legacy
+/// /hostile/retaliate base keeps that list ("enemies") and fills it on damage;
+/// a behavior-tree retaliator shares the same list, so it stays passive until
+/// something attacks it.
+/datum/target_source/enemies/retaliate
+	name = "retaliating enemies"
+
+/datum/target_source/enemies/retaliate/find_targets(datum/ai_controller/controller, mob/living/pawn, search_range)
+	var/list/candidates = ..()
+	if(!length(candidates))
+		return candidates
+
+	var/mob/living/simple_animal/hostile/retaliate/retaliator = pawn
+	if(!istype(retaliator))
+		return list()
+	if(!length(retaliator.enemies))
+		return list()
+
+	for(var/candidate in candidates.Copy())
+		if(!(candidate in retaliator.enemies))
+			candidates -= candidate
+	return candidates
