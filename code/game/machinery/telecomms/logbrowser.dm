@@ -237,14 +237,17 @@ var/list/static/list_of_animal_types = typesof(/mob/living/simple_animal)
 		return 1
 
 /obj/machinery/computer/telecomms/server/proc/find_servers()
-	for(var/obj/machinery/telecomms/server/T in range(25, src))
-		if(T.network == network)
+	var/turf/our_turf = get_turf(src)
+	if(!our_turf)
+		return
+	for(var/obj/machinery/telecomms/server/T in telecomms_list)
+		if(T.network != network)
+			continue
+		var/turf/server_turf = get_turf(T)
+		if(server_turf && server_turf.z == our_turf.z && get_dist(our_turf, server_turf) <= 25)
 			servers |= T
 
 	if(!long_range_scan)
-		return
-	var/turf/our_turf = get_turf(src)
-	if(!our_turf)
 		return
 	// Piggyback on a relay on our z-level: it reaches the hubs it is linked to, which reach their servers
 	for(var/obj/machinery/telecomms/relay/R in telecomms_list)
