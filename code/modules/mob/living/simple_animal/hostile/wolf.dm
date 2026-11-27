@@ -249,7 +249,7 @@
 			if(dist < fire.light_range*2)
 				walk_away(src,fire,(fire.light_range*2),move_to_delay)
 
-		if(stance == HOSTILE_STANCE_IDLE && !client)
+		if(is_legacy_idle() && !client)
 			//Check if the alpha is still alive
 			if(pack_alpha)
 				if(pack_alpha.isDead())

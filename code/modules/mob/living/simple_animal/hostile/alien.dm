@@ -65,7 +65,7 @@ var/list/nest_locations = list()
 		acid++
 
 	if(!client)
-		if(stance == HOSTILE_STANCE_IDLE)
+		if(is_legacy_idle())
 			var/new_dest = FindNest()
 			if(new_dest)
 				if(FindPrey())
@@ -82,6 +82,9 @@ var/list/nest_locations = list()
 			dragging = null
 			if(pulling)
 				stop_pulling()
+			// The behavior tree drives movement while engaged; drop any walk loop
+			// the nest dragging started.
+			walk(src, 0)
 
 /mob/living/simple_animal/hostile/alien/DestroySurroundings()
 	for(var/dir in cardinal)

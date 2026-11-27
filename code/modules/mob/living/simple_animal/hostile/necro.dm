@@ -805,7 +805,7 @@
 /mob/living/simple_animal/hostile/necro/necromorph/leaper/Life()
 	update_climb()
 	if(!isUnconscious())
-		if(stance == HOSTILE_STANCE_IDLE && !client)
+		if(is_legacy_idle() && !client)
 			var/list/can_see = view(get_turf(src), vision_range/2) //Nothing too close for comfort
 			var/all_clear = 1
 			for(var/mob/living/L in can_see)

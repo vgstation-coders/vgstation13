@@ -36,8 +36,8 @@
 	blooded = FALSE
 
 // WIP: installs a behavior tree controller on a hivebot combat variant. Kept as
-// a proc so the beacon (`tele`) and the unmigrated base hivebot keep the legacy
-// AI; only the subtypes below opt in.
+// a proc so the combat variants can pick their exact tree; the base hivebot and
+// the beacon are migrated by the generic hostile hook.
 /mob/living/simple_animal/hostile/hivebot/proc/use_behavior_tree(list/tree)
 	stop_automated_movement = TRUE
 	wander = 0

@@ -43,6 +43,40 @@
 	..()
 	initialize_rules()
 
+/// WIP: installs the behavior tree controller on this hostile mob. Retaliators
+/// consume their legacy `enemies` list, ranged mobs get the keep-distance tree
+/// and the rest share the melee combat tree. Mobs that need a custom tree
+/// (mimics, deer, spiders) install their own controller in New() instead.
+/mob/living/simple_animal/hostile/proc/use_hostile_tree(tree_type)
+	stop_automated_movement = TRUE
+	wander = 0
+	var/datum/ai_controller/controller = new(src)
+	if(tree_type)
+		controller.behavior_nodes = list(tree_type)
+	else if(istype(src, /mob/living/simple_animal/hostile/retaliate))
+		controller.behavior_nodes = list(bt_idle_hostile_tree(/datum/target_source/enemies/retaliate, 0))
+	else if(ranged_mode())
+		controller.behavior_nodes = list(bt_ranged_hostile_tree(retreat_distance = retreat_distance ? retreat_distance : 0))
+	else
+		controller.behavior_nodes = list(bt_basic_hostile_tree())
+	controller.initialize_behavior_tree()
+	return controller
+
+/// TRUE when the legacy AI would consider this pawn idle: either no controller
+/// and the legacy stance is idle, or a controller without a blackboard target.
+/// Legacy idle flavor code (nest dragging, foraging, burrowing) uses this so it
+/// still runs while the tree has nothing to fight.
+/mob/living/simple_animal/hostile/proc/is_legacy_idle()
+	if(ai_controller)
+		return !ai_has_target()
+	return stance == HOSTILE_STANCE_IDLE
+
+/// TRUE when the legacy AI would consider this pawn engaged in combat.
+/mob/living/simple_animal/hostile/proc/is_legacy_engaged()
+	if(ai_controller)
+		return !!ai_has_target()
+	return stance == HOSTILE_STANCE_ATTACK || stance == HOSTILE_STANCE_ATTACKING
+
 /mob/living/simple_animal/hostile/Destroy()
 	QDEL_LIST_NULL(target_rules)
 	if(hivelord)
@@ -95,6 +129,11 @@
 							forceMove(entry_vent)
 							return
 						forceMove(exit_vent.loc)
+	// WIP: every hostile mob is driven by a behavior tree. The controller is
+	// created lazily on the first Life tick so subtype New() has already run and
+	// set up ranged/retreat/search vars; mobs with a custom tree already have one.
+	if(!ai_controller && !stat)
+		use_hostile_tree()
 	. = ..()
 	//Cooldowns
 	if(ranged)
@@ -117,26 +156,28 @@
 				return 0
 		if(is_pacified())
 			return 0
-		switch(stance)
-			if(HOSTILE_STANCE_IDLE)
-				if(environment_smash_flags & SMASH_LIGHT_STRUCTURES)
-					EscapeConfinement()
-				var/new_target = FindTarget()
-				GiveTarget(new_target)
-				// Chase on the acquiring tick rather than idling a full 2s AI tick.
-				if(stance == HOSTILE_STANCE_ATTACK && !(flags & INVULNERABLE))
-					MoveToTarget()
-					DestroySurroundings()
+		// The behavior tree owns target acquisition, movement and attacks.
+		if(!ai_controller)
+			switch(stance)
+				if(HOSTILE_STANCE_IDLE)
+					if(environment_smash_flags & SMASH_LIGHT_STRUCTURES)
+						EscapeConfinement()
+					var/new_target = FindTarget()
+					GiveTarget(new_target)
+					// Chase on the acquiring tick rather than idling a full 2s AI tick.
+					if(stance == HOSTILE_STANCE_ATTACK && !(flags & INVULNERABLE))
+						MoveToTarget()
+						DestroySurroundings()
 
-			if(HOSTILE_STANCE_ATTACK)
-				if(!(flags & INVULNERABLE))
-					MoveToTarget()
-					DestroySurroundings()
+				if(HOSTILE_STANCE_ATTACK)
+					if(!(flags & INVULNERABLE))
+						MoveToTarget()
+						DestroySurroundings()
 
-			if(HOSTILE_STANCE_ATTACKING)
-				if(!(flags & INVULNERABLE))
-					AttackTarget()
-					DestroySurroundings()
+				if(HOSTILE_STANCE_ATTACKING)
+					if(!(flags & INVULNERABLE))
+						AttackTarget()
+						DestroySurroundings()
 
 //////////////HOSTILE MOB TARGETTING AND AGGRESSION////////////
 
@@ -153,6 +194,10 @@
 	return L
 
 /mob/living/simple_animal/hostile/proc/FindTarget()//Step 2, filter down possible targets to things we actually care about
+	// The behavior tree owns acquisition on migrated mobs; direct callers (legacy
+	// subtype Life() code) must not resurrect the old pipeline.
+	if(ai_controller)
+		return null
 	var/list/Targets = list()
 	var/Target
 	for(var/atom/A in ListTargets())
@@ -267,6 +312,9 @@
 	return ranged
 
 /mob/living/simple_animal/hostile/proc/MoveToTarget()//Step 5, handle movement between us and our target
+	// The tree drives movement on migrated mobs.
+	if(ai_controller)
+		return
 	stop_automated_movement = 1
 	if(!target || !CanAttack(target))
 		LoseTarget()
@@ -321,7 +369,7 @@
 
 /mob/living/simple_animal/hostile/adjustBruteLoss(var/damage)
 	..(damage)
-	if(!stat && search_objects < 3)//Not unconscious, and we don't ignore mobs
+	if(!stat && search_objects < 3 && !ai_controller)//Not unconscious, and we don't ignore mobs
 		if(search_objects)//Turn off item searching and ignore whatever item we were looking at, we're more concerned with fight or flight
 			search_objects = 0
 			target = null
@@ -337,6 +385,9 @@
 /mob/living/simple_animal/hostile/proc/AttackTarget()
 
 
+	// The tree drives attacks on migrated mobs.
+	if(ai_controller)
+		return 0
 	stop_automated_movement = 1
 	if(!target || !CanAttack(target))
 		LoseTarget()

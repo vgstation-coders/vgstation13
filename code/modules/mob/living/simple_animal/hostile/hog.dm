@@ -111,7 +111,7 @@
 	..()
 	nutrition--
 
-	if(stance == HOSTILE_STANCE_IDLE && (!food_target || get_dist(food_target, src) > 7) && !ckey)
+	if(is_legacy_idle() && (!food_target || get_dist(food_target, src) > 7) && !ckey)
 		if(mood == HOG_CURIOUS)
 			var/odds_of_new_food_search = max(300 - nutrition, 0)
 			//every nutrition under HOG_FED increases odds of a new search by 1%
@@ -222,7 +222,7 @@ if ungreased adult: l containers
 /mob/living/simple_animal/hostile/spacehog/adult/Life()
 	..()
 	panic--
-	if(stance == HOSTILE_STANCE_ATTACK) //If currently agitated by nearby humans, gain panic if piglets are nearby
+	if(is_legacy_engaged()) //If currently agitated by nearby humans, gain panic if piglets are nearby
 		for(var/mob/living/simple_animal/hostile/spacehog/piglet in view(7,src))
 			panic += 2
 	if(locked_to)

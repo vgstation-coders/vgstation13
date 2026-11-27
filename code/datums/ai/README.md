@@ -4,7 +4,7 @@ Source: [tgstation/tgstation](https://github.com/tgstation/tgstation) `master`,
 `code/datums/ai/_ai_bt_*.dm`, `code/datums/ai/_ai_behavior.dm`,
 `code/datums/ai/_ai_controller.dm` and `code/__DEFINES/ai/behavior_trees.dm`.
 
-**Status:** phase 25. The core, subsystem/possession path, sentience hooks,
+**Status:** phase 26. The core, subsystem/possession path, sentience hooks,
 z-level-gated subsystems, path-cached movement, starter behavior leaves (attack,
 flee, retreat, hold, smash, wait, wander, hunt, follow, idle work, speak,
 blackboard keys), async actions, target lifecycle hooks and target sources
@@ -137,6 +137,25 @@ is still pending.
   the "out of ammo -> knife" switch stay in `afterShoot()`; the drawn-weapon
   overlays now also key off `ai_has_target()` because the tree does not touch
   `stance`.
+- `hostile.dm` (generic migration): every hostile simple animal now gets a
+  controller. Mobs that do not install a custom tree are migrated lazily on their
+  first `Life()` tick by `use_hostile_tree()`: retaliators get the idle
+  retaliate tree, ranged mobs get the keep-distance tree and the rest share the
+  melee combat tree. The legacy stance switch, `adjustBruteLoss` acquisition,
+  `FindTarget()`, `MoveToTarget()` and `AttackTarget()` are inert while a
+  controller is attached, so untouched mob families stop running two decision
+  layers. `is_legacy_idle()` / `is_legacy_engaged()` let idle flavor code (the
+  alien nest dragging, hog foraging, leaper vent climbing, rockernaut burrowing,
+  wolf pack following, grue feeding) keep running only while the tree has no
+  target.
+- `arcane_golem.dm`: uses the new companion tree: it attacks adjacent enemies and
+  otherwise follows its master through `ai_get_follow_target()` instead of the
+  legacy `Goto(master)` loop.
+- `mining_mobs.dm`: the basilisk cold stare and the goldgrub ore/flee reactions
+  moved from `GiveTarget()` overrides to `ai_target_acquired()`, which the tree
+  calls on acquisition.
+- `hive_aliens.dm`: the hive defender returns to movement mode through
+  `ai_target_lost()` because the tree no longer calls `LostTarget()`.
 - `mimic.dm`: mimics run the combat tree with `target_source/enemies/mimic`,
   which stays empty until `anger()`; losing the target calls `calm_down()` again
   (re-disguise) because the tree never calls `LoseTarget()`.
@@ -220,9 +239,13 @@ childless and it fails every tick.
 - **Abilities run synchronously.** `ai_ability/perform` must not sleep; anything
   with a windup belongs in a behavior leaf using `AI_BEHAVIOR_DELAY`. The ranged
   ability also respects the mob's legacy `ranged_cooldown`.
-- **Migrations disable the legacy target acquisition** with a `FindTarget()`
-  override. The legacy `Life()` still runs health/speech; only target
-  acquisition, movement and attack are owned by the tree. Mobs can hook
+- **Migrations disable the legacy target acquisition.** The base hostile proc
+  returns null from `FindTarget()` and makes `MoveToTarget()` / `AttackTarget()`
+  inert whenever a controller is attached; the legacy `Life()` stance switch and
+  `adjustBruteLoss()` acquisition are skipped too. Mobs with a custom migration
+  may also add a `FindTarget()` override. The legacy `Life()` still runs
+  health/speech; only target acquisition, movement and attack are owned by the
+  tree. Mobs can hook
   `ai_target_acquired()` / `ai_target_lost()` for reaction flavor; the target
   leaf also drops dead or unattackable targets instead of chasing them forever.
 - **Death and sentience hooks.** Possession registers `/event/death`,

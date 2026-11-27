@@ -50,8 +50,18 @@
 	)
 
 /// Idle layer: wander occasionally, otherwise rest. Used by non-hostile mobs
-/// and as the fallback of the idle hostile tree.
-/proc/bt_idle_tree(wander_chance = 50, wander_cooldown = 5 SECONDS, rest_time = 4 SECONDS)
+/// and as the fallback of the idle hostile tree. With blocking_wait the rest leaf
+/// returns RUNNING, so a selector holds it instead of re-running acquisition every
+/// tick; hostile trees pass FALSE so combat is re-checked each tick.
+/proc/bt_idle_tree(wander_chance = 50, wander_cooldown = 5 SECONDS, rest_time = 4 SECONDS, blocking_wait = TRUE)
+	var/list/rest_leaf
+	if(blocking_wait)
+		rest_leaf = list(
+			BT_DESC_TYPE = /datum/bt_node/ai_behavior/wait,
+			wait_time = rest_time,
+		)
+	else
+		rest_leaf = list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/idle)
 	return list(
 		BT_DESC_TYPE = /datum/bt_node/composite/selector,
 		BT_DESC_CHILDREN = list(
@@ -60,21 +70,19 @@
 				move_chance = wander_chance,
 				cooldown = wander_cooldown,
 			),
-			list(
-				BT_DESC_TYPE = /datum/bt_node/ai_behavior/wait,
-				wait_time = rest_time,
-			),
+			rest_leaf,
 		),
 	)
 
 /// Hostile tree with an idle layer: fight when there is a target, otherwise
-/// wander/rest instead of re-running target acquisition every tick.
+/// wander/rest. The rest leaf does not hold the selector, so a mob that is
+/// provoked (or whose legacy enemies list fills) reacts on the next tick.
 /proc/bt_idle_hostile_tree(target_source_type = /datum/target_source/enemies, wander_chance = 50, wander_cooldown = 5 SECONDS, rest_time = 4 SECONDS)
 	return list(
 		BT_DESC_TYPE = /datum/bt_node/composite/selector,
 		BT_DESC_CHILDREN = list(
 			bt_hostile_combat_tree(target_source_type),
-			bt_idle_tree(wander_chance, wander_cooldown, rest_time),
+			bt_idle_tree(wander_chance, wander_cooldown, rest_time, FALSE),
 		),
 	)
 
@@ -113,6 +121,27 @@
 /// call sites do not depend on the composition details.
 /proc/bt_basic_hostile_tree()
 	return bt_hostile_combat_tree()
+
+/// Companion tree for mobs that follow their owner instead of chasing: attack
+/// only when a target is already adjacent, otherwise trail the follow target
+/// (ai_get_follow_target). The arcane golem uses this.
+/proc/bt_companion_hostile_tree(target_source_type = /datum/target_source/enemies)
+	return list(
+		BT_DESC_TYPE = /datum/bt_node/composite/selector,
+		BT_DESC_CHILDREN = list(
+			list(
+				BT_DESC_TYPE = /datum/bt_node/composite/sequence,
+				BT_DESC_CHILDREN = list(
+					list(
+						BT_DESC_TYPE = /datum/bt_node/ai_behavior/acquire_target,
+						target_source_type = target_source_type,
+					),
+					list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/attack_target),
+				),
+			),
+			list(BT_DESC_TYPE = /datum/bt_node/ai_behavior/follow_leader, follow_distance = 2, max_distance = 40),
+		),
+	)
 
 /// Combat tree that prefers to flee while badly hurt. The decorator self-aborts
 /// (through the polling observer) once health recovers, so combat resumes.
@@ -545,6 +574,13 @@
 	if(world.time >= end_time)
 		return AI_BEHAVIOR_SUCCEEDED
 	return AI_BEHAVIOR_DELAY
+
+/// No-op leaf that succeeds immediately. Used as the non-blocking rest of the
+/// hostile idle tree so a selector re-checks combat every tick.
+/datum/bt_node/ai_behavior/idle
+
+/datum/bt_node/ai_behavior/idle/perform(seconds_per_tick, datum/ai_controller/controller)
+	return AI_BEHAVIOR_SUCCEEDED
 
 /// Writes a value to the blackboard. Fails without a key.
 /datum/bt_node/ai_behavior/set_blackboard_key

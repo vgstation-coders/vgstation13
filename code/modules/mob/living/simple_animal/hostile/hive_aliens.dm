@@ -317,6 +317,10 @@
 
 	walk(src, 0)
 
+/mob/living/simple_animal/hostile/hive_alien/defender/ai_target_lost(atom/target)
+	if(attack_mode)
+		mode_movement()
+
 /mob/living/simple_animal/hostile/hive_alien/defender/LostTarget()
 	if(attack_mode && !FindTarget()) //If we don't immediately find another target, switch to movement mode
 		mode_movement()
