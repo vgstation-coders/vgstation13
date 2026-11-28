@@ -232,11 +232,10 @@ var/updated_stats = 0
 		world.update_status()
 	//Admin Authorisation
 	var/static/list/localhost_addresses = list("127.0.0.1","::1")
-	if(config.localhost_autoadmin)
+	holder = admin_datums[ckey]
+	if(!holder && config.localhost_autoadmin)
 		if((!address && !world.port) || (address in localhost_addresses))
 			holder = new /datum/admins("Host", R_HOST, src.ckey)
-	else
-		holder = admin_datums[ckey]
 
 	if(holder)
 		if(prefs.get_pref(/datum/preference_setting/binary_flag/toggles) & AUTO_DEADMIN)

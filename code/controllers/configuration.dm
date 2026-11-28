@@ -5,7 +5,7 @@
 
 	var/nudge_script_path = "nudge.py"  // where the nudge.py script is located
 
-	var/localhost_autoadmin = 0			// Give local host clients +HOST upon joining
+	var/localhost_autoadmin = TRUE			// Give local host clients +HOST upon joining
 
 	var/log_ooc = 0						// log OOC channel
 	var/tts_server = ""					// TTS Server
@@ -316,7 +316,7 @@
 					use_recursive_explosions = 1
 
 				if ("localhost_autoadmin")
-					localhost_autoadmin = 1
+					localhost_autoadmin = value ? text2num(value) : TRUE
 
 				if ("log_ooc")
 					config.log_ooc = 1
