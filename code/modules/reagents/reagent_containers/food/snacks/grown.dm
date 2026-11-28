@@ -1250,7 +1250,7 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	log_admin("LOG: Pomegrenade going off at [T.loc] (@[T.x],[T.y],[T.z]), last touched by [fingerprintslast].")
 	message_admins("LOG: Pomegrenade going off at [formatJumpTo(T)], last touched by [fingerprintslast].")
 	var/obj/structure/bomberman/pomegrenade/pom = new (T)
-	pom.bombpower = max(1, floor(potency / 10))
+	pom.bombpower = max(1, floor(potency / 20))
 	if (short)
 		pom.countdown = 1
 	qdel(src)
