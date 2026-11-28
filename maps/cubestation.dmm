@@ -617,9 +617,7 @@
 "aeq" = (
 /obj/structure/shuttle/diag_wall/smooth,
 /turf/space,
-/area/shuttle/security{
-	name = "\improper Engineering Shuttle"
-	})
+/area/shuttle/bagel)
 "aet" = (
 /obj/structure/cable/yellow{
 	d1 = 1;
@@ -1049,10 +1047,10 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/obj/abstract/map/spawner/maint/filled_crate,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 9
 	},
+/obj/abstract/map/spawner/maint/lowchance,
 /turf/simulated/floor{
 	icon_state = "floorgrime"
 	},
@@ -1849,9 +1847,7 @@
 	pixel_y = -25
 	},
 /turf/simulated/floor/shuttle/brig,
-/area/shuttle/bagel{
-	name = "Security Shuttle"
-	})
+/area/shuttle/security)
 "anF" = (
 /obj/structure/cable/yellow{
 	d1 = 4;
@@ -8179,6 +8175,19 @@
 	icon_state = "floor"
 	},
 /area/centcom/control)
+"bdz" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/machinery/portable_atmospherics/pump,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/engineering/aux_storage{
+	name = "HIGH-IMPACT Engineering";
+	general_area_name = "Off-Station";
+	icon_state = "engine"
+	})
 "bdL" = (
 /obj/machinery/door/firedoor/border_only{
 	dir = 8;
@@ -10388,9 +10397,7 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor2"
 	},
-/area/shuttle/security{
-	name = "\improper Engineering Shuttle"
-	})
+/area/shuttle/bagel)
 "bsx" = (
 /obj/machinery/power/apc{
 	cell_type = 0;
@@ -10773,9 +10780,7 @@
 /area/security/lobby)
 "bvh" = (
 /turf/simulated/wall/shuttle/panel,
-/area/shuttle/bagel{
-	name = "Security Shuttle"
-	})
+/area/shuttle/security)
 "bvi" = (
 /obj/structure/grille/broken,
 /obj/item/stack/rods,
@@ -13648,12 +13653,13 @@
 	pixel_y = -24
 	},
 /turf/simulated/floor/shuttle/brig,
-/area/shuttle/bagel{
-	name = "Security Shuttle"
-	})
+/area/shuttle/security)
 "bNc" = (
 /obj/machinery/light/small{
 	dir = 4
+	},
+/obj/machinery/light_switch{
+	pixel_x = 25
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -17348,9 +17354,7 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor2"
 	},
-/area/shuttle/security{
-	name = "\improper Engineering Shuttle"
-	})
+/area/shuttle/bagel)
 "ckV" = (
 /obj/structure/window{
 	dir = 8
@@ -21526,9 +21530,7 @@
 	pixel_y = 20
 	},
 /turf/simulated/floor/shuttle/brig,
-/area/shuttle/bagel{
-	name = "Security Shuttle"
-	})
+/area/shuttle/security)
 "cLK" = (
 /obj/structure/closet/firecloset/full,
 /turf/simulated/floor/plating,
@@ -31822,6 +31824,9 @@
 /area/medical/surgery)
 "dVh" = (
 /obj/machinery/oven,
+/obj/machinery/light{
+	dir = 8
+	},
 /turf/simulated/floor{
 	icon_state = "cafeteria"
 	},
@@ -35301,7 +35306,9 @@
 /area/centcom/ert)
 "eru" = (
 /obj/item/weapon/corncob,
-/mob/living/simple_animal/hostile/carp,
+/mob/living/simple_animal/hostile/carp{
+	child_amount = 0
+	},
 /turf/simulated/floor{
 	icon_state = "floorgrime"
 	},
@@ -35387,6 +35394,10 @@
 /obj/structure/window,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
+	},
+/obj/structure/dispenser/oxygen,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
 	},
 /turf/simulated/floor/plating,
 /area/engineering/engine_singularity{
@@ -35677,9 +35688,7 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor2"
 	},
-/area/shuttle/security{
-	name = "\improper Engineering Shuttle"
-	})
+/area/shuttle/bagel)
 "euK" = (
 /obj/machinery/hologram/holopad,
 /turf/simulated/floor/shuttle,
@@ -36158,9 +36167,7 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor2"
 	},
-/area/shuttle/security{
-	name = "\improper Engineering Shuttle"
-	})
+/area/shuttle/bagel)
 "exE" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced,
@@ -39152,6 +39159,7 @@
 	pixel_y = -22
 	},
 /obj/item/clothing/mask/gas/mothership,
+/obj/item/dictionary/grey,
 /turf/simulated/floor/mineral/reticulite/fancy,
 /area/crew_quarters/sleep_male{
 	name = "\improper Xeno Dorm"
@@ -41464,6 +41472,19 @@
 /area/derelictparts/stripclub{
 	general_area_name = "Off-Station";
 	name = "Yantar Lab"
+	})
+"fhp" = (
+/obj/machinery/portable_atmospherics/scrubber,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/engineering/aux_storage{
+	name = "HIGH-IMPACT Engineering";
+	general_area_name = "Off-Station";
+	icon_state = "engine"
 	})
 "fhw" = (
 /obj/machinery/door/airlock/external{
@@ -47801,6 +47822,9 @@
 	dir = 1;
 	on = 1
 	},
+/obj/machinery/light/small{
+	dir = 8
+	},
 /turf/simulated/floor{
 	dir = 9;
 	icon_state = "whitegreen"
@@ -51067,6 +51091,9 @@
 	dir = 4;
 	pixel_x = 24
 	},
+/obj/machinery/light{
+	dir = 4
+	},
 /turf/simulated/floor{
 	icon_state = "cafeteria"
 	},
@@ -54144,9 +54171,7 @@
 	},
 /obj/structure/window/full/reinforced,
 /turf/simulated/floor/shuttle/plating,
-/area/shuttle/security{
-	name = "\improper Engineering Shuttle"
-	})
+/area/shuttle/bagel)
 "gQs" = (
 /obj/structure/sign/parking{
 	pixel_y = 32
@@ -57749,9 +57774,7 @@
 	dir = 4
 	},
 /turf/simulated/floor/shuttle/brig,
-/area/shuttle/bagel{
-	name = "Security Shuttle"
-	})
+/area/shuttle/security)
 "hpv" = (
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
 	dir = 1
@@ -60829,9 +60852,6 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 4
-	},
 /obj/structure/window/full/reinforced,
 /turf/unsimulated/floor{
 	name = "plating"
@@ -62336,6 +62356,9 @@
 /obj/machinery/firealarm{
 	pixel_y = 24
 	},
+/obj/machinery/light/small{
+	dir = 1
+	},
 /turf/simulated/floor{
 	dir = 1;
 	icon_state = "whitegreen"
@@ -62455,9 +62478,7 @@
 	dir = 4
 	},
 /turf/space,
-/area/shuttle/bagel{
-	name = "Security Shuttle"
-	})
+/area/shuttle/security)
 "hWq" = (
 /obj/machinery/atmospherics/binary/valve,
 /obj/structure/cable/orange{
@@ -62500,11 +62521,15 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/machinery/hologram/holopad,
 /obj/structure/sign/shard/yellow{
 	name = "HIGH-IMPACT ENGINEERING";
 	desc = "A sign which reads 'HIGH-IMPACT ENGINEERING' with a picture of a super matter shard on it.";
 	pixel_y = -32
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 8;
+	icon_state = "loading_area";
+	tag = "icon-loading_area (WEST)"
 	},
 /turf/simulated/floor{
 	dir = 9;
@@ -63011,9 +63036,7 @@
 	dir = 1
 	},
 /turf/space,
-/area/shuttle/bagel{
-	name = "Security Shuttle"
-	})
+/area/shuttle/security)
 "iaQ" = (
 /obj/structure/cable/yellow{
 	d1 = 2;
@@ -64524,6 +64547,10 @@
 /obj/machinery/recharger,
 /obj/item/weapon/gun/energy/laser/practice,
 /obj/item/weapon/gun/energy/laser/practice,
+/obj/machinery/light_switch{
+	pixel_x = 22;
+	pixel_y = -23
+	},
 /turf/simulated/floor,
 /area/security/range)
 "ima" = (
@@ -64691,6 +64718,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
+/obj/machinery/hologram/holopad,
 /turf/simulated/floor,
 /area/engineering/engine)
 "inh" = (
@@ -71298,11 +71326,9 @@
 	},
 /area/centcom/holding)
 "jfI" = (
-/obj/machinery/computer/shuttle_control/bagel,
+/obj/machinery/computer/shuttle_control/security,
 /turf/simulated/floor/shuttle/brig,
-/area/shuttle/bagel{
-	name = "Security Shuttle"
-	})
+/area/shuttle/security)
 "jfM" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plating,
@@ -72498,9 +72524,7 @@
 	},
 /obj/structure/window/full/reinforced,
 /turf/simulated/floor/shuttle/plating,
-/area/shuttle/bagel{
-	name = "Security Shuttle"
-	})
+/area/shuttle/security)
 "joj" = (
 /obj/structure/disposalpipe/segment{
 	desc = "Anti Sneaks, Perpetrators and Rogue Engineers pipe. Or Anti SPARE for short.";
@@ -72643,10 +72667,10 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
-/obj/abstract/map/spawner/maint/filled_crate,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 10
 	},
+/obj/abstract/map/spawner/maint/lowchance,
 /turf/simulated/floor{
 	icon_state = "floorgrime"
 	},
@@ -74319,7 +74343,7 @@
 /turf/simulated/floor/plating,
 /area/science/xenobiology)
 "jBz" = (
-/obj/machinery/computer/shuttle_control/bagel,
+/obj/machinery/computer/shuttle_control/security,
 /turf/simulated/floor{
 	dir = 6;
 	icon_state = "red"
@@ -76829,9 +76853,7 @@
 "jRu" = (
 /obj/structure/shuttle/engine/propulsion,
 /turf/space,
-/area/shuttle/security{
-	name = "\improper Engineering Shuttle"
-	})
+/area/shuttle/bagel)
 "jRA" = (
 /turf/simulated/wall,
 /area/medical/surgery_ghetto)
@@ -78537,9 +78559,7 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor2"
 	},
-/area/shuttle/security{
-	name = "\improper Engineering Shuttle"
-	})
+/area/shuttle/bagel)
 "kci" = (
 /obj/machinery/hologram/holopad,
 /obj/structure/cable/yellow{
@@ -79254,9 +79274,7 @@
 	},
 /obj/structure/window/full/reinforced,
 /turf/simulated/floor/shuttle/plating,
-/area/shuttle/security{
-	name = "\improper Engineering Shuttle"
-	})
+/area/shuttle/bagel)
 "kgU" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -82041,7 +82059,7 @@
 /obj/structure/window/reinforced{
 	dir = 4
 	},
-/turf/space,
+/turf/simulated/floor/plating,
 /area/maintenance/asmaint2)
 "kyb" = (
 /obj/structure/transit_tube{
@@ -82211,13 +82229,11 @@
 /turf/simulated/floor/wood,
 /area/crew_quarters/sleep)
 "kzt" = (
-/obj/machinery/computer/shuttle_control/security,
+/obj/machinery/computer/shuttle_control/bagel,
 /turf/simulated/floor/shuttle{
 	icon_state = "floor2"
 	},
-/area/shuttle/security{
-	name = "\improper Engineering Shuttle"
-	})
+/area/shuttle/bagel)
 "kzw" = (
 /obj/machinery/door/airlock/glass_research{
 	name = "Research Outpost Xenoarcheology";
@@ -82885,9 +82901,7 @@
 	dir = 4
 	},
 /turf/space,
-/area/shuttle/bagel{
-	name = "Security Shuttle"
-	})
+/area/shuttle/security)
 "kDV" = (
 /turf/simulated/floor{
 	dir = 6;
@@ -82920,6 +82934,7 @@
 /obj/structure/table,
 /obj/effect/decal/cleanable/dirt,
 /obj/item/trash/plate/clean,
+/obj/machinery/light,
 /turf/simulated/floor{
 	icon_state = "cafeteria"
 	},
@@ -84776,9 +84791,7 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor2"
 	},
-/area/shuttle/security{
-	name = "\improper Engineering Shuttle"
-	})
+/area/shuttle/bagel)
 "kPy" = (
 /obj/item/device/radio/intercom/medbay/broadcast_nospeaker{
 	pixel_y = 25
@@ -87978,9 +87991,7 @@
 	dir = 1
 	},
 /turf/simulated/floor/shuttle/brig,
-/area/shuttle/bagel{
-	name = "Security Shuttle"
-	})
+/area/shuttle/security)
 "lkt" = (
 /obj/structure/flora/pottedplant/random{
 	icon_state = "plant-9"
@@ -89984,9 +89995,7 @@
 /area/solar/astarboard)
 "lvu" = (
 /turf/simulated/wall/shuttle/panel,
-/area/shuttle/security{
-	name = "\improper Engineering Shuttle"
-	})
+/area/shuttle/bagel)
 "lvz" = (
 /turf/simulated/floor{
 	dir = 1;
@@ -96693,9 +96702,7 @@
 	},
 /obj/structure/window/full/reinforced,
 /turf/simulated/floor/shuttle/plating,
-/area/shuttle/security{
-	name = "\improper Engineering Shuttle"
-	})
+/area/shuttle/bagel)
 "mnG" = (
 /obj/machinery/door/airlock/glass{
 	name = "Primary Tool Storage"
@@ -97579,9 +97586,7 @@
 	dir = 4
 	},
 /turf/space,
-/area/shuttle/security{
-	name = "\improper Engineering Shuttle"
-	})
+/area/shuttle/bagel)
 "mua" = (
 /obj/structure/cable{
 	d1 = 4;
@@ -99434,9 +99439,7 @@
 	dir = 1
 	},
 /turf/space,
-/area/shuttle/security{
-	name = "\improper Engineering Shuttle"
-	})
+/area/shuttle/bagel)
 "mGu" = (
 /turf/simulated/wall/r_wall,
 /area/hallway/primary/western{
@@ -101129,6 +101132,9 @@
 "mSY" = (
 /obj/machinery/disease2/centrifuge,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/machinery/light{
+	dir = 1
+	},
 /turf/simulated/floor{
 	dir = 6;
 	icon_state = "whitegreenfull"
@@ -105417,9 +105423,7 @@
 	id_tag = "SecurityShuttle"
 	},
 /turf/simulated/floor/shuttle/brig,
-/area/shuttle/bagel{
-	name = "Security Shuttle"
-	})
+/area/shuttle/security)
 "nuy" = (
 /obj/structure/bed/chair/office/dark,
 /obj/effect/landmark/start{
@@ -108799,6 +108803,7 @@
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
+/obj/machinery/light,
 /turf/simulated/floor{
 	dir = 6;
 	icon_state = "whitegreenfull"
@@ -109660,6 +109665,9 @@
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging{
 	dir = 4
 	},
+/obj/machinery/light/small/broken{
+	dir = 1
+	},
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
 	},
@@ -109795,6 +109803,24 @@
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/asmaint2)
+"oai" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/machinery/space_heater/air_conditioner,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/engineering/aux_storage{
+	name = "HIGH-IMPACT Engineering";
+	general_area_name = "Off-Station";
+	icon_state = "engine"
+	})
 "oak" = (
 /obj/machinery/atmospherics/pipe/manifold4w/supply/hidden,
 /obj/structure/disposalpipe/segment,
@@ -109819,6 +109845,9 @@
 "oao" = (
 /obj/machinery/alarm{
 	pixel_y = 23
+	},
+/obj/machinery/light/small{
+	dir = 1
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -114579,6 +114608,9 @@
 	dir = 1;
 	on = 1
 	},
+/obj/machinery/light/small{
+	dir = 8
+	},
 /turf/simulated/floor{
 	dir = 9;
 	icon_state = "whitegreen"
@@ -116599,7 +116631,7 @@
 	dir = 1;
 	network = list("Engineering")
 	},
-/obj/machinery/computer/shuttle_control/security,
+/obj/machinery/computer/shuttle_control/bagel,
 /turf/simulated/floor{
 	icon_state = "dark vault stripe"
 	},
@@ -117697,9 +117729,7 @@
 "oZO" = (
 /obj/machinery/hologram/holopad,
 /turf/simulated/floor/shuttle/brig,
-/area/shuttle/bagel{
-	name = "Security Shuttle"
-	})
+/area/shuttle/security)
 "oZQ" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
@@ -118098,6 +118128,19 @@
 	icon_state = "green"
 	},
 /area/research_outpost/anomaly)
+"pcr" = (
+/obj/machinery/space_heater,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/engineering/aux_storage{
+	name = "HIGH-IMPACT Engineering";
+	general_area_name = "Off-Station";
+	icon_state = "engine"
+	})
 "pcs" = (
 /obj/structure/reagent_dispensers/fueltank,
 /obj/effect/decal/warning_stripes{
@@ -119056,7 +119099,7 @@
 /obj/machinery/conveyor{
 	id_tag = "AIDodge";
 	invisibility = 1;
-	dir = 4;
+	dir = 8;
 	name = "AI Advanced Dodge System"
 	},
 /turf/simulated/floor{
@@ -121662,6 +121705,24 @@
 	icon_state = "browncorner"
 	},
 /area/mine/lobby)
+"pzu" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/machinery/space_heater/air_conditioner,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/engineering/aux_storage{
+	name = "HIGH-IMPACT Engineering";
+	general_area_name = "Off-Station";
+	icon_state = "engine"
+	})
 "pzx" = (
 /obj/machinery/door/poddoor{
 	density = 0;
@@ -123270,9 +123331,7 @@
 	dir = 8
 	},
 /turf/space,
-/area/shuttle/bagel{
-	name = "Security Shuttle"
-	})
+/area/shuttle/security)
 "pIT" = (
 /obj/machinery/atmospherics/pipe/simple/insulated/visible{
 	dir = 4
@@ -123846,9 +123905,7 @@
 	dir = 8
 	},
 /turf/space,
-/area/shuttle/security{
-	name = "\improper Engineering Shuttle"
-	})
+/area/shuttle/bagel)
 "pMV" = (
 /obj/machinery/disposal,
 /obj/structure/disposalpipe/trunk{
@@ -126525,9 +126582,7 @@
 	dir = 8
 	},
 /turf/simulated/floor/shuttle/plating/airless,
-/area/shuttle/bagel{
-	name = "Security Shuttle"
-	})
+/area/shuttle/security)
 "qeo" = (
 /obj/machinery/suit_storage_unit/security,
 /obj/effect/decal/warning_stripes{
@@ -127717,6 +127772,9 @@
 "qnd" = (
 /obj/machinery/computer/area_atmos,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/machinery/light_switch{
+	pixel_x = 24
+	},
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "red"
@@ -128267,9 +128325,7 @@
 "qqe" = (
 /obj/structure/bed/chair/shuttle/red,
 /turf/simulated/floor/shuttle/brig,
-/area/shuttle/bagel{
-	name = "Security Shuttle"
-	})
+/area/shuttle/security)
 "qqj" = (
 /obj/machinery/door/airlock{
 	id_tag = "DormPlasma";
@@ -130163,6 +130219,22 @@
 	icon_state = "dark vault corner"
 	},
 /area/supply/qm)
+"qBH" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/window/full/reinforced,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/turf/unsimulated/floor{
+	name = "plating"
+	},
+/area/centcom/test)
 "qBI" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/machinery/light_switch{
@@ -132127,6 +132199,9 @@
 	dir = 1
 	},
 /obj/item/knitting_needles,
+/obj/machinery/light_switch{
+	pixel_x = -22
+	},
 /turf/simulated/floor{
 	icon_state = "floorgrime"
 	},
@@ -132146,6 +132221,11 @@
 "qOn" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 8
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "loading_area";
+	tag = "icon-loading_area (EAST)"
 	},
 /turf/simulated/floor{
 	icon_state = "dark"
@@ -132856,9 +132936,7 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor2"
 	},
-/area/shuttle/security{
-	name = "\improper Engineering Shuttle"
-	})
+/area/shuttle/bagel)
 "qSD" = (
 /obj/structure/closet/emcloset,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
@@ -136519,9 +136597,7 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor2"
 	},
-/area/shuttle/security{
-	name = "\improper Engineering Shuttle"
-	})
+/area/shuttle/bagel)
 "rqC" = (
 /obj/structure/shuttle/diag_wall/smooth{
 	dir = 8
@@ -142166,9 +142242,7 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor2"
 	},
-/area/shuttle/security{
-	name = "\improper Engineering Shuttle"
-	})
+/area/shuttle/bagel)
 "sev" = (
 /obj/machinery/door/poddoor{
 	id_tag = "CentComPort";
@@ -143788,6 +143862,10 @@
 	})
 "srq" = (
 /obj/structure/window,
+/obj/structure/dispenser/plasma,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
 /turf/simulated/floor/plating,
 /area/engineering/engine_singularity{
 	general_area_name = "Engineering Outpost";
@@ -147777,7 +147855,9 @@
 	icon_state = "4-8"
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/mob/living/simple_animal/hostile/carp,
+/mob/living/simple_animal/hostile/carp{
+	child_amount = 0
+	},
 /turf/simulated/floor{
 	icon_state = "floorgrime"
 	},
@@ -148426,9 +148506,7 @@
 /area/security/detectives_office)
 "sUr" = (
 /turf/simulated/floor/shuttle/brig,
-/area/shuttle/bagel{
-	name = "Security Shuttle"
-	})
+/area/shuttle/security)
 "sUD" = (
 /obj/effect/decal/warning_stripes{
 	dir = 4;
@@ -153782,6 +153860,19 @@
 	icon_state = "dark vault corner"
 	},
 /area/bridge)
+"tDU" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/machinery/space_heater,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/engineering/aux_storage{
+	name = "HIGH-IMPACT Engineering";
+	general_area_name = "Off-Station";
+	icon_state = "engine"
+	})
 "tDV" = (
 /obj/machinery/air_sensor{
 	frequency = 1443;
@@ -154124,9 +154215,7 @@
 	},
 /obj/structure/window/full/reinforced,
 /turf/simulated/floor/shuttle/plating,
-/area/shuttle/security{
-	name = "\improper Engineering Shuttle"
-	})
+/area/shuttle/bagel)
 "tFM" = (
 /obj/structure/cable/yellow{
 	d1 = 4;
@@ -157356,9 +157445,7 @@
 	desc = "For when the kids won't stop poking eachother in the back seat."
 	},
 /turf/simulated/floor/shuttle/brig,
-/area/shuttle/bagel{
-	name = "Security Shuttle"
-	})
+/area/shuttle/security)
 "tYx" = (
 /obj/structure/disposalpipe/segment{
 	desc = "An underfloor disposal pipe. Directly connected to cargo for station exports.";
@@ -160345,15 +160432,18 @@
 	},
 /area/centcom/control)
 "uto" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
 	},
-/obj/structure/window/reinforced{
-	dir = 4
+/obj/machinery/portable_atmospherics/scrubber,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
 	},
-/turf/space,
-/area/maintenance/asmaint2)
+/area/engineering/aux_storage{
+	name = "HIGH-IMPACT Engineering";
+	general_area_name = "Off-Station";
+	icon_state = "engine"
+	})
 "utp" = (
 /obj/machinery/light/small{
 	dir = 1
@@ -162213,7 +162303,7 @@
 /turf/simulated/floor/plating,
 /area/mine/production)
 "uHc" = (
-/obj/machinery/computer/shuttle_control/security,
+/obj/machinery/computer/shuttle_control/bagel,
 /turf/simulated/floor/plating,
 /area/engineering/engine_singularity{
 	general_area_name = "Engineering Outpost";
@@ -162927,6 +163017,9 @@
 "uMp" = (
 /obj/structure/closet/bombcloset,
 /obj/machinery/light,
+/obj/machinery/light_switch{
+	pixel_y = -25
+	},
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "dark-markings"
@@ -171501,6 +171594,9 @@
 	icon_state = "1-2"
 	},
 /obj/machinery/atmospherics/pipe/manifold4w/scrubbers/hidden,
+/obj/machinery/light_switch{
+	pixel_x = 24
+	},
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "red"
@@ -173802,6 +173898,10 @@
 	},
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
+	},
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
 	},
 /turf/simulated/floor{
 	icon_state = "redfull"
@@ -177911,9 +178011,7 @@
 /obj/docking_port/shuttle,
 /obj/machinery/door/unpowered/shuttle,
 /turf/simulated/floor/shuttle/brig,
-/area/shuttle/bagel{
-	name = "Security Shuttle"
-	})
+/area/shuttle/security)
 "wyX" = (
 /obj/machinery/meter,
 /obj/structure/grille,
@@ -184247,7 +184345,7 @@
 	name = "KEEP CLEAR: DOCKING AREA";
 	pixel_y = -32
 	},
-/obj/machinery/computer/shuttle_control/bagel,
+/obj/machinery/computer/shuttle_control/security,
 /turf/simulated/floor/plating,
 /area/prison/hallway/central{
 	name = "\improper Prison Station Hallway"
@@ -184406,14 +184504,12 @@
 	name = "Mining Station Mint"
 	})
 "xoN" = (
-/obj/structure/table,
-/obj/item/weapon/folder/yellow{
-	pixel_x = 3;
-	pixel_y = 3
-	},
-/obj/item/weapon/folder/yellow,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 10
+	},
+/obj/structure/dispenser/oxygen,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
 	},
 /turf/simulated/floor{
 	dir = 4;
@@ -185182,9 +185278,7 @@
 "xuw" = (
 /obj/structure/shuttle/diag_wall/smooth,
 /turf/space,
-/area/shuttle/bagel{
-	name = "Security Shuttle"
-	})
+/area/shuttle/security)
 "xuA" = (
 /obj/machinery/power/rad_collector{
 	anchored = 1
@@ -186037,9 +186131,7 @@
 	dir = 1
 	},
 /turf/simulated/floor/shuttle/plating/airless,
-/area/shuttle/security{
-	name = "\improper Engineering Shuttle"
-	})
+/area/shuttle/bagel)
 "xAC" = (
 /obj/structure/rack,
 /obj/item/stack/sheet/wood/bigstack,
@@ -189472,9 +189564,7 @@
 	dir = 8
 	},
 /turf/simulated/floor/shuttle/brig,
-/area/shuttle/bagel{
-	name = "Security Shuttle"
-	})
+/area/shuttle/security)
 "xWI" = (
 /turf/simulated/floor/plating,
 /area/maintenance/aft)
@@ -190547,9 +190637,7 @@
 /turf/simulated/floor/shuttle{
 	icon_state = "floor2"
 	},
-/area/shuttle/security{
-	name = "\improper Engineering Shuttle"
-	})
+/area/shuttle/bagel)
 "ydE" = (
 /obj/machinery/light,
 /turf/simulated/floor{
@@ -284111,8 +284199,8 @@ lbY
 lbY
 oLZ
 aRR
-nXj
-nXj
+ooX
+ooX
 jKk
 rpZ
 snh
@@ -284613,8 +284701,8 @@ lbY
 lbY
 oLZ
 aRR
-nXj
-nXj
+pcr
+tDU
 jKk
 kCP
 cZJ
@@ -285115,8 +285203,8 @@ lbY
 lbY
 oLZ
 aRR
-nXj
-nXj
+fhp
+uto
 fdA
 eaW
 fVb
@@ -285617,8 +285705,8 @@ djA
 djA
 oLZ
 aRR
-nXj
-nXj
+bdz
+bdz
 ktB
 kCP
 pLw
@@ -286119,8 +286207,8 @@ lzp
 hgz
 kzD
 pOH
-ntz
-ntz
+oai
+pzu
 uIb
 tqR
 wAK
@@ -286621,8 +286709,8 @@ rTQ
 nss
 wSo
 pVE
-nXj
-nXj
+djA
+djA
 ktB
 wEb
 wAK
@@ -338245,9 +338333,9 @@ dRW
 vuQ
 dCE
 kxX
-uto
-uto
-uto
+mUl
+mUl
+mUl
 xxB
 wLX
 iVV
@@ -354870,19 +354958,19 @@ sIx
 sIx
 sIx
 sIx
-sIx
-sIx
-sIx
-sIx
-sIx
-sIx
-sIx
-sIx
-sIx
-sIx
-sIx
-sIx
-sIx
+kBG
+kBG
+kBG
+kBG
+kBG
+kBG
+kBG
+kBG
+kBG
+kBG
+kBG
+kBG
+kBG
 obg
 nGS
 qUR
@@ -360392,19 +360480,19 @@ kBG
 kBG
 kBG
 kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
-kBG
+sIx
+sIx
+sIx
+sIx
+sIx
+sIx
+sIx
+sIx
+sIx
+sIx
+sIx
+sIx
+sIx
 kBG
 kBG
 kBG
@@ -504079,7 +504167,7 @@ nqF
 vok
 jCs
 wsV
-nqF
+qBH
 hKG
 eRV
 qqP
