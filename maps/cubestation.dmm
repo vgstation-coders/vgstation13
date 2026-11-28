@@ -5460,12 +5460,14 @@
 	})
 "aKn" = (
 /obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
 	},
-/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
-	dir = 4
+/obj/structure/cable/yellow{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
 	},
 /turf/simulated/floor,
 /area/hallway/primary/fore)
@@ -8153,6 +8155,11 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
 /turf/simulated/floor,
 /area/crew_quarters/hop)
 "bcZ" = (
@@ -10748,9 +10755,6 @@
 	pixel_y = 7
 	},
 /obj/item/weapon/pen,
-/obj/item/weapon/reagent_containers/food/snacks/jellyburger/slime{
-	pixel_x = -3
-	},
 /turf/simulated/floor{
 	icon_state = "whitepurple"
 	},
@@ -24500,6 +24504,14 @@
 	desc = "A brimless hat made of cloth, worn by men within Orthdox Jewish communities as part of religious custom. This one seems old, and smells faintly of ash."
 	},
 /obj/item/weapon/pillow,
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 5
+	},
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
 /turf/simulated/floor/mineral/lead{
 	icon_state = "carpet9-4";
 	desc = "Please do not lick.";
@@ -40661,12 +40673,12 @@
 /area/maintenance/aft)
 "fcf" = (
 /obj/machinery/door/airlock/glass_research{
-	autoclose = 0;
 	icon_state = "door_locked";
 	id_tag = "tox_airlock";
 	locked = 1;
 	name = "Mixing Room Airlock";
-	req_access_txt = "8"
+	req_access_txt = "8";
+	frequency = 1558
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -42643,7 +42655,7 @@
 	pixel_x = 5;
 	pixel_y = 3
 	},
-/obj/item/weapon/reagent_containers/food/snacks/jelliedtoast/slime,
+/obj/item/weapon/reagent_containers/food/snacks/jelliedtoast/cherry,
 /turf/simulated/floor{
 	icon_state = "whitepurple"
 	},
@@ -64859,11 +64871,6 @@
 /turf/simulated/floor,
 /area/hallway/secondary/entry)
 "ioJ" = (
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/structure/window/reinforced/tinted{
 	dir = 8
 	},
@@ -93942,6 +93949,9 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
+	dir = 4
+	},
 /turf/simulated/floor/plating,
 /area/crew_quarters/hop)
 "lVj" = (
@@ -114362,6 +114372,11 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
 /turf/simulated/floor,
 /area/crew_quarters/hop)
 "oCf" = (
@@ -124632,11 +124647,6 @@
 /area/engineering/reactor_room)
 "pRA" = (
 /obj/structure/table/woodentable,
-/obj/structure/cable/yellow{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
 /obj/item/weapon/reagent_containers/food/drinks/gromitmug,
 /obj/item/weapon/coin/silver{
 	pixel_x = -3;
@@ -124649,9 +124659,6 @@
 /obj/structure/window/reinforced/tinted{
 	dir = 1
 	},
-/obj/machinery/atmospherics/unary/vent_scrubber/on{
-	dir = 4
-	},
 /obj/machinery/light_switch{
 	pixel_x = 23;
 	pixel_y = 10
@@ -124662,6 +124669,7 @@
 	pixel_x = 25;
 	req_access_txt = "57"
 	},
+/obj/machinery/atmospherics/unary/vent_scrubber/on,
 /turf/simulated/floor/mineral/lead{
 	icon_state = "carpet10-8";
 	name = "lead carpet";
@@ -127957,7 +127965,7 @@
 	pixel_x = 24
 	},
 /obj/structure/table,
-/obj/item/weapon/reagent_containers/food/snacks/donut/slimejelly,
+/obj/item/weapon/reagent_containers/food/snacks/jellysandwich/cherry,
 /turf/simulated/floor{
 	dir = 6;
 	icon_state = "whitepurple"
@@ -131500,11 +131508,6 @@
 	},
 /area/vox_trading_post/gardens)
 "qKm" = (
-/obj/structure/cable/yellow{
-	d1 = 2;
-	d2 = 8;
-	icon_state = "2-8"
-	},
 /obj/machinery/atmospherics/unary/vent_pump{
 	dir = 4;
 	on = 1
@@ -142562,12 +142565,12 @@
 /area/maintenance/ghettokitchen)
 "shQ" = (
 /obj/machinery/door/airlock/glass_research{
-	autoclose = 0;
 	icon_state = "door_locked";
 	id_tag = "tox_airlock";
 	locked = 1;
 	name = "Mixing Room Airlock";
-	req_access_txt = "8"
+	req_access_txt = "8";
+	frequency = 1558
 	},
 /turf/simulated/floor/engine,
 /area/research_outpost/dorm2{
@@ -162870,10 +162873,10 @@
 	name = "Atmospherics Maintenance";
 	req_access_txt = "24;12"
 	},
-/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/machinery/atmospherics/pipe/simple/cyan/visible{
 	dir = 4
 	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
@@ -168479,7 +168482,7 @@
 "vtR" = (
 /obj/machinery/door/airlock/external{
 	name = "Chamber Airlock";
-	req_one_access_txt = "10;24"
+	req_one_access_txt = "11;24"
 	},
 /turf/simulated/floor/plating,
 /area/engineering/supermatter_room)
@@ -177265,10 +177268,12 @@
 /turf/simulated/floor/shuttle,
 /area/shuttle/arrival/station)
 "wug" = (
-/obj/structure/cable/yellow{
-	icon_state = "1-4"
-	},
 /obj/machinery/photocopier,
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
 /turf/simulated/floor,
 /area/crew_quarters/hop)
 "wuj" = (
@@ -182890,13 +182895,16 @@
 /turf/simulated/floor/wood,
 /area/crew_quarters/courtroom)
 "xeC" = (
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
+	dir = 4
+	},
 /obj/structure/cable/yellow{
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8"
 	},
 /turf/simulated/floor,
-/area/crew_quarters/hop)
+/area/hallway/primary/fore)
 "xeE" = (
 /obj/machinery/light_switch{
 	pixel_x = -25
@@ -184348,6 +184356,11 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
+	},
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
 	},
 /turf/simulated/floor/mineral/lead{
 	icon_state = "carpet5-1";
@@ -288455,7 +288468,7 @@ nAI
 pij
 haP
 etX
-xeC
+etX
 oCe
 iKY
 xSI
@@ -290463,8 +290476,8 @@ ciY
 xLV
 xCU
 rHr
-aKn
 xLV
+xeC
 xLV
 xlZ
 epY
@@ -290966,7 +290979,7 @@ ifY
 iwb
 ifY
 qKm
-ifY
+aKn
 ifY
 dcc
 lLv
